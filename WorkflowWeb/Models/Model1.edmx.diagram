@@ -12,6 +12,7 @@
         <AssociationConnector Association="COMMENTSModel.FK_T_Comment_T_Comment" ManuallyRouted="false" />
         <AssociationConnector Association="COMMENTSModel.FK_T_Comment_T_Domain" ManuallyRouted="false" />
         <AssociationConnector Association="COMMENTSModel.FK_T_CommentVote_T_Comment" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="COMMENTSModel.T_Upload" Width="1.5" PointX="3.375" PointY="5.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -20,11 +20,12 @@
         props: ['label', 'id', 'url'],
         data: function () {
             return {
-                progress: 0
+                progress: 0,
+                token: $('@Html.AntiForgeryToken()').val()
             };
         },
         mounted: function () {
-            
+
         },
         methods:
         {
@@ -32,7 +33,7 @@
                 var file = $('#' + this.id)[0].files[0];
                 var chunkSize = 256 * 1024; //256KB
                 var chunks = Math.ceil(file.size / chunkSize, chunkSize);
-                this.uploadSlice(this.url, file, chunkSize, 0, chunks);                 
+                this.uploadSlice(this.url, file, chunkSize, 0, chunks);
             },
             uploadSlice: function (url, file, chunkSize, chunk, chunks) {
                 var vm = this;
@@ -47,6 +48,7 @@
                     fd.append("size", file.size);
                     fd.append("part", chunk);
                     fd.append("parts", chunks);
+                    fd.append("__RequestVerificationToken", vm.token);
 
                     console.log("uploading part " + chunk + " of " + chunks);
                     $.ajax({

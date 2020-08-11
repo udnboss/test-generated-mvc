@@ -29,5 +29,6 @@ namespace WorkflowWeb.Models
         public virtual DbSet<T_Comment> T_Comment { get; set; }
         public virtual DbSet<T_CommentVote> T_CommentVote { get; set; }
         public virtual DbSet<T_Domain> T_Domain { get; set; }
+        public virtual DbSet<T_Upload> T_Upload { get; set; }
     }
 }

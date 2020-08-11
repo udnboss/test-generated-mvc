@@ -130,6 +130,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Attributes\HandleParameters.cs" />
     <Compile Include="Controllers\Comment1Controller.cs" />
+    <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -163,6 +164,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\T_Domain.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\T_Upload.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -239,6 +243,7 @@
     <Content Include="Views\Shared\Vue\FormSelect.cshtml" />
     <Content Include="Views\Shared\Vue\FormUpload.cshtml" />
     <Content Include="Views\Shared\Vue\FormUpload - Copy.cshtml" />
+    <Content Include="Views\Upload\Component.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

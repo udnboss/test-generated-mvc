@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="COMMENTSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="COMMENTSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -45,6 +45,17 @@
           <Property Name="ID" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Host" Type="nvarchar" MaxLength="50" />
           <Property Name="Port" Type="int" />
+        </EntityType>
+        <EntityType Name="T_Upload">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="Path" Type="nvarchar(max)" />
+          <Property Name="Size" Type="int" />
+          <Property Name="UploadDate" Type="datetime" />
+          <Property Name="ParentID" Type="uniqueidentifier" />
         </EntityType>
         <Association Name="FK_T_Comment_T_Comment">
           <End Role="T_Comment" Type="Self.T_Comment" Multiplicity="0..1" />
@@ -87,6 +98,7 @@
           <EntitySet Name="T_Comment" EntityType="Self.T_Comment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_CommentVote" EntityType="Self.T_CommentVote" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_Domain" EntityType="Self.T_Domain" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_Upload" EntityType="Self.T_Upload" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_T_Comment_T_Comment" Association="Self.FK_T_Comment_T_Comment">
             <End Role="T_Comment" EntitySet="T_Comment" />
             <End Role="T_Comment1" EntitySet="T_Comment" />
@@ -100,8 +112,7 @@
             <End Role="T_CommentVote" EntitySet="T_CommentVote" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="COMMENTSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -205,7 +216,19 @@
             <End Role="T_Comment" EntitySet="T_Comment" />
             <End Role="T_CommentVote" EntitySet="T_CommentVote" />
           </AssociationSet>
+          <EntitySet Name="T_Upload" EntityType="COMMENTSModel.T_Upload" />
         </EntityContainer>
+        <EntityType Name="T_Upload">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Path" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Size" Type="Int32" />
+          <Property Name="UploadDate" Type="DateTime" Precision="3" />
+          <Property Name="ParentID" Type="Guid" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -254,6 +277,18 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Host" ColumnName="Host" />
                 <ScalarProperty Name="Port" ColumnName="Port" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_Upload">
+            <EntityTypeMapping TypeName="COMMENTSModel.T_Upload">
+              <MappingFragment StoreEntitySet="T_Upload">
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="UploadDate" ColumnName="UploadDate" />
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="Path" ColumnName="Path" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
