@@ -1,0 +1,176 @@
+﻿<script type="text/template" id="commentsComponent">
+    <div>
+        <div class="text-right">
+            <button v-on:click="refresh()" class="btn btn-primary">Refresh</button>
+            <button v-on:click="createNew()" class="btn btn-primary">New..</button>
+        </div>
+        <table class="table">
+            <tr v-for="c in objects">
+                <td>{{ c.Name }}</td>
+                <td>{{ c.Comment }}</td>
+                <td>{{ c.DatePosted }}</td>
+                <td><button v-on:click="details(c)" class="btn btn-primary">View</button></td>
+                <td><button v-on:click="edit(c)" class="btn btn-success">Edit</button></td>
+                <td><button v-on:click="del(c)" class="btn btn-danger">Delete</button></td>
+            </tr>
+        </table>
+
+        <v-modal v-if="detailsModal" v-on:close="detailsModal = false" name="Umesh" v-bind:comment="selectedObject">
+            <p>{{ selectedObject.Comment }}</p>
+        </v-modal>
+
+        <v-modal v-if="editModal" v-on:close="editModal = false" name="Umesh" v-bind:comment="editObject">
+            <form v-on:submit.prevent="update(editObject)">
+                <v-form-input v-for="(value, name, index) in editObject" v-bind:key="name" :label="name" v-model="editObject[name]"></v-form-input>
+                @*<v-form-input label="UserName" v-model="editObject.Name"></v-form-input>
+        <v-form-input label="Comment" v-model="editObject.Comment"></v-form-input>*@
+                <v-select2 label="Domain" :options="lookups.domain_id" v-model="editObject.DomainID">
+                    <option disabled value="0">Select one</option>
+                </v-select2>
+                <button>Update</button>
+                <p>{{ editObject }}</p>
+            </form>
+        </v-modal>
+
+        <v-modal v-if="newModal" v-on:close="newModal = false" name="Umesh" v-bind:comment="createObject">
+            <form v-on:submit.prevent="create(createObject)">
+                <v-form-input label="UserName" v-model="createObject.Name"></v-form-input>
+                <v-form-input label="Comment" v-model="createObject.Comment"></v-form-input>
+                <button>Create</button>
+                <p>{{ createObject }}</p>
+            </form>
+        </v-modal>
+
+        <v-modal v-if="deleteModal" v-on:close="deleteModal = false" name="Umesh" v-bind:comment="selectedObject">
+            <p>{{ selectedObject.Comment }}</p>
+            <form v-on:submit.prevent="deleteConfirmed(selectedObject)">
+                <button>Delete</button>
+            </form>
+        </v-modal>
+    </div>
+</script>
+
+<script>
+    //see this for a complete crud example...
+    //https://www.ma-no.org/en/programming/javascript/crud-operations-using-vue-js-a-basic-example
+
+
+    Vue.component("v-comments", {
+        template: "#commentsComponent",
+        data: function () {
+            return {
+                lookups: {},
+                objects: [],
+                selectedObject: {},
+                editObject: {},
+                createObject: {},
+                detailsModal: false,
+                editModal: false,
+                newModal: false,
+                deleteModal: false,
+                token: $('@Html.AntiForgeryToken()').val()
+            }
+        },
+       mounted: function () {
+           var app = this;
+            $.get('@Url.Action("Index", "Comment")', function (response) {
+                app.objects = response;
+                selectedObject = app.objects[0];
+                createObject = app.objects[0];
+                detailsModal = app.objects[0];
+                });
+        },
+       methods: {
+
+           getIndex: function (o) {
+               var app = this;
+                var i = app.objects.map(function (elem) {
+                    return elem.ID;
+                }).indexOf(o.ID);
+                return i;
+            },
+            refresh: function () {
+                var app = this;
+                $.get('@Url.Action("Index", "Comment")', function (response) {
+                    app.objects = response;
+                });
+            },
+            details: function (o) {
+                var app = this;
+                $.get('@Url.Action("Details", "Comment")', { id: o.ID }, function (response) {
+                    var i = app.getIndex(o);
+                    console.log(i);
+                    app.objects[i] = response;
+                    app.selectedObject = app.objects[i];
+                    app.hideModals();
+                    app.detailsModal = true;
+                });
+            },
+            edit: function (o) {
+                var app = this;
+                $.get('@Url.Action("Edit", "Comment")', { id: o.ID }, function (response) {
+                    var i = app.getIndex(o);
+                    app.objects[i] = response.data;
+                    app.lookups = response.lookups;
+                    //console.log(app.lookups);
+                    app.selectedObject = app.objects[i];
+                    app.editObject = JSON.parse(JSON.stringify(app.selectedObject));
+                    app.hideModals();
+                    app.editModal = true;
+                });
+            },
+            createNew: function () {
+                var app = this;
+                $.get('@Url.Action("New", "Comment")', function (response) {
+                    app.createObject = response.data;
+                    app.lookups = response.lookups;
+                    app.hideModals();
+                    app.newModal = true;
+                });
+            },
+            del: function (o) {
+                var app = this;
+                app.selectedObject = o;
+                app.hideModals();
+                app.deleteModal = true;
+            },
+            create: function (o) {
+                var app = this;
+                o["__RequestVerificationToken"] = app.token;
+                $.post('@Url.Action("Create", "Comment")', o, function (response) {
+                    app.objects = response;
+                    app.selectedObject = o;
+                    app.hideModals();
+                })
+            },
+            update: function (o) {
+                var app = this;
+                o["__RequestVerificationToken"] = app.token;
+                delete o["T_Comment1"];
+
+                $.post('@Url.Action("Update", "Comment")', o, function (response) {
+                    app.objects = response;
+                    app.selectedObject = o;
+                    app.hideModals();
+                })
+            },
+            deleteConfirmed: function (o) {
+                var app = this;
+                o["__RequestVerificationToken"] = app.token;
+                $.post('@Url.Action("Delete", "Comment")', o, function (response) {
+                    app.objects = response;
+                    app.selectedObject = o;
+                    app.hideModals();
+                })
+            },
+            hideModals: function () {
+                var app = this;
+                app.detailsModal = false;
+                app.editModal = false;
+                app.newModal = false;
+                app.deleteModal = false;
+            }
+        }
+    });
+
+</script>

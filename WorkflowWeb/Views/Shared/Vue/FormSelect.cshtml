@@ -1,0 +1,22 @@
+﻿<script id="formSelectComponent" type="text/template">
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2">{{label}}</label>
+        <div class="col-sm-10">
+            <select class="form-control" v-model="value" v-on:change="onInput">
+                <option v-for="o in options" value="o.id">{{ o.text }}</option>
+            </select>
+        </div>
+    </div>
+</script>
+
+<script>
+    Vue.component("v-form-input", {
+        props: ['label', 'value'],
+        methods: {
+            onInput: function (event) {
+                this.$emit('change', event.target.value)
+            }
+        },
+        template: "#formInputComponent"
+    });
+</script>

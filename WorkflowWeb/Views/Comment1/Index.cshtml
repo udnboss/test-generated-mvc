@@ -1,0 +1,82 @@
+﻿@model IEnumerable<WorkflowWeb.Models.T_Comment>
+
+@ViewBag.HtmlTarget
+<p>
+    @Html.ActionLink("New..", "Create", new { html_target = ViewBag.HtmlTarget }, new { data_modal = true }) @*added for remembring where to update, and to fire up a modal*@
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Path)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IP)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Comment)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DatePosted)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.QueryString)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.T_Comment2.DomainID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.T_Domain.Host)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Path)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comment)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DatePosted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.QueryString)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.T_Comment2.DomainID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.T_Domain.Host)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+            </td>
+        </tr>
+    }
+
+</table>
+
+<script>
+    $(function () {
+        $('a[data-modal="True"]').on('click', function (e) {
+            e.preventDefault();
+            var a = $(this);
+            var url = a.attr('href');
+            LoadModalByUrl(url);
+        });
+    });
+</script>

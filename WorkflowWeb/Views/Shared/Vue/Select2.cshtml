@@ -1,0 +1,54 @@
+﻿<script type="text/x-template" id="select2Component">
+    <div class="form-group row">
+        <label class="col-form-label col-sm-2">{{label}}</label>
+        <div class="col-sm-10">
+            <div class="d-block">
+                <select>
+                    <slot></slot>
+                </select>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script>
+    Vue.component("v-select2", {
+        props: ["label", "options", "value"],
+        template: "#select2Component",
+        mounted: function () {
+            var vm = this;
+            $(this.$el)
+                .find('select')
+                // init select2
+                .select2({ data: this.options, width: 'auto', dropdownAutoWidth: 'true' })
+                .val(this.value)
+                .trigger("change")
+                // emit event on change.
+                .on("change", function () {
+                    vm.$emit("input", this.value);
+                });
+        },
+        watch: {
+            value: function (value) {
+                // update value
+                $(this.$el)
+                    .find('select')
+                    .val(value)
+                    .trigger("change");
+            },
+            options: function (options) {
+                // update options
+                $(this.$el)
+                    .find('select')
+                    .empty()
+                    .select2({ data: options, width: 'auto', dropdownAutoWidth: 'true' });
+            }
+        },
+        destroyed: function () {
+            $(this.$el)
+                .find('select')
+                .off()
+                .select2("destroy");
+        }
+    });
+</script>

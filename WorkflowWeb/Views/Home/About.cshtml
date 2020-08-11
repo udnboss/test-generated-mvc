@@ -1,0 +1,231 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+<p>
+    Full example of a CRUD using vue with a router.
+</p>
+<main id="app"></main>
+
+<template id="invoice-list">
+    <section>
+        <div class="actions">
+            <router-link class="btn btn-default" :to="{path: '/invoice-add'}">
+                <span class="glyphicon glyphicon-plus"></span>
+                Add invoice
+            </router-link>
+        </div>
+        <div class="filters row">
+            <div class="form-group col-sm-3">
+                <label for="search-element">invoice name</label>
+                <input v-model="searchKey" class="form-control" id="search-element" requred />
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th class="col-sm-2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="invoice in filteredinvoices">
+                    <td>
+                        <router-link :to="{name: 'invoice', params: {invoice_id: invoice.id}}">{{ invoice.name }}</router-link>
+                    </td>
+                    <td>{{ invoice.description }}</td>
+                    <td>
+                        {{ invoice.price }}
+                        <span class="glyphicon glyphicon-euro" aria-hidden="true"></span>
+                    </td>
+                    <td>
+                        <router-link class="btn btn-warning btn-xs" :to="{name: 'invoice-edit', params: {invoice_id: invoice.id}}">Edit</router-link>
+                        <router-link class="btn btn-danger btn-xs" :to="{name: 'invoice-delete', params: {invoice_id: invoice.id}}">Delete</router-link>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</template>
+
+<template id="invoice-add">
+    <section>
+        <h2>Add new invoice</h2>
+        <form v-on:submit="createinvoice">
+            <div class="form-group">
+                <label for="add-name">Name</label>
+                <input class="form-control" id="add-name" v-model="invoice.name" required />
+            </div>
+            <div class="form-group">
+                <label for="add-description">Description</label>
+                <textarea class="form-control" id="add-description" rows="10" v-model="invoice.description"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="add-price">Price, <span class="glyphicon glyphicon-euro"></span></label>
+                <input type="number" class="form-control" id="add-price" v-model="invoice.price" />
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+            <router-link class="btn btn-default" :to="{path: '/'}">Cancel</router-link>
+        </form>
+    </section>
+</template>
+
+<template id="invoice">
+    <section>
+        <h2>{{ invoice.name }}</h2>
+        <b>Description: </b>
+        <div>{{ invoice.description }}</div>
+        <b>Price:</b>
+        <div>{{ invoice.price }}<span class="glyphicon glyphicon-euro"></span></div>
+        <br />
+        <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+        <router-link to="/">Back to invoice list</router-link>
+    </section>
+</template>
+
+<template id="invoice-edit">
+    <section>
+        <h2>Edit invoice</h2>
+        <form v-on:submit="updateinvoice">
+            <div class="form-group">
+                <label for="edit-name">Name</label>
+                <input class="form-control" id="edit-name" v-model="invoice.name" required />
+            </div>
+            <div class="form-group">
+                <label for="edit-description">Description</label>
+                <textarea class="form-control" id="edit-description" rows="3" v-model="invoice.description"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="edit-price">Price, <span class="glyphicon glyphicon-euro"></span></label>
+                <input type="number" class="form-control" id="edit-price" v-model="invoice.price" />
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+            <router-link to="/" class="btn btn-default">Cancel</router-link>
+        </form>
+    </section>
+</template>
+
+<template id="invoice-delete">
+    <section>
+        <h2>Delete invoice {{ invoice.name }}</h2>
+        <form v-on:submit="deleteinvoice">
+            <p>The action cannot be undone.</p>
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <router-link to="/" class="btn btn-default">Cancel</router-link>
+        </form>
+    </section>
+</template>
+
+<script>
+    var invoices = [
+        { id: 1, name: 'Laravel', description: 'Provide Laravel Information.', price: 100 },
+        { id: 2, name: 'AngularJS', description: 'Provide AngularJS Information.', price: 100 },
+        { id: 3, name: 'PHP', description: 'Provide PHP Information.', price: 100 }
+    ];
+
+    function findinvoice(invoiceId) {
+        return invoices[findinvoiceKey(invoiceId)];
+    };
+
+    function findinvoiceKey(invoiceId) {
+        for (var key = 0; key < invoices.length; key++) {
+            if (invoices[key].id == invoiceId) {
+                return key;
+            }
+        }
+    };
+
+    var List = Vue.extend({
+        template: '#invoice-list',
+        data: function () {
+            return { invoices: invoices, searchKey: '' };
+        },
+        computed: {
+            filteredinvoices: function () {
+                var self = this;
+                console.log()
+                return self.invoices.filter(function (invoice) {
+                    return invoice.name.indexOf(self.searchKey) !== -1
+                })
+            }
+        }
+    });
+
+    var invoice = Vue.extend({
+        template: '#invoice',
+        data: function () {
+            return { invoice: findinvoice(this.$route.params.invoice_id) };
+        }
+    });
+
+    var invoiceEdit = Vue.extend({
+        template: '#invoice-edit',
+        data: function () {
+            return { invoice: Object.assign({}, findinvoice(this.$route.params.invoice_id)) }; //edit a copy, not original.
+        },
+        methods: {
+            updateinvoice: function () {
+                var invoice = this.invoice;
+                invoices[findinvoiceKey(invoice.id)] = {
+                    id: invoice.id,
+                    name: invoice.name,
+                    description: invoice.description,
+                    price: invoice.price
+                };
+                router.push('/');
+            }
+        }
+    });
+
+    var invoiceDelete = Vue.extend({
+        template: '#invoice-delete',
+        data: function () {
+            return { invoice: findinvoice(this.$route.params.invoice_id) };
+        },
+        methods: {
+            deleteinvoice: function () {
+                invoices.splice(findinvoiceKey(this.$route.params.invoice_id), 1);
+                router.push('/');
+            }
+        }
+    });
+
+    var Addinvoice = Vue.extend({
+        template: '#invoice-add',
+        data: function () {
+            return {
+                invoice: { name: '', description: '', price: '' }
+            }
+        },
+        methods: {
+            createinvoice: function () {
+                var invoice = this.invoice;
+                invoices.push({
+                    id: Math.random().toString().split('.')[1],
+                    name: invoice.name,
+                    description: invoice.description,
+                    price: invoice.price
+                });
+                router.push('/');
+            }
+        }
+    });
+
+    var router = new VueRouter({
+        routes: [{ path: '/', component: List },
+        { path: '/invoice/:invoice_id', component: invoice, name: 'invoice' },
+        { path: '/invoice-add', component: Addinvoice },
+        { path: '/invoice/:invoice_id/edit', component: invoiceEdit, name: 'invoice-edit' },
+        { path: '/invoice/:invoice_id/delete', component: invoiceDelete, name: 'invoice-delete' }
+        ]
+    });
+
+    new Vue({
+        el: '#app',
+        router: router,
+        template: '<router-view></router-view>'
+    });
+</script>
