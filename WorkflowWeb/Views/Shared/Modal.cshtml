@@ -16,9 +16,9 @@
                 </div>
                 <div class="modal-footer">
                     <div class="text-center">
-                        <img id="{modal_loading}" class="loading" src="@VirtualPathUtility.ToAbsolute("~/Content/img/loading.gif")" style="display:none; height:30px;" />
+                        <img class="loading" src="@Url.Content("~/Content/img/loading.gif")" style="display:none; height:30px;" />
                     </div>
-                    <button type="button" class="btn btn-sm btn-outline-secondary" data-dismiss="modal"><i class="@IMS.Models.Bootstrap.IconClose"></i> Close</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -99,19 +99,11 @@
         });
     }
 
-    //function modal_loading(id, show) {
-    //    if (show)
-    //        $('#' + id + '_loading').show();
-    //    else
-    //        $('#' + id + '_loading').hide();
-    //}
-
     function modal_loading(show) {
         if (show)
             $('.loading').show();
         else {
             $('.loading').hide();
-            add_icons($('.modal'));
         }
 
     }

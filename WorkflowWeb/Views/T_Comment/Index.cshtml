@@ -15,13 +15,13 @@
         ajaxOptions: new AjaxOptions
         {
             HttpMethod = "GET",
-            OnBegin = "$('.loading').show(); $('#" + modalId + "_modal').modal({});",
-            OnSuccess = "$('.loading').hide()",
+            OnBegin = "show_modal('" + modalId + "')",
+            OnSuccess = "",
             Confirm = null,
             AllowCache = false,
             InsertionMode = InsertionMode.Replace,
             OnFailure = "show_error",
-            OnComplete = "$('.loading').hide()",
+            OnComplete = "modal_loading(false)",
             UpdateTargetId = modalId + "_body"
         },
         htmlAttributes: new
@@ -61,13 +61,13 @@
                                 ajaxOptions: new AjaxOptions
                                 {
                                     HttpMethod = "GET",
-                                    OnBegin = "$('.loading').show(); $('#" + modalId + "_modal').modal('show');",
-                                    OnSuccess = "$('.loading').hide()",
+                                    OnBegin = "show_modal('" + modalId + "')",
+                                    OnSuccess = "",
                                     Confirm = null,
                                     AllowCache = false,
                                     InsertionMode = InsertionMode.Replace,
                                     OnFailure = "show_error",
-                                    OnComplete = "$('.loading').hide()",
+                                    OnComplete = "modal_loading(false)",
                                     UpdateTargetId = modalId + "_body"
                                 },
                                 htmlAttributes: new
@@ -83,14 +83,10 @@
                         <td>@Html.DisplayFor(modelItem => item.Comment)</td>
                         <td>@Html.DisplayFor(modelItem => item.ParentID)</td>
                         <td>@Html.DisplayFor(modelItem => item.DatePosted)</td>
-                        <td>@Html.DisplayFor(modelItem => item.QueryString)</td>_
+                        <td>@Html.DisplayFor(modelItem => item.QueryString)</td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
-
-
-
-

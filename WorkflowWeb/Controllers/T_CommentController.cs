@@ -17,14 +17,16 @@ namespace WorkflowWeb.Controllers
         public List<T_Comment> GetList()
         {
             db.Configuration.ProxyCreationEnabled = false;
-            var data = db.T_Comment.ToList();
+            var data = db.T_Comment.Include(x => x.T_Domain)
+                .Include(x => x.T_Comment1).ToList();
             return data;
         }
 
         public T_Comment Get(Guid id)
         {
             db.Configuration.ProxyCreationEnabled = false;
-            return db.T_Comment.Find(id);
+            return db.T_Comment.Include(x => x.T_Domain)
+                .Include(x => x.T_Comment1).FirstOrDefault(x => x.ID == id);
         }
 
         public bool Del(Guid id)
@@ -85,7 +87,7 @@ namespace WorkflowWeb.Controllers
                 m.ID = Guid.NewGuid();
                 db.T_Comment.Add(m);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return PartialView("Index", GetList());
             }
 
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -115,7 +117,7 @@ namespace WorkflowWeb.Controllers
             {
                 db.Entry(m).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return PartialView("Index", GetList());
             }
 
             return PartialView(ModelState);
@@ -126,7 +128,7 @@ namespace WorkflowWeb.Controllers
         public ActionResult Delete(T_Comment m)
         {
             Del(m.ID);
-            return RedirectToAction("Index");
+            return PartialView("Index", GetList());
         }
 
     }

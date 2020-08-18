@@ -16,13 +16,13 @@
     ajaxOptions: new AjaxOptions
     {
         HttpMethod = "POST",
-        OnBegin = "$('.loading').show();",
-        OnSuccess = "$('.loading').hide(); $('#" + modalId + "_modal *[data-dismiss=\"modal\"]').click();",
+        OnBegin = "modal_loading(true)",
+        OnSuccess = "hide_modal(this)",
         Confirm = null,
         AllowCache = false,
         InsertionMode = InsertionMode.Replace,
         OnFailure = "show_error",
-        OnComplete = "$('.loading').hide()",
+        OnComplete = "modal_loading(false)",
         UpdateTargetId = html_target
     },
     htmlAttributes: new
@@ -36,6 +36,8 @@
         <h4>T_Comment</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.HiddenFor(m => m.ID)
 
         <div class="form-group row">
             @Html.LabelFor(model => model.DomainID, htmlAttributes: new { @class = "control-label col-md-2" })
