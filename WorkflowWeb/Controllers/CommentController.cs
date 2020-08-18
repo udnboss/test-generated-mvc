@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,6 +16,7 @@ namespace WorkflowWeb.Controllers
     {
         private COMMENTSEntities db = new COMMENTSEntities();
 
+
         public List<T_Comment> GetList()
         {
             db.Configuration.ProxyCreationEnabled = false;
@@ -22,16 +24,18 @@ namespace WorkflowWeb.Controllers
             return data;
         }
 
-        public T_Comment Get(Guid? id)
+
+        public T_Comment Get(Guid id)
         {
             db.Configuration.ProxyCreationEnabled = false;
             return db.T_Comment.Find(id);
         }
 
-        public bool Del(Guid? id)
+
+        public bool Del(Guid id)
         {
             var m = Get(id);
-            if(m == null)
+            if (m == null)
             {
                 return false;
             }
@@ -41,22 +45,26 @@ namespace WorkflowWeb.Controllers
             return true;
         }
 
+
         public Dictionary<string, object> GetLookups()
         {
             return new Dictionary<string, object> {
-                    {"parent_id", GetList().Select(x => new { id = x.ID, text = x.Name }).ToList() },
-                    {"domain_id", db.T_Domain.Select(x => new { id = x.ID, text = x.Host }).ToList() }
-                };
+                                    {"T_Comment2", db.T_Comment.Select(x => new { id = x.ID, text = x.ID }).ToList() },
+    {"T_Domain", db.T_Domain.Select(x => new { id = x.ID, text = x.ID }).ToList() }
+                        };
         }
 
-        // GET: Comment
+
+
         public ActionResult Index()
         {
-            return JsonOut(GetList());            
+            {
+                return JsonOut(GetList());
+            }
         }
 
-        // GET: Comment/Details/5
-        public ActionResult Details(Guid? id)
+
+        public ActionResult Details(Guid id)
         {
             if (id == null)
             {
@@ -71,26 +79,26 @@ namespace WorkflowWeb.Controllers
             return JsonOut(m);
         }
 
-        // GET: Comment/Create
+
         public ActionResult New()
         {
-            var vm = new { 
-                data = new T_Comment(), 
+            var vm = new
+            {
+                data = new T_Comment(),
                 lookups = GetLookups()
             };
 
             return JsonOut(vm);
         }
 
-        // POST: Comment/Create
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(T_Comment m)
         {
             if (ModelState.IsValid)
             {
-                m.ID = Guid.NewGuid();
-                db.T_Comment.Add(m);
+                m.ID = Guid.NewGuid(); db.T_Comment.Add(m);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -98,8 +106,9 @@ namespace WorkflowWeb.Controllers
             return JsonOut(ModelState);
         }
 
-        // GET: Comment/Edit/5
-        public ActionResult Edit(Guid? id)
+
+
+        public ActionResult Edit(Guid id)
         {
             if (id == null)
             {
@@ -120,7 +129,8 @@ namespace WorkflowWeb.Controllers
             return JsonOut(vm);
         }
 
-        // POST: Comment/Edit/5
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Update(T_Comment m)
@@ -136,7 +146,7 @@ namespace WorkflowWeb.Controllers
         }
 
 
-        // POST: Comment/Delete/5
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(T_Comment m)
@@ -144,13 +154,5 @@ namespace WorkflowWeb.Controllers
             return JsonOut(new { status = Del(m.ID) });
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

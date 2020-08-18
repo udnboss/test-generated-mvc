@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -10,128 +12,122 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.Controllers
 {
-    public class T_CommentController : Controller
+    public class T_CommentController : BaseController
     {
-        private COMMENTSEntities db = new COMMENTSEntities();
+        public List<T_Comment> GetList()
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            var data = db.T_Comment.ToList();
+            return data;
+        }
 
-        // GET: T_Comment
+        public T_Comment Get(Guid id)
+        {
+            db.Configuration.ProxyCreationEnabled = false;
+            return db.T_Comment.Find(id);
+        }
+
+        public bool Del(Guid id)
+        {
+            var m = Get(id);
+            if (m == null)
+            {
+                return false;
+            }
+
+            db.T_Comment.Remove(m);
+            db.SaveChanges();
+            return true;
+        }
+
+        public Dictionary<string, object> GetLookups()
+        {
+            return new Dictionary<string, object> {
+                {"ParentID", db.T_Comment.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
+                {"DomainID", db.T_Domain.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) }
+            };
+        }
+
         public ActionResult Index()
         {
-            var t_Comment = db.T_Comment.Include(t => t.T_Comment2).Include(t => t.T_Domain);
-            return View(t_Comment.ToList());
+            return PartialView(GetList());
         }
 
-        // GET: T_Comment/Details/5
-        public ActionResult Details(Guid? id)
+        public ActionResult Details(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            T_Comment t_Comment = db.T_Comment.Find(id);
-            if (t_Comment == null)
+            var m = Get(id);
+            if (m == null)
             {
                 return HttpNotFound();
             }
-            return View(t_Comment);
+
+            return PartialView(m);
         }
 
-        // GET: T_Comment/Create
-        public ActionResult Create()
+        public ActionResult New()
         {
-            ViewBag.ParentID = new SelectList(db.T_Comment, "ID", "DomainID");
-            ViewBag.DomainID = new SelectList(db.T_Domain, "ID", "Host");
-            return View();
+            var m = new T_Comment() { DatePosted = DateTime.Now };
+
+            ViewBag.Lookups = GetLookups();
+            return PartialView(m);
         }
 
-        // POST: T_Comment/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,DomainID,Path,IP,Name,Comment,ParentID,DatePosted,QueryString")] T_Comment t_Comment)
+        public ActionResult Create(T_Comment m)
         {
             if (ModelState.IsValid)
             {
-                t_Comment.ID = Guid.NewGuid();
-                db.T_Comment.Add(t_Comment);
+                m.ID = Guid.NewGuid();
+                db.T_Comment.Add(m);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ParentID = new SelectList(db.T_Comment, "ID", "DomainID", t_Comment.ParentID);
-            ViewBag.DomainID = new SelectList(db.T_Domain, "ID", "Host", t_Comment.DomainID);
-            return View(t_Comment);
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
-        // GET: T_Comment/Edit/5
-        public ActionResult Edit(Guid? id)
+        public ActionResult Edit(Guid id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            T_Comment t_Comment = db.T_Comment.Find(id);
-            if (t_Comment == null)
+            var m = Get(id);
+            if (m == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.ParentID = new SelectList(db.T_Comment, "ID", "DomainID", t_Comment.ParentID);
-            ViewBag.DomainID = new SelectList(db.T_Domain, "ID", "Host", t_Comment.DomainID);
-            return View(t_Comment);
+
+            ViewBag.Lookups = GetLookups();
+            return PartialView(m);
         }
 
-        // POST: T_Comment/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,DomainID,Path,IP,Name,Comment,ParentID,DatePosted,QueryString")] T_Comment t_Comment)
+        public ActionResult Update(T_Comment m)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(t_Comment).State = EntityState.Modified;
+                db.Entry(m).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.ParentID = new SelectList(db.T_Comment, "ID", "DomainID", t_Comment.ParentID);
-            ViewBag.DomainID = new SelectList(db.T_Domain, "ID", "Host", t_Comment.DomainID);
-            return View(t_Comment);
+
+            return PartialView(ModelState);
         }
 
-        // GET: T_Comment/Delete/5
-        public ActionResult Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            T_Comment t_Comment = db.T_Comment.Find(id);
-            if (t_Comment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(t_Comment);
-        }
-
-        // POST: T_Comment/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(Guid id)
+        public ActionResult Delete(T_Comment m)
         {
-            T_Comment t_Comment = db.T_Comment.Find(id);
-            db.T_Comment.Remove(t_Comment);
-            db.SaveChanges();
+            Del(m.ID);
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
     }
 }

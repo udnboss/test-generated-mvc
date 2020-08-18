@@ -1,7 +1,7 @@
 ﻿
     <script id="modal_template" type="text/html">
         <div class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Modal title</h5>
@@ -13,7 +13,6 @@
                         <p>Modal body text goes here.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Save changes</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -23,14 +22,16 @@
 
     <script>
         
-    function LoadModal(html) {
+    function show_modal(id, html) {
         var mhtml = $($('#modal_template').html());
-        mhtml.attr('id', 'Modal');
+        mhtml.attr('id', id);
         mhtml.find('.modal-body').html(html);
 
         var m = $(mhtml).modal();
         
-    }
+        }
+
+
 
     function LoadModalByUrl(url) {
         $.get(url, function (data) {

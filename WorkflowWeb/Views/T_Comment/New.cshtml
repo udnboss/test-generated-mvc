@@ -10,14 +10,14 @@
 
 
 @using (Ajax.BeginForm(
-    actionName: "Update",
+    actionName: "Create",
     controllerName: controller,
     routeValues: new { html_target = html_target },
     ajaxOptions: new AjaxOptions
     {
         HttpMethod = "POST",
         OnBegin = "$('.loading').show();",
-        OnSuccess = "$('.loading').hide(); $('#" + modalId + "_modal *[data-dismiss=\"modal\"]').click();",
+        OnSuccess = "$('.loading').hide(); ",
         Confirm = null,
         AllowCache = false,
         InsertionMode = InsertionMode.Replace,
@@ -103,7 +103,7 @@
 
         <div class="form-group row">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Update" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn btn-default" />
             </div>
         </div>
     </div>
