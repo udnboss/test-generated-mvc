@@ -1,41 +1,118 @@
-﻿
-    <script id="modal_template" type="text/html">
-        <div class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Modal title</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+﻿<!-- reusable modal template for client side -->
+<script id="modal_template" type="text/html">
+    <div id="{modal_id}" class="modal fade" tabindex="-1">
+        <div class="modal-dialog modal-{modal_size}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{modal_title}</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="{modal_body_id}" class="p-2">
+                        {modal_body}
                     </div>
-                    <div class="modal-body">
-                        <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                    <div class="text-center">
+                        <img id="{modal_loading}" class="loading" src="@VirtualPathUtility.ToAbsolute("~/Content/img/loading.gif")" style="display:none; height:30px;" />
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-dismiss="modal"><i class="@IMS.Models.Bootstrap.IconClose"></i> Close</button>
                 </div>
             </div>
         </div>
-    </script>
+    </div>
+</script>
 
-    <script>
-        
-    function show_modal(id, html) {
-        var mhtml = $($('#modal_template').html());
-        mhtml.attr('id', id);
-        mhtml.find('.modal-body').html(html);
+<!-- modals placeholder -->
+<div id="#modals"></div>
 
-        var m = $(mhtml).modal();
-        
+<script>
+    function hide_modal(src) {
+        //hide the first parent modal.
+        var modal_div = $(src).parents('.modal').first();
+        modal_div.modal('hide');
+        modal_loading(false);
+    }
+
+
+
+    function show_error(error) {
+        //$('#error_panel').html(error.responseText);
+        //$('#error_modal').modal('show');
+
+        show_modal('error_modal', 'error', 'xlarge');
+
+        try {
+            var json = jQuery.parseJSON(error.responseText);
+            var html = "<h4>Errors:</h4><ul>";
+            for (var i in json) {
+                html += '<li>' + json[i] + '</li>';
+            }
+            html += "</ul>";
+            $('#error_modal_body').html(html);
+
+        } catch (e) {
+            // its not json
+            var er = error.responseText;
+            var regex = /((<style>)|(<style type=.+))((\s+)|(\S+)|(\r+)|(\n+))(.+)((\s+)|(\S+)|(\r+)|(\n+))(<\/style>)/g;
+
+            er = er.replace(regex, '');
+
+            $('#error_modal_body').html(er);
         }
 
-
-
-    function LoadModalByUrl(url) {
-        $.get(url, function (data) {
-                LoadModal(data);
-            });
+        modal_loading(false);
     }
-    </script>
+
+    function before_modal() {
+        $('#edit_modal_panel').html('');
+    }
+
+    function show_modal(modal_id, modal_title, modal_size) {
+        var modal_template = $('#modal_template').html();
+
+        modal_template = modal_template.replace('{modal_id}', modal_id);
+        modal_template = modal_template.replace('{modal_title}', modal_title);
+        modal_template = modal_template.replace('{modal_body_id}', modal_id + '_body');
+        modal_template = modal_template.replace('{modal_body}', '');
+        modal_template = modal_template.replace('{modal_loading}', modal_id + '_loading');
+        modal_template = modal_template.replace('{modal_size}', modal_size);
+
+        $('body').append(modal_template);
+
+        var modal_div = $('#' + modal_id);
+
+        var modal = modal_div.modal({});
+
+        modal_loading(modal_div.attr('id'), true);
+
+        modal.on('hidden.bs.modal', function (e) {
+            modal.modal('dispose');
+            $('#' + modal_id).remove();
+        });
+
+        modal.on('shown.bs.modal', function () {
+            $(document).off('focusin.modal');
+
+        });
+    }
+
+    //function modal_loading(id, show) {
+    //    if (show)
+    //        $('#' + id + '_loading').show();
+    //    else
+    //        $('#' + id + '_loading').hide();
+    //}
+
+    function modal_loading(show) {
+        if (show)
+            $('.loading').show();
+        else {
+            $('.loading').hide();
+            add_icons($('.modal'));
+        }
+
+    }
+</script>
