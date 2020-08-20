@@ -8,42 +8,16 @@
     <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 </div>
 
-<div id="commentsBlock">
-    @Html.Action("Index", "T_Comment", new { html_target = "commentsBlock" })
+<h2>T_Comment</h2>
+<div id="block_comments">
+    @Html.Action("Index", "T_Comment", new { html_target = "block_comments"})
 </div>
 
-
-
-
-@*Common components*@
-@Html.Partial("~/Views/Shared/Vue/FormInput.cshtml")
-@Html.Partial("~/Views/Shared/Vue/FormUpload.cshtml")
-@Html.Partial("~/Views/Shared/Vue/Select2.cshtml")
-@Html.Partial("~/Views/Shared/Vue/Modal.cshtml")
-@*@Html.Partial("~/Views/Shared/Vue/SideBar.cshtml")*@
-
-
-
-@Html.Partial("~/Views/Comment/Component.cshtml")
-@Html.Partial("~/Views/Upload/Component.cshtml")
-
-
-<div id="app">
-    @*<v-sidebar></v-sidebar>*@
-    @*<v-uploads></v-uploads>
-    <v-comments></v-comments>*@
-    <v-comments></v-comments>
-</div>
-
-
-<script>
-    var app = new Vue({
-        el: '#app'
-    });
-</script>
-
-
-
-@*<div id="comments-box">
-        @Html.Action("Index", "Comment1", new { html_target = "comments-box" })
-    </div>*@
+@foreach (var x in typeof(WorkflowWeb.Models.IMSEntities).GetProperties().Where(p => p.PropertyType.Name.StartsWith("DbSet")))
+{
+    var blockId = Guid.NewGuid();
+    <h2>@x.Name</h2>
+    <div id="block_@blockId">
+        @Html.Action("Index", x.Name, new { html_target = "block_" + blockId })
+    </div>
+}

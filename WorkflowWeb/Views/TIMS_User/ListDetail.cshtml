@@ -1,0 +1,122 @@
+@using WorkflowWeb.ViewModels
+@model IEnumerable<TIMS_UserViewModel>
+@{
+    var controller = ViewContext.RouteData.Values["controller"].ToString();
+
+    var ui_html_target = (ViewContext.RouteData.Values["ui_html_target"] ?? Request.QueryString["ui_html_target"]) as string;
+    var ui_list_view = System.IO.Path.GetFileNameWithoutExtension(((RazorView)ViewContext.View).ViewPath);
+    var ui_modal_id = Guid.NewGuid().ToString();
+    var ui_tab_id = (ViewContext.RouteData.Values["ui_tab_id"] ?? Request.QueryString["ui_tab_id"]) as string;
+    var ui_route_filter = (ViewContext.RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+
+    var currentId = ViewBag.CurrentID as object;
+    var currentItem = currentId == null ? Model.FirstOrDefault() : Model.FirstOrDefault(x => x.ID.ToString() == currentId.ToString());
+}
+
+<div>
+    <div class="text-right mb-5">
+        @Ajax.ActionLink(
+        linkText: "Add New TIMS_User..",
+        actionName: "New",
+        controllerName: controller,
+        routeValues: new { ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter },
+        ajaxOptions: new AjaxOptions
+        {
+            HttpMethod = "GET",
+            OnBegin = "show_modal('" + ui_modal_id + "')",
+            OnSuccess = "",
+            Confirm = null,
+            AllowCache = false,
+            InsertionMode = InsertionMode.Replace,
+            OnFailure = "show_error",
+            OnComplete = "modal_loading(false)",
+            UpdateTargetId = ui_modal_id + "_body"
+        },
+        htmlAttributes: new
+        {
+            @class = "btn btn-outline-primary btn-sm"
+        })
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="list-group">
+                @foreach (var item in Model)
+                {
+                    <a href="@Url.Action(actionName: "Index", controllerName: controller, routeValues: new { id = item.ID, ui_route_filter })" class="list-group-item list-group-item-action @(currentItem != null && currentItem.ID == item.ID ? "list-group-item-primary" : "")">@item.Name</a>
+                }
+            </div>
+        </div>
+        <div class="col-md-8">
+            @if (currentItem != null)
+            {
+                <h1>@currentItem.Name</h1>
+                <div class="card my-5">
+                    <div class="card-body">
+                        @Html.Action(actionName: "Details", controllerName: controller, routeValues: new { id = currentItem.ID, ui_html_target, ui_modal_id, ui_list_view, ui_route_filter })
+                    </div>
+                </div>
+                <div>
+                    <script>
+                        $(function () {
+                            if ("@ui_tab_id" == "") {
+                                $('#tabs-TIMS_User a').first().tab('show');
+                            }
+                            else {
+                                $('#tabs-TIMS_User a[href="#@ui_tab_id"]').tab('show');
+                            }
+
+                        });
+                    </script>
+                    <ul class="nav nav-tabs mb-3" id="tabs-TIMS_User">
+                        <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_User-TIMS_ProjectActionItemWorkflow">TIMS_ProjectActionItemWorkflow</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_User-TIMS_ProjectAttachment">TIMS_ProjectAttachment</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_User-TIMS_ProjectComment">TIMS_ProjectComment</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_User-TIMS_ProjectInterfaceAgreementWorkflow">TIMS_ProjectInterfaceAgreementWorkflow</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_User-TIMS_ProjectInterfacePointWorkflow">TIMS_ProjectInterfacePointWorkflow</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_User-TIMS_UserRole">TIMS_UserRole</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_User-TIMS_UserWatchlistItem">TIMS_UserWatchlistItem</a>
+</li>
+                    </ul>
+                    <div class="tab-content" id="tabContent-TIMS_User">
+                        <div class="tab-pane fade" id="tab-TIMS_User-TIMS_ProjectActionItemWorkflow">
+    @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectActionItemWorkflow", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectActionItemWorkflowViewModel { UserID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_User-TIMS_ProjectActionItemWorkflow", ui_list_view = "ListTable" })
+</div>
+<div class="tab-pane fade" id="tab-TIMS_User-TIMS_ProjectAttachment">
+    @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectAttachment", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectAttachmentViewModel { UserID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_User-TIMS_ProjectAttachment", ui_list_view = "ListTable" })
+</div>
+<div class="tab-pane fade" id="tab-TIMS_User-TIMS_ProjectComment">
+    @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectComment", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectCommentViewModel { UserID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_User-TIMS_ProjectComment", ui_list_view = "ListTable" })
+</div>
+<div class="tab-pane fade" id="tab-TIMS_User-TIMS_ProjectInterfaceAgreementWorkflow">
+    @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectInterfaceAgreementWorkflow", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfaceAgreementWorkflowViewModel { UserID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_User-TIMS_ProjectInterfaceAgreementWorkflow", ui_list_view = "ListTable" })
+</div>
+<div class="tab-pane fade" id="tab-TIMS_User-TIMS_ProjectInterfacePointWorkflow">
+    @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectInterfacePointWorkflow", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfacePointWorkflowViewModel { UserID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_User-TIMS_ProjectInterfacePointWorkflow", ui_list_view = "ListTable" })
+</div>
+<div class="tab-pane fade" id="tab-TIMS_User-TIMS_UserRole">
+    @Html.Action(actionName: "ListTable", controllerName: "TIMS_UserRole", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_UserRoleViewModel { UserID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_User-TIMS_UserRole", ui_list_view = "ListTable" })
+</div>
+<div class="tab-pane fade" id="tab-TIMS_User-TIMS_UserWatchlistItem">
+    @Html.Action(actionName: "ListTable", controllerName: "TIMS_UserWatchlistItem", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_UserWatchlistItemViewModel { UserID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_User-TIMS_UserWatchlistItem", ui_list_view = "ListTable" })
+</div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</div>

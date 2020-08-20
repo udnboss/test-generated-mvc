@@ -10,7 +10,7 @@ namespace WorkflowWeb.Controllers
 {
     public class BaseController : Controller
     {
-        protected COMMENTSEntities db = new COMMENTSEntities();
+        protected IMSEntities db = new IMSEntities();
         public ContentResult JsonOut(object data)
         {
             string json = JsonConvert.SerializeObject(data, Formatting.Indented);

@@ -1,0 +1,11 @@
+@using WorkflowWeb.ViewModels
+@{
+    var controller = ViewContext.RouteData.Values["controller"].ToString();
+    var ui_list_view = "ListDetail";
+    var ui_html_target = "TIMS_WorkflowStateindex";
+    var ui_route_filter = (ViewContext.RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+}
+
+<div id="@ui_html_target">
+    @Html.Action(actionName: ui_list_view, controllerName: controller, routeValues: new { id = Model, ui_html_target, ui_list_view, ui_route_filter })
+</div>

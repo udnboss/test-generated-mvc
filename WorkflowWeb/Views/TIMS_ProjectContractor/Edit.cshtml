@@ -1,0 +1,91 @@
+@using WorkflowWeb.ViewModels
+@model TIMS_ProjectContractorViewModel
+
+@{
+    var controller = ViewContext.RouteData.Values["controller"].ToString();
+
+    var ui_html_target = (ViewContext.RouteData.Values["ui_html_target"] ?? Request.QueryString["ui_html_target"]) as string;
+    var ui_list_view = (ViewContext.RouteData.Values["ui_list_view"] ?? Request.QueryString["ui_list_view"]) as string;
+    var ui_modal_id = (ViewContext.RouteData.Values["ui_modal_id"] ?? Request.QueryString["ui_modal_id"]) as string;
+    var ui_tab_id = (ViewContext.RouteData.Values["ui_tab_id"] ?? Request.QueryString["ui_tab_id"]) as string;
+    var ui_route_filter = (ViewContext.RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+
+    var ui_form_id = Guid.NewGuid().ToString();
+    var lookups = ViewBag.Lookups as Dictionary<string, object>;
+}
+
+
+@using (Ajax.BeginForm(
+    actionName: "Update",
+    controllerName: controller,
+    routeValues: new { ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter },
+    ajaxOptions: new AjaxOptions
+    {
+        HttpMethod = "POST",
+        OnBegin = "modal_loading(true)",
+        OnSuccess = "hide_modal(this)",
+        Confirm = null,
+        AllowCache = false,
+        InsertionMode = InsertionMode.Replace,
+        OnFailure = "show_error",
+        OnComplete = "modal_loading(false)",
+        UpdateTargetId = ui_html_target
+    },
+    htmlAttributes: new
+    {
+        id = ui_form_id
+    }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>@Model.Name</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.HiddenFor(m => m.ID)
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+		        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.ProjectID, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DropDownList("ProjectID", lookups["ProjectID"] as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+		        @Html.ValidationMessageFor(model => model.ProjectID, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.ContractorID, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DropDownList("ContractorID", lookups["ContractorID"] as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+		        @Html.ValidationMessageFor(model => model.ContractorID, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+        <script>
+            $(function () {
+                $('form#@ui_form_id select').each(function () {
+                    $(this).prepend('<option value=""></option>'); //allow empty selections
+                });
+
+                $.validator.unobtrusive.parse("form#@ui_form_id"); //enable validations
+            });
+        </script>
+
+        <div class="form-group row">
+            <div class="col-md-2">
+
+            </div>
+            <div class="col-md-10">
+                <button type="submit" class="btn btn-success btn-sm">Update</button>
+            </div>
+        </div>
+    </div>
+}

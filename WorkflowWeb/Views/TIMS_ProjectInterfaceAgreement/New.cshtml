@@ -1,0 +1,179 @@
+@using WorkflowWeb.ViewModels
+@model TIMS_ProjectInterfaceAgreementViewModel
+
+@{
+    var controller = ViewContext.RouteData.Values["controller"].ToString();
+
+    var ui_html_target = (ViewContext.RouteData.Values["ui_html_target"] ?? Request.QueryString["ui_html_target"]) as string;
+    var ui_list_view = (ViewContext.RouteData.Values["ui_list_view"] ?? Request.QueryString["ui_list_view"]) as string;
+    var ui_modal_id = (ViewContext.RouteData.Values["ui_modal_id"] ?? Request.QueryString["ui_modal_id"]) as string;
+    var ui_tab_id = (ViewContext.RouteData.Values["ui_tab_id"] ?? Request.QueryString["ui_tab_id"]) as string;
+    var ui_route_filter = (ViewContext.RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+
+    var ui_form_id = Guid.NewGuid().ToString();
+    var lookups = ViewBag.Lookups as Dictionary<string, object>;
+}
+
+
+@using (Ajax.BeginForm(
+    actionName: "Create",
+    controllerName: controller,
+    routeValues: new { ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter },
+    ajaxOptions: new AjaxOptions
+    {
+        HttpMethod = "POST",
+        OnBegin = "modal_loading(true)",
+        OnSuccess = "hide_modal(this)",
+        Confirm = null,
+        AllowCache = false,
+        InsertionMode = InsertionMode.Replace,
+        OnFailure = "show_error",
+        OnComplete = "modal_loading(false)",
+        UpdateTargetId = ui_html_target
+    },
+    htmlAttributes: new
+    {
+        id = ui_form_id
+    }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>@Model.Name</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @Html.HiddenFor(m => m.ID)
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+		        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.InterfacePointID, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DropDownList("InterfacePointID", lookups["InterfacePointID"] as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+		        @Html.ValidationMessageFor(model => model.InterfacePointID, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.RequestorPackageID, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DropDownList("RequestorPackageID", lookups["RequestorPackageID"] as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+		        @Html.ValidationMessageFor(model => model.RequestorPackageID, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.ResponderPackageID, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DropDownList("ResponderPackageID", lookups["ResponderPackageID"] as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+		        @Html.ValidationMessageFor(model => model.ResponderPackageID, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.RequestorUserID, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.EditorFor(model => model.RequestorUserID, new { htmlAttributes = new { @class = "form-control" } })
+		        @Html.ValidationMessageFor(model => model.RequestorUserID, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.RequestorTechnicalContactID, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.EditorFor(model => model.RequestorTechnicalContactID, new { htmlAttributes = new { @class = "form-control" } })
+		        @Html.ValidationMessageFor(model => model.RequestorTechnicalContactID, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.ResponderInterfaceManagerID, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.EditorFor(model => model.ResponderInterfaceManagerID, new { htmlAttributes = new { @class = "form-control" } })
+		        @Html.ValidationMessageFor(model => model.ResponderInterfaceManagerID, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.ResponderTechnicalContactID, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.EditorFor(model => model.ResponderTechnicalContactID, new { htmlAttributes = new { @class = "form-control" } })
+		        @Html.ValidationMessageFor(model => model.ResponderTechnicalContactID, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.CreateDate, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.EditorFor(model => model.CreateDate, new { htmlAttributes = new { @class = "form-control" } })
+		        @Html.ValidationMessageFor(model => model.CreateDate, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.NeedDate, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.EditorFor(model => model.NeedDate, new { htmlAttributes = new { @class = "form-control" } })
+		        @Html.ValidationMessageFor(model => model.NeedDate, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.IssuedDate, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.EditorFor(model => model.IssuedDate, new { htmlAttributes = new { @class = "form-control" } })
+		        @Html.ValidationMessageFor(model => model.IssuedDate, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.AcceptedDate, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.EditorFor(model => model.AcceptedDate, new { htmlAttributes = new { @class = "form-control" } })
+		        @Html.ValidationMessageFor(model => model.AcceptedDate, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.ResponseDate, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.EditorFor(model => model.ResponseDate, new { htmlAttributes = new { @class = "form-control" } })
+		        @Html.ValidationMessageFor(model => model.ResponseDate, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.CloseDate, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.EditorFor(model => model.CloseDate, new { htmlAttributes = new { @class = "form-control" } })
+		        @Html.ValidationMessageFor(model => model.CloseDate, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+        <script>
+            $(function () {
+                $('form#@ui_form_id select').each(function () {
+                    $(this).prepend('<option value=""></option>'); //allow empty selections
+                });
+
+                $.validator.unobtrusive.parse("form#@ui_form_id"); //enable validations
+            });
+        </script>
+
+        <div class="form-group row">
+            <div class="col-md-2">
+
+            </div>
+            <div class="col-md-10">
+                <button type="submit" class="btn btn-success">Create</button>
+            </div>
+        </div>
+    </div>
+}

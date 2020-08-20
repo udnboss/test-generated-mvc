@@ -130,6 +130,33 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Attributes\HandleParameters.cs" />
     <Compile Include="Controllers\Comment1Controller.cs" />
+    <Compile Include="Controllers\TIMS_ContractorController.cs" />
+    <Compile Include="Controllers\TIMS_DisciplineController.cs" />
+    <Compile Include="Controllers\TIMS_PhaseController.cs" />
+    <Compile Include="Controllers\TIMS_ProjectActionItemController.cs" />
+    <Compile Include="Controllers\TIMS_ProjectActionItemWorkflowController.cs" />
+    <Compile Include="Controllers\TIMS_ProjectAreaController.cs" />
+    <Compile Include="Controllers\TIMS_ProjectAttachmentController.cs" />
+    <Compile Include="Controllers\TIMS_ProjectCommentController.cs" />
+    <Compile Include="Controllers\TIMS_ProjectContractorController.cs" />
+    <Compile Include="Controllers\TIMS_ProjectController.cs" />
+    <Compile Include="Controllers\TIMS_ProjectDisciplineController.cs" />
+    <Compile Include="Controllers\TIMS_ProjectDisciplineInterfaceTypeController.cs" />
+    <Compile Include="Controllers\TIMS_ProjectDisciplineInterfaceTypeFieldController.cs" />
+    <Compile Include="Controllers\TIMS_ProjectInterfaceAgreementController.cs" />
+    <Compile Include="Controllers\TIMS_ProjectInterfaceAgreementWorkflowController.cs" />
+    <Compile Include="Controllers\TIMS_ProjectInterfacePointController.cs" />
+    <Compile Include="Controllers\TIMS_ProjectInterfacePointFieldEntryController.cs" />
+    <Compile Include="Controllers\TIMS_ProjectInterfacePointWorkflowController.cs" />
+    <Compile Include="Controllers\TIMS_ProjectPackageController.cs" />
+    <Compile Include="Controllers\TIMS_ProjectPhysicalAreaController.cs" />
+    <Compile Include="Controllers\TIMS_RoleController.cs" />
+    <Compile Include="Controllers\TIMS_UserController.cs" />
+    <Compile Include="Controllers\TIMS_UserRoleController.cs" />
+    <Compile Include="Controllers\TIMS_UserWatchlistItemController.cs" />
+    <Compile Include="Controllers\TIMS_WorkflowActionController.cs" />
+    <Compile Include="Controllers\TIMS_WorkflowStateController.cs" />
+    <Compile Include="Controllers\TIMS_WorkflowTypeController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -153,9 +180,105 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\Model2.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model2.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model2.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model2.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Model2.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Models\Partial\T_Comment.cs" />
     <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_Contractor.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_Discipline.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_Phase.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_Project.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_ProjectActionItem.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_ProjectActionItemWorkflow.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_ProjectArea.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_ProjectAttachment.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_ProjectComment.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_ProjectContractor.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_ProjectDiscipline.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_ProjectDisciplineInterfaceType.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_ProjectDisciplineInterfaceTypeField.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_ProjectInterfaceAgreement.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_ProjectInterfaceAgreementWorkflow.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_ProjectInterfacePoint.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_ProjectInterfacePointFieldEntry.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_ProjectInterfacePointWorkflow.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_ProjectPackage.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_ProjectPhysicalArea.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_Role.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_User.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_UserRole.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_UserWatchlistItem.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_WorkflowAction.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_WorkflowState.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TIMS_WorkflowType.cs">
+      <DependentUpon>Model2.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\T_Comment.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -170,6 +293,33 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\TIMS_ContractorViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_DisciplineViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_PhaseViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_ProjectActionItemViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_ProjectActionItemWorkflowViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_ProjectAreaViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_ProjectAttachmentViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_ProjectCommentViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_ProjectContractorViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_ProjectDisciplineInterfaceTypeFieldViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_ProjectDisciplineInterfaceTypeViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_ProjectDisciplineViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_ProjectInterfaceAgreementViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_ProjectInterfaceAgreementWorkflowViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_ProjectInterfacePointFieldEntryViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_ProjectInterfacePointViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_ProjectInterfacePointWorkflowViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_ProjectPackageViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_ProjectPhysicalAreaViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_ProjectViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_RoleViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_UserRoleViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_UserViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_UserWatchlistItemViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_WorkflowActionViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_WorkflowStateViewModel.cs" />
+    <Compile Include="ViewModels\TIMS_WorkflowTypeViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\sb-admin-2.css" />
@@ -1828,6 +1978,16 @@
       <DependentUpon>Model1.edmx</DependentUpon>
       <LastGenOutput>Model1.cs</LastGenOutput>
     </Content>
+    <Content Include="Models\Model2.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model2.edmx</DependentUpon>
+      <LastGenOutput>Model2.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\Model2.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Model2.edmx</DependentUpon>
+      <LastGenOutput>Model2.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <EntityDeploy Include="Models\Model1.edmx">
@@ -1850,6 +2010,13 @@
     <Content Include="Content\vendor\fontawesome-free\webfonts\fa-solid-900.ttf" />
     <Content Include="Content\vendor\fontawesome-free\webfonts\fa-solid-900.woff" />
     <Content Include="Content\vendor\fontawesome-free\webfonts\fa-solid-900.woff2" />
+    <EntityDeploy Include="Models\Model2.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model2.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Model2.edmx.diagram">
+      <DependentUpon>Model2.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -1898,6 +2065,171 @@
     <Content Include="Views\Shared\Vue\SideBar.cshtml" />
     <Content Include="Views\Upload\Component.cshtml" />
     <Content Include="Views\T_Comment\New.cshtml" />
+    <Content Include="Views\TIMS_Contractor\Details.cshtml" />
+    <Content Include="Views\TIMS_Contractor\Edit.cshtml" />
+    <Content Include="Views\TIMS_Contractor\Index.cshtml" />
+    <Content Include="Views\TIMS_Contractor\New.cshtml" />
+    <Content Include="Views\TIMS_Discipline\Details.cshtml" />
+    <Content Include="Views\TIMS_Discipline\Edit.cshtml" />
+    <Content Include="Views\TIMS_Discipline\Index.cshtml" />
+    <Content Include="Views\TIMS_Discipline\New.cshtml" />
+    <Content Include="Views\TIMS_Phase\Details.cshtml" />
+    <Content Include="Views\TIMS_Phase\Edit.cshtml" />
+    <Content Include="Views\TIMS_Phase\Index.cshtml" />
+    <Content Include="Views\TIMS_Phase\New.cshtml" />
+    <Content Include="Views\TIMS_ProjectActionItemWorkflow\Details.cshtml" />
+    <Content Include="Views\TIMS_ProjectActionItemWorkflow\Edit.cshtml" />
+    <Content Include="Views\TIMS_ProjectActionItemWorkflow\Index.cshtml" />
+    <Content Include="Views\TIMS_ProjectActionItemWorkflow\New.cshtml" />
+    <Content Include="Views\TIMS_ProjectActionItem\Details.cshtml" />
+    <Content Include="Views\TIMS_ProjectActionItem\Edit.cshtml" />
+    <Content Include="Views\TIMS_ProjectActionItem\Index.cshtml" />
+    <Content Include="Views\TIMS_ProjectActionItem\New.cshtml" />
+    <Content Include="Views\TIMS_ProjectArea\Details.cshtml" />
+    <Content Include="Views\TIMS_ProjectArea\Edit.cshtml" />
+    <Content Include="Views\TIMS_ProjectArea\Index.cshtml" />
+    <Content Include="Views\TIMS_ProjectArea\New.cshtml" />
+    <Content Include="Views\TIMS_ProjectAttachment\Details.cshtml" />
+    <Content Include="Views\TIMS_ProjectAttachment\Edit.cshtml" />
+    <Content Include="Views\TIMS_ProjectAttachment\Index.cshtml" />
+    <Content Include="Views\TIMS_ProjectAttachment\New.cshtml" />
+    <Content Include="Views\TIMS_ProjectComment\Details.cshtml" />
+    <Content Include="Views\TIMS_ProjectComment\Edit.cshtml" />
+    <Content Include="Views\TIMS_ProjectComment\Index.cshtml" />
+    <Content Include="Views\TIMS_ProjectComment\New.cshtml" />
+    <Content Include="Views\TIMS_ProjectContractor\Details.cshtml" />
+    <Content Include="Views\TIMS_ProjectContractor\Edit.cshtml" />
+    <Content Include="Views\TIMS_ProjectContractor\Index.cshtml" />
+    <Content Include="Views\TIMS_ProjectContractor\New.cshtml" />
+    <Content Include="Views\TIMS_ProjectDisciplineInterfaceTypeField\Details.cshtml" />
+    <Content Include="Views\TIMS_ProjectDisciplineInterfaceTypeField\Edit.cshtml" />
+    <Content Include="Views\TIMS_ProjectDisciplineInterfaceTypeField\Index.cshtml" />
+    <Content Include="Views\TIMS_ProjectDisciplineInterfaceTypeField\New.cshtml" />
+    <Content Include="Views\TIMS_ProjectDisciplineInterfaceType\Details.cshtml" />
+    <Content Include="Views\TIMS_ProjectDisciplineInterfaceType\Edit.cshtml" />
+    <Content Include="Views\TIMS_ProjectDisciplineInterfaceType\Index.cshtml" />
+    <Content Include="Views\TIMS_ProjectDisciplineInterfaceType\New.cshtml" />
+    <Content Include="Views\TIMS_ProjectDiscipline\Details.cshtml" />
+    <Content Include="Views\TIMS_ProjectDiscipline\Edit.cshtml" />
+    <Content Include="Views\TIMS_ProjectDiscipline\Index.cshtml" />
+    <Content Include="Views\TIMS_ProjectDiscipline\New.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfaceAgreementWorkflow\Details.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfaceAgreementWorkflow\Edit.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfaceAgreementWorkflow\Index.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfaceAgreementWorkflow\New.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfaceAgreement\Details.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfaceAgreement\Edit.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfaceAgreement\Index.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfaceAgreement\New.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePointFieldEntry\Details.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePointFieldEntry\Edit.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePointFieldEntry\Index.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePointFieldEntry\New.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePointWorkflow\Details.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePointWorkflow\Edit.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePointWorkflow\Index.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePointWorkflow\New.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePoint\Details.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePoint\Edit.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePoint\Index.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePoint\New.cshtml" />
+    <Content Include="Views\TIMS_ProjectPackage\Details.cshtml" />
+    <Content Include="Views\TIMS_ProjectPackage\Edit.cshtml" />
+    <Content Include="Views\TIMS_ProjectPackage\Index.cshtml" />
+    <Content Include="Views\TIMS_ProjectPackage\New.cshtml" />
+    <Content Include="Views\TIMS_ProjectPhysicalArea\Details.cshtml" />
+    <Content Include="Views\TIMS_ProjectPhysicalArea\Edit.cshtml" />
+    <Content Include="Views\TIMS_ProjectPhysicalArea\Index.cshtml" />
+    <Content Include="Views\TIMS_ProjectPhysicalArea\New.cshtml" />
+    <Content Include="Views\TIMS_Project\Details.cshtml" />
+    <Content Include="Views\TIMS_Project\Edit.cshtml" />
+    <Content Include="Views\TIMS_Project\ListTable.cshtml" />
+    <Content Include="Views\TIMS_Project\New.cshtml" />
+    <Content Include="Views\TIMS_Role\Details.cshtml" />
+    <Content Include="Views\TIMS_Role\Edit.cshtml" />
+    <Content Include="Views\TIMS_Role\Index.cshtml" />
+    <Content Include="Views\TIMS_Role\New.cshtml" />
+    <Content Include="Views\TIMS_UserRole\Details.cshtml" />
+    <Content Include="Views\TIMS_UserRole\Edit.cshtml" />
+    <Content Include="Views\TIMS_UserRole\Index.cshtml" />
+    <Content Include="Views\TIMS_UserRole\New.cshtml" />
+    <Content Include="Views\TIMS_UserWatchlistItem\Details.cshtml" />
+    <Content Include="Views\TIMS_UserWatchlistItem\Edit.cshtml" />
+    <Content Include="Views\TIMS_UserWatchlistItem\Index.cshtml" />
+    <Content Include="Views\TIMS_UserWatchlistItem\New.cshtml" />
+    <Content Include="Views\TIMS_User\Details.cshtml" />
+    <Content Include="Views\TIMS_User\Edit.cshtml" />
+    <Content Include="Views\TIMS_User\Index.cshtml" />
+    <Content Include="Views\TIMS_User\New.cshtml" />
+    <Content Include="Views\TIMS_WorkflowAction\Details.cshtml" />
+    <Content Include="Views\TIMS_WorkflowAction\Edit.cshtml" />
+    <Content Include="Views\TIMS_WorkflowAction\Index.cshtml" />
+    <Content Include="Views\TIMS_WorkflowAction\New.cshtml" />
+    <Content Include="Views\TIMS_WorkflowState\Details.cshtml" />
+    <Content Include="Views\TIMS_WorkflowState\Edit.cshtml" />
+    <Content Include="Views\TIMS_WorkflowState\Index.cshtml" />
+    <Content Include="Views\TIMS_WorkflowState\New.cshtml" />
+    <Content Include="Views\TIMS_WorkflowType\Details.cshtml" />
+    <Content Include="Views\TIMS_WorkflowType\Edit.cshtml" />
+    <Content Include="Views\TIMS_WorkflowType\Index.cshtml" />
+    <Content Include="Views\TIMS_WorkflowType\New.cshtml" />
+    <Content Include="Views\Home\Index - Copy.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Boolean.cshtml" />
+    <Content Include="Views\TIMS_Project\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_Project\Index.cshtml" />
+    <Content Include="Views\TIMS_Contractor\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_Contractor\ListTable.cshtml" />
+    <Content Include="Views\TIMS_Discipline\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_Discipline\ListTable.cshtml" />
+    <Content Include="Views\TIMS_Phase\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_Phase\ListTable.cshtml" />
+    <Content Include="Views\TIMS_ProjectActionItemWorkflow\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_ProjectActionItemWorkflow\ListTable.cshtml" />
+    <Content Include="Views\TIMS_ProjectActionItem\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_ProjectActionItem\ListTable.cshtml" />
+    <Content Include="Views\TIMS_ProjectArea\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_ProjectArea\ListTable.cshtml" />
+    <Content Include="Views\TIMS_ProjectAttachment\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_ProjectAttachment\ListTable.cshtml" />
+    <Content Include="Views\TIMS_ProjectComment\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_ProjectComment\ListTable.cshtml" />
+    <Content Include="Views\TIMS_ProjectContractor\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_ProjectContractor\ListTable.cshtml" />
+    <Content Include="Views\TIMS_ProjectDisciplineInterfaceTypeField\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_ProjectDisciplineInterfaceTypeField\ListTable.cshtml" />
+    <Content Include="Views\TIMS_ProjectDisciplineInterfaceType\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_ProjectDisciplineInterfaceType\ListTable.cshtml" />
+    <Content Include="Views\TIMS_ProjectDiscipline\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_ProjectDiscipline\ListTable.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfaceAgreementWorkflow\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfaceAgreementWorkflow\ListTable.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfaceAgreement\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfaceAgreement\ListTable.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePointFieldEntry\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePointFieldEntry\ListTable.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePointWorkflow\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePointWorkflow\ListTable.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePoint\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePoint\ListTable.cshtml" />
+    <Content Include="Views\TIMS_ProjectPackage\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_ProjectPackage\ListTable.cshtml" />
+    <Content Include="Views\TIMS_ProjectPhysicalArea\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_ProjectPhysicalArea\ListTable.cshtml" />
+    <Content Include="Views\TIMS_Role\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_Role\ListTable.cshtml" />
+    <Content Include="Views\TIMS_UserRole\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_UserRole\ListTable.cshtml" />
+    <Content Include="Views\TIMS_UserWatchlistItem\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_UserWatchlistItem\ListTable.cshtml" />
+    <Content Include="Views\TIMS_User\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_User\ListTable.cshtml" />
+    <Content Include="Views\TIMS_WorkflowAction\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_WorkflowAction\ListTable.cshtml" />
+    <Content Include="Views\TIMS_WorkflowState\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_WorkflowState\ListTable.cshtml" />
+    <Content Include="Views\TIMS_WorkflowType\ListDetail.cshtml" />
+    <Content Include="Views\TIMS_WorkflowType\ListTable.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

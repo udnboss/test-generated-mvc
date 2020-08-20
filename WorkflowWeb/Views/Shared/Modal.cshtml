@@ -1,7 +1,7 @@
 ﻿<!-- reusable modal template for client side -->
 <script id="modal_template" type="text/html">
     <div id="{modal_id}" class="modal fade" tabindex="-1">
-        <div class="modal-dialog modal-{modal_size}">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">{modal_title}</h5>
@@ -84,7 +84,7 @@
 
         var modal_div = $('#' + modal_id);
 
-        var modal = modal_div.modal({});
+        var modal = modal_div.modal({ backdrop: 'static' });
 
         modal_loading(modal_div.attr('id'), true);
 
@@ -104,6 +104,7 @@
             $('.loading').show();
         else {
             $('.loading').hide();
+            $('.modal input').focus();
         }
 
     }

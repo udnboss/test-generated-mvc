@@ -14,6 +14,7 @@ namespace WorkflowWeb.Controllers
 {
     public class T_CommentController : BaseController
     {
+        new COMMENTSEntities db = new COMMENTSEntities();
         public List<T_Comment> GetList()
         {
             db.Configuration.ProxyCreationEnabled = false;
