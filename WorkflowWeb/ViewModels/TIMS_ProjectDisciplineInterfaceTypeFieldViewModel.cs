@@ -20,7 +20,7 @@ namespace WorkflowWeb.ViewModels
 		[DisplayName("Name")]
 		public String Name { get; set; }
 		
-		[DisplayName("Interface Type ID")]
+		[DisplayName("Interface Type")]
 		public Guid? InterfaceTypeID { get; set; }
 		
 		[DisplayName("TIMS_Project Discipline Interface Type")]
@@ -62,7 +62,7 @@ namespace WorkflowWeb.ViewModels
 
         public string ToRouteFilter()
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID,Name,InterfaceTypeID });
+            var route_filter = JsonConvert.SerializeObject(new { ID, Name, InterfaceTypeID });
             var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
             route_filter = Convert.ToBase64String(bytes);
             return route_filter;

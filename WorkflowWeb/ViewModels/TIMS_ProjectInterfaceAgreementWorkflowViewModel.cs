@@ -16,34 +16,34 @@ namespace WorkflowWeb.ViewModels
 		[DisplayName("ID")]
 		public Guid ID { get; set; }
 		
-		[DisplayName("Workflow Type ID")]
+		[DisplayName("Workflow Type")]
 		public String WorkflowTypeID { get; set; }
 		
-		[DisplayName("Interface Agreement ID")]
+		[DisplayName("Interface Agreement")]
 		public Guid? InterfaceAgreementID { get; set; }
 		
 		[DisplayName("Date Initiated")]
 		public DateTime? DateInitiated { get; set; }
 		
-		[DisplayName("Lead State ID")]
+		[DisplayName("Lead State")]
 		public String LeadStateID { get; set; }
 		
-		[DisplayName("Interface State ID")]
+		[DisplayName("Interface State")]
 		public String InterfaceStateID { get; set; }
 		
-		[DisplayName("User ID")]
+		[DisplayName("User")]
 		public Guid? UserID { get; set; }
 		
 		[DisplayName("Is Draft")]
 		public Boolean? IsDraft { get; set; }
 		
-		[DisplayName("Discipline ID")]
+		[DisplayName("Discipline")]
 		public Guid? DisciplineID { get; set; }
 		
-		[DisplayName("System ID")]
+		[DisplayName("System")]
 		public Guid? SystemID { get; set; }
 		
-		[DisplayName("Area ID")]
+		[DisplayName("Area")]
 		public Guid? AreaID { get; set; }
 		
 		[DisplayName("Short Description")]
@@ -136,7 +136,7 @@ namespace WorkflowWeb.ViewModels
 
         public string ToRouteFilter()
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID,WorkflowTypeID,InterfaceAgreementID,DateInitiated,LeadStateID,InterfaceStateID,UserID,IsDraft,DisciplineID,SystemID,AreaID,ShortDescription,DetailedDescription });
+            var route_filter = JsonConvert.SerializeObject(new { ID, WorkflowTypeID, InterfaceAgreementID, DateInitiated, LeadStateID, InterfaceStateID, UserID, IsDraft, DisciplineID, SystemID, AreaID, ShortDescription, DetailedDescription });
             var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
             route_filter = Convert.ToBase64String(bytes);
             return route_filter;

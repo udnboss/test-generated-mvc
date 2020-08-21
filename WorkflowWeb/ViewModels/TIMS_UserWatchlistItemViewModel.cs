@@ -16,16 +16,16 @@ namespace WorkflowWeb.ViewModels
 		[DisplayName("ID")]
 		public Guid ID { get; set; }
 		
-		[DisplayName("User ID")]
+		[DisplayName("User")]
 		public Guid? UserID { get; set; }
 		
-		[DisplayName("Project Interface Point ID")]
+		[DisplayName("Project Interface Point")]
 		public Guid? ProjectInterfacePointID { get; set; }
 		
-		[DisplayName("Project Interface Agreement ID")]
+		[DisplayName("Project Interface Agreement")]
 		public Guid? ProjectInterfaceAgreementID { get; set; }
 		
-		[DisplayName("Project Action Item ID")]
+		[DisplayName("Project Action Item")]
 		public Guid? ProjectActionItemID { get; set; }
 		
 		[DisplayName("TIMS_Project Action Item")]
@@ -81,7 +81,7 @@ namespace WorkflowWeb.ViewModels
 
         public string ToRouteFilter()
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID,UserID,ProjectInterfacePointID,ProjectInterfaceAgreementID,ProjectActionItemID });
+            var route_filter = JsonConvert.SerializeObject(new { ID, UserID, ProjectInterfacePointID, ProjectInterfaceAgreementID, ProjectActionItemID });
             var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
             route_filter = Convert.ToBase64String(bytes);
             return route_filter;

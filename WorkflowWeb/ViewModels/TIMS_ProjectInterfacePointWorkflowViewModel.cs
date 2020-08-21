@@ -16,37 +16,37 @@ namespace WorkflowWeb.ViewModels
 		[DisplayName("ID")]
 		public Guid ID { get; set; }
 		
-		[DisplayName("Workflow Type ID")]
+		[DisplayName("Workflow Type")]
 		public String WorkflowTypeID { get; set; }
 		
-		[DisplayName("Interface Point ID")]
+		[DisplayName("Interface Point")]
 		public Guid? InterfacePointID { get; set; }
 		
 		[DisplayName("Date Initiated")]
 		public DateTime? DateInitiated { get; set; }
 		
-		[DisplayName("Lead State ID")]
+		[DisplayName("Lead State")]
 		public String LeadStateID { get; set; }
 		
-		[DisplayName("Interface State ID")]
+		[DisplayName("Interface State")]
 		public String InterfaceStateID { get; set; }
 		
-		[DisplayName("Support State ID")]
+		[DisplayName("Support State")]
 		public String SupportStateID { get; set; }
 		
-		[DisplayName("Project Area ID")]
+		[DisplayName("Project Area")]
 		public Guid? ProjectAreaID { get; set; }
 		
-		[DisplayName("Project Physical Area ID")]
+		[DisplayName("Project Physical Area")]
 		public Guid? ProjectPhysicalAreaID { get; set; }
 		
-		[DisplayName("Phase ID")]
+		[DisplayName("Phase")]
 		public String PhaseID { get; set; }
 		
-		[DisplayName("Interface Type ID")]
+		[DisplayName("Interface Type")]
 		public Guid? InterfaceTypeID { get; set; }
 		
-		[DisplayName("User ID")]
+		[DisplayName("User")]
 		public Guid? UserID { get; set; }
 		
 		[DisplayName("Is Draft")]
@@ -161,7 +161,7 @@ namespace WorkflowWeb.ViewModels
 
         public string ToRouteFilter()
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID,WorkflowTypeID,InterfacePointID,DateInitiated,LeadStateID,InterfaceStateID,SupportStateID,ProjectAreaID,ProjectPhysicalAreaID,PhaseID,InterfaceTypeID,UserID,IsDraft });
+            var route_filter = JsonConvert.SerializeObject(new { ID, WorkflowTypeID, InterfacePointID, DateInitiated, LeadStateID, InterfaceStateID, SupportStateID, ProjectAreaID, ProjectPhysicalAreaID, PhaseID, InterfaceTypeID, UserID, IsDraft });
             var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
             route_filter = Convert.ToBase64String(bytes);
             return route_filter;

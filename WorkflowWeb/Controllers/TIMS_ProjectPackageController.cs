@@ -15,6 +15,40 @@ namespace WorkflowWeb.Controllers
 {
     public class TIMS_ProjectPackageController : BaseController
     {
+        private TIMS_ProjectPackage _routeFilter;
+        public TIMS_ProjectPackage RouteFilter
+        {
+            get
+            {
+                if (_routeFilter != null)
+                {
+                    return _routeFilter;
+                }
+
+                var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+                if (!string.IsNullOrEmpty(ui_route_filter))
+                {
+                    try
+                    {
+                        var bytes = Convert.FromBase64String(ui_route_filter);
+                        ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
+
+                        var filter = JsonConvert.DeserializeObject<TIMS_ProjectPackageViewModel>(ui_route_filter).ToModel();
+
+                        _routeFilter = filter;
+
+                        return filter;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+
+                return null;
+            }
+        }
+
         public List<TIMS_ProjectPackageViewModel> GetList()
         {
             db.Configuration.ProxyCreationEnabled = false;
@@ -22,27 +56,19 @@ namespace WorkflowWeb.Controllers
 				.Include(x => x.TIMS_ProjectContractor).AsQueryable();
 
             var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
-            if (!string.IsNullOrEmpty(ui_route_filter))
+            var filter = RouteFilter;
+
+            if (filter != null)
             {
-                try
-                {
-                    var bytes = Convert.FromBase64String(ui_route_filter);
-                    ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
-
-                    var filter = JsonConvert.DeserializeObject<TIMS_ProjectPackageViewModel>(ui_route_filter).ToModel();
-
-                    if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
+                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
 					if (filter.Name != null && filter.Name.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.Name == filter.Name);
 					if (filter.ProjectID != null && filter.ProjectID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectID == filter.ProjectID);
 					if (filter.ProjectContractorID != null && filter.ProjectContractorID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectContractorID == filter.ProjectContractorID);                        
-                }
-                catch
-                {
-
-                }
             }
 
-            return data.ToList().Select(x => new TIMS_ProjectPackageViewModel(x, true)).ToList();
+            var results = data.ToList().Select(x => new TIMS_ProjectPackageViewModel(x, true)).ToList();
+
+            return results;
         }
 
         public TIMS_ProjectPackage Get(Guid id)
@@ -105,7 +131,7 @@ namespace WorkflowWeb.Controllers
 
         public ActionResult New()
         {
-            var vm = new TIMS_ProjectPackageViewModel() {  };
+            var vm = RouteFilter != null ? new TIMS_ProjectPackageViewModel(RouteFilter) : new TIMS_ProjectPackageViewModel() {  };
                        
             ViewBag.Lookups = GetLookups();
             return PartialView(vm);

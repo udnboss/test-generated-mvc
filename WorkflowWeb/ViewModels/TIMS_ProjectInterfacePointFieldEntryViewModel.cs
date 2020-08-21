@@ -16,10 +16,10 @@ namespace WorkflowWeb.ViewModels
 		[DisplayName("ID")]
 		public Guid ID { get; set; }
 		
-		[DisplayName("Interface Point Workflow ID")]
+		[DisplayName("Interface Point Workflow")]
 		public Guid? InterfacePointWorkflowID { get; set; }
 		
-		[DisplayName("Interface Type Field ID")]
+		[DisplayName("Interface Type Field")]
 		public Guid? InterfaceTypeFieldID { get; set; }
 		
 		[DisplayName("Value")]
@@ -66,7 +66,7 @@ namespace WorkflowWeb.ViewModels
 
         public string ToRouteFilter()
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID,InterfacePointWorkflowID,InterfaceTypeFieldID,Value });
+            var route_filter = JsonConvert.SerializeObject(new { ID, InterfacePointWorkflowID, InterfaceTypeFieldID, Value });
             var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
             route_filter = Convert.ToBase64String(bytes);
             return route_filter;

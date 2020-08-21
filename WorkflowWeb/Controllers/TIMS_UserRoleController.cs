@@ -15,6 +15,40 @@ namespace WorkflowWeb.Controllers
 {
     public class TIMS_UserRoleController : BaseController
     {
+        private TIMS_UserRole _routeFilter;
+        public TIMS_UserRole RouteFilter
+        {
+            get
+            {
+                if (_routeFilter != null)
+                {
+                    return _routeFilter;
+                }
+
+                var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+                if (!string.IsNullOrEmpty(ui_route_filter))
+                {
+                    try
+                    {
+                        var bytes = Convert.FromBase64String(ui_route_filter);
+                        ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
+
+                        var filter = JsonConvert.DeserializeObject<TIMS_UserRoleViewModel>(ui_route_filter).ToModel();
+
+                        _routeFilter = filter;
+
+                        return filter;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+
+                return null;
+            }
+        }
+
         public List<TIMS_UserRoleViewModel> GetList()
         {
             db.Configuration.ProxyCreationEnabled = false;
@@ -24,28 +58,20 @@ namespace WorkflowWeb.Controllers
 				.Include(x => x.TIMS_Role).AsQueryable();
 
             var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
-            if (!string.IsNullOrEmpty(ui_route_filter))
+            var filter = RouteFilter;
+
+            if (filter != null)
             {
-                try
-                {
-                    var bytes = Convert.FromBase64String(ui_route_filter);
-                    ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
-
-                    var filter = JsonConvert.DeserializeObject<TIMS_UserRoleViewModel>(ui_route_filter).ToModel();
-
-                    if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
+                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
 					if (filter.UserID != null && filter.UserID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.UserID == filter.UserID);
 					if (filter.ProjectID != null && filter.ProjectID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectID == filter.ProjectID);
 					if (filter.ProjectPackageID != null && filter.ProjectPackageID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectPackageID == filter.ProjectPackageID);
 					if (filter.RoleID != null && filter.RoleID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.RoleID == filter.RoleID);                        
-                }
-                catch
-                {
-
-                }
             }
 
-            return data.ToList().Select(x => new TIMS_UserRoleViewModel(x, true)).ToList();
+            var results = data.ToList().Select(x => new TIMS_UserRoleViewModel(x, true)).ToList();
+
+            return results;
         }
 
         public TIMS_UserRole Get(Guid id)
@@ -112,7 +138,7 @@ namespace WorkflowWeb.Controllers
 
         public ActionResult New()
         {
-            var vm = new TIMS_UserRoleViewModel() {  };
+            var vm = RouteFilter != null ? new TIMS_UserRoleViewModel(RouteFilter) : new TIMS_UserRoleViewModel() {  };
                        
             ViewBag.Lookups = GetLookups();
             return PartialView(vm);

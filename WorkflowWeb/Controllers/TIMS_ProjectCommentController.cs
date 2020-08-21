@@ -15,6 +15,40 @@ namespace WorkflowWeb.Controllers
 {
     public class TIMS_ProjectCommentController : BaseController
     {
+        private TIMS_ProjectComment _routeFilter;
+        public TIMS_ProjectComment RouteFilter
+        {
+            get
+            {
+                if (_routeFilter != null)
+                {
+                    return _routeFilter;
+                }
+
+                var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+                if (!string.IsNullOrEmpty(ui_route_filter))
+                {
+                    try
+                    {
+                        var bytes = Convert.FromBase64String(ui_route_filter);
+                        ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
+
+                        var filter = JsonConvert.DeserializeObject<TIMS_ProjectCommentViewModel>(ui_route_filter).ToModel();
+
+                        _routeFilter = filter;
+
+                        return filter;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+
+                return null;
+            }
+        }
+
         public List<TIMS_ProjectCommentViewModel> GetList()
         {
             db.Configuration.ProxyCreationEnabled = false;
@@ -24,30 +58,22 @@ namespace WorkflowWeb.Controllers
 				.Include(x => x.TIMS_User).AsQueryable();
 
             var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
-            if (!string.IsNullOrEmpty(ui_route_filter))
+            var filter = RouteFilter;
+
+            if (filter != null)
             {
-                try
-                {
-                    var bytes = Convert.FromBase64String(ui_route_filter);
-                    ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
-
-                    var filter = JsonConvert.DeserializeObject<TIMS_ProjectCommentViewModel>(ui_route_filter).ToModel();
-
-                    if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
+                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
 					if (filter.Comment != null && filter.Comment.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.Comment == filter.Comment);
 					if (filter.ProjectInterfacePointWorkflowID != null && filter.ProjectInterfacePointWorkflowID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectInterfacePointWorkflowID == filter.ProjectInterfacePointWorkflowID);
 					if (filter.ProjectInterfaceAgreementWorkflowID != null && filter.ProjectInterfaceAgreementWorkflowID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectInterfaceAgreementWorkflowID == filter.ProjectInterfaceAgreementWorkflowID);
 					if (filter.ProjectActionItemWorkflowID != null && filter.ProjectActionItemWorkflowID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectActionItemWorkflowID == filter.ProjectActionItemWorkflowID);
 					if (filter.UserID != null && filter.UserID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.UserID == filter.UserID);
 					if (filter.DateAdded != null && filter.DateAdded.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.DateAdded == filter.DateAdded);                        
-                }
-                catch
-                {
-
-                }
             }
 
-            return data.ToList().Select(x => new TIMS_ProjectCommentViewModel(x, true)).ToList();
+            var results = data.ToList().Select(x => new TIMS_ProjectCommentViewModel(x, true)).ToList();
+
+            return results;
         }
 
         public TIMS_ProjectComment Get(Guid id)
@@ -114,7 +140,7 @@ namespace WorkflowWeb.Controllers
 
         public ActionResult New()
         {
-            var vm = new TIMS_ProjectCommentViewModel() {  };
+            var vm = RouteFilter != null ? new TIMS_ProjectCommentViewModel(RouteFilter) : new TIMS_ProjectCommentViewModel() {  };
                        
             ViewBag.Lookups = GetLookups();
             return PartialView(vm);

@@ -15,32 +15,58 @@ namespace WorkflowWeb.Controllers
 {
     public class TIMS_ProjectDisciplineInterfaceTypeFieldController : BaseController
     {
+        private TIMS_ProjectDisciplineInterfaceTypeField _routeFilter;
+        public TIMS_ProjectDisciplineInterfaceTypeField RouteFilter
+        {
+            get
+            {
+                if (_routeFilter != null)
+                {
+                    return _routeFilter;
+                }
+
+                var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+                if (!string.IsNullOrEmpty(ui_route_filter))
+                {
+                    try
+                    {
+                        var bytes = Convert.FromBase64String(ui_route_filter);
+                        ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
+
+                        var filter = JsonConvert.DeserializeObject<TIMS_ProjectDisciplineInterfaceTypeFieldViewModel>(ui_route_filter).ToModel();
+
+                        _routeFilter = filter;
+
+                        return filter;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+
+                return null;
+            }
+        }
+
         public List<TIMS_ProjectDisciplineInterfaceTypeFieldViewModel> GetList()
         {
             db.Configuration.ProxyCreationEnabled = false;
             var data = db.TIMS_ProjectDisciplineInterfaceTypeField.Include(x => x.TIMS_ProjectDisciplineInterfaceType).AsQueryable();
 
             var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
-            if (!string.IsNullOrEmpty(ui_route_filter))
+            var filter = RouteFilter;
+
+            if (filter != null)
             {
-                try
-                {
-                    var bytes = Convert.FromBase64String(ui_route_filter);
-                    ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
-
-                    var filter = JsonConvert.DeserializeObject<TIMS_ProjectDisciplineInterfaceTypeFieldViewModel>(ui_route_filter).ToModel();
-
-                    if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
+                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
 					if (filter.Name != null && filter.Name.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.Name == filter.Name);
 					if (filter.InterfaceTypeID != null && filter.InterfaceTypeID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.InterfaceTypeID == filter.InterfaceTypeID);                        
-                }
-                catch
-                {
-
-                }
             }
 
-            return data.ToList().Select(x => new TIMS_ProjectDisciplineInterfaceTypeFieldViewModel(x, true)).ToList();
+            var results = data.ToList().Select(x => new TIMS_ProjectDisciplineInterfaceTypeFieldViewModel(x, true)).ToList();
+
+            return results;
         }
 
         public TIMS_ProjectDisciplineInterfaceTypeField Get(Guid id)
@@ -101,7 +127,7 @@ namespace WorkflowWeb.Controllers
 
         public ActionResult New()
         {
-            var vm = new TIMS_ProjectDisciplineInterfaceTypeFieldViewModel() {  };
+            var vm = RouteFilter != null ? new TIMS_ProjectDisciplineInterfaceTypeFieldViewModel(RouteFilter) : new TIMS_ProjectDisciplineInterfaceTypeFieldViewModel() {  };
                        
             ViewBag.Lookups = GetLookups();
             return PartialView(vm);

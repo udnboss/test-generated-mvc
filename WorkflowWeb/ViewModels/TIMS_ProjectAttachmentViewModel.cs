@@ -20,16 +20,16 @@ namespace WorkflowWeb.ViewModels
 		[DisplayName("Name")]
 		public String Name { get; set; }
 		
-		[DisplayName("Project Interface Point Workflow ID")]
+		[DisplayName("Project Interface Point Workflow")]
 		public Guid? ProjectInterfacePointWorkflowID { get; set; }
 		
-		[DisplayName("Project Interface Agreement Workflow ID")]
+		[DisplayName("Project Interface Agreement Workflow")]
 		public Guid? ProjectInterfaceAgreementWorkflowID { get; set; }
 		
-		[DisplayName("Project Action Item Workflow ID")]
+		[DisplayName("Project Action Item Workflow")]
 		public Guid? ProjectActionItemWorkflowID { get; set; }
 		
-		[DisplayName("Package ID")]
+		[DisplayName("Package")]
 		public Guid? PackageID { get; set; }
 		
 		[DisplayName("Filename")]
@@ -38,7 +38,7 @@ namespace WorkflowWeb.ViewModels
 		[DisplayName("Date Uploaded")]
 		public DateTime? DateUploaded { get; set; }
 		
-		[DisplayName("User ID")]
+		[DisplayName("User")]
 		public Guid? UserID { get; set; }
 		
 		[DisplayName("TIMS_Project Action Item Workflow")]
@@ -107,7 +107,7 @@ namespace WorkflowWeb.ViewModels
 
         public string ToRouteFilter()
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID,Name,ProjectInterfacePointWorkflowID,ProjectInterfaceAgreementWorkflowID,ProjectActionItemWorkflowID,PackageID,Filename,DateUploaded,UserID });
+            var route_filter = JsonConvert.SerializeObject(new { ID, Name, ProjectInterfacePointWorkflowID, ProjectInterfaceAgreementWorkflowID, ProjectActionItemWorkflowID, PackageID, Filename, DateUploaded, UserID });
             var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
             route_filter = Convert.ToBase64String(bytes);
             return route_filter;

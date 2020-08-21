@@ -15,6 +15,40 @@ namespace WorkflowWeb.Controllers
 {
     public class TIMS_UserWatchlistItemController : BaseController
     {
+        private TIMS_UserWatchlistItem _routeFilter;
+        public TIMS_UserWatchlistItem RouteFilter
+        {
+            get
+            {
+                if (_routeFilter != null)
+                {
+                    return _routeFilter;
+                }
+
+                var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+                if (!string.IsNullOrEmpty(ui_route_filter))
+                {
+                    try
+                    {
+                        var bytes = Convert.FromBase64String(ui_route_filter);
+                        ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
+
+                        var filter = JsonConvert.DeserializeObject<TIMS_UserWatchlistItemViewModel>(ui_route_filter).ToModel();
+
+                        _routeFilter = filter;
+
+                        return filter;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+
+                return null;
+            }
+        }
+
         public List<TIMS_UserWatchlistItemViewModel> GetList()
         {
             db.Configuration.ProxyCreationEnabled = false;
@@ -24,28 +58,20 @@ namespace WorkflowWeb.Controllers
 				.Include(x => x.TIMS_ProjectActionItem).AsQueryable();
 
             var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
-            if (!string.IsNullOrEmpty(ui_route_filter))
+            var filter = RouteFilter;
+
+            if (filter != null)
             {
-                try
-                {
-                    var bytes = Convert.FromBase64String(ui_route_filter);
-                    ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
-
-                    var filter = JsonConvert.DeserializeObject<TIMS_UserWatchlistItemViewModel>(ui_route_filter).ToModel();
-
-                    if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
+                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
 					if (filter.UserID != null && filter.UserID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.UserID == filter.UserID);
 					if (filter.ProjectInterfacePointID != null && filter.ProjectInterfacePointID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectInterfacePointID == filter.ProjectInterfacePointID);
 					if (filter.ProjectInterfaceAgreementID != null && filter.ProjectInterfaceAgreementID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectInterfaceAgreementID == filter.ProjectInterfaceAgreementID);
 					if (filter.ProjectActionItemID != null && filter.ProjectActionItemID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectActionItemID == filter.ProjectActionItemID);                        
-                }
-                catch
-                {
-
-                }
             }
 
-            return data.ToList().Select(x => new TIMS_UserWatchlistItemViewModel(x, true)).ToList();
+            var results = data.ToList().Select(x => new TIMS_UserWatchlistItemViewModel(x, true)).ToList();
+
+            return results;
         }
 
         public TIMS_UserWatchlistItem Get(Guid id)
@@ -112,7 +138,7 @@ namespace WorkflowWeb.Controllers
 
         public ActionResult New()
         {
-            var vm = new TIMS_UserWatchlistItemViewModel() {  };
+            var vm = RouteFilter != null ? new TIMS_UserWatchlistItemViewModel(RouteFilter) : new TIMS_UserWatchlistItemViewModel() {  };
                        
             ViewBag.Lookups = GetLookups();
             return PartialView(vm);

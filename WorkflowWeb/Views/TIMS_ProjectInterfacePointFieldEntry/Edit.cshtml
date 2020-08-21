@@ -48,7 +48,7 @@
 		<div class="form-group row">
 		    @Html.LabelFor(model => model.InterfacePointWorkflowID, htmlAttributes: new { @class = "control-label col-md-2" })
 		    <div class="col-md-10">
-		        @Html.DropDownList("InterfacePointWorkflowID", lookups["InterfacePointWorkflowID"] as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+		        @Html.DropDownList("InterfacePointWorkflowID", (lookups["InterfacePointWorkflowID"] as IEnumerable<SelectListItem>).Prepend(new SelectListItem { Text = "-", Value = "" }), htmlAttributes: new { @class = "form-control" })
 		        @Html.ValidationMessageFor(model => model.InterfacePointWorkflowID, "", new { @class = "text-danger" })
 		    </div>
 		</div>
@@ -56,7 +56,7 @@
 		<div class="form-group row">
 		    @Html.LabelFor(model => model.InterfaceTypeFieldID, htmlAttributes: new { @class = "control-label col-md-2" })
 		    <div class="col-md-10">
-		        @Html.DropDownList("InterfaceTypeFieldID", lookups["InterfaceTypeFieldID"] as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+		        @Html.DropDownList("InterfaceTypeFieldID", (lookups["InterfaceTypeFieldID"] as IEnumerable<SelectListItem>).Prepend(new SelectListItem { Text = "-", Value = "" }), htmlAttributes: new { @class = "form-control" })
 		        @Html.ValidationMessageFor(model => model.InterfaceTypeFieldID, "", new { @class = "text-danger" })
 		    </div>
 		</div>
@@ -71,10 +71,6 @@
 
         <script>
             $(function () {
-                $('form#@ui_form_id select').each(function () {
-                    $(this).prepend('<option value=""></option>'); //allow empty selections
-                });
-
                 $.validator.unobtrusive.parse("form#@ui_form_id"); //enable validations
             });
         </script>

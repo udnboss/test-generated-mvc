@@ -15,6 +15,40 @@ namespace WorkflowWeb.Controllers
 {
     public class TIMS_ProjectInterfaceAgreementWorkflowController : BaseController
     {
+        private TIMS_ProjectInterfaceAgreementWorkflow _routeFilter;
+        public TIMS_ProjectInterfaceAgreementWorkflow RouteFilter
+        {
+            get
+            {
+                if (_routeFilter != null)
+                {
+                    return _routeFilter;
+                }
+
+                var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+                if (!string.IsNullOrEmpty(ui_route_filter))
+                {
+                    try
+                    {
+                        var bytes = Convert.FromBase64String(ui_route_filter);
+                        ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
+
+                        var filter = JsonConvert.DeserializeObject<TIMS_ProjectInterfaceAgreementWorkflowViewModel>(ui_route_filter).ToModel();
+
+                        _routeFilter = filter;
+
+                        return filter;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+
+                return null;
+            }
+        }
+
         public List<TIMS_ProjectInterfaceAgreementWorkflowViewModel> GetList()
         {
             db.Configuration.ProxyCreationEnabled = false;
@@ -25,16 +59,11 @@ namespace WorkflowWeb.Controllers
 				.Include(x => x.TIMS_ProjectArea).AsQueryable();
 
             var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
-            if (!string.IsNullOrEmpty(ui_route_filter))
+            var filter = RouteFilter;
+
+            if (filter != null)
             {
-                try
-                {
-                    var bytes = Convert.FromBase64String(ui_route_filter);
-                    ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
-
-                    var filter = JsonConvert.DeserializeObject<TIMS_ProjectInterfaceAgreementWorkflowViewModel>(ui_route_filter).ToModel();
-
-                    if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
+                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
 					if (filter.WorkflowTypeID != null && filter.WorkflowTypeID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.WorkflowTypeID == filter.WorkflowTypeID);
 					if (filter.InterfaceAgreementID != null && filter.InterfaceAgreementID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.InterfaceAgreementID == filter.InterfaceAgreementID);
 					if (filter.DateInitiated != null && filter.DateInitiated.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.DateInitiated == filter.DateInitiated);
@@ -47,14 +76,11 @@ namespace WorkflowWeb.Controllers
 					if (filter.AreaID != null && filter.AreaID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.AreaID == filter.AreaID);
 					if (filter.ShortDescription != null && filter.ShortDescription.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ShortDescription == filter.ShortDescription);
 					if (filter.DetailedDescription != null && filter.DetailedDescription.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.DetailedDescription == filter.DetailedDescription);                        
-                }
-                catch
-                {
-
-                }
             }
 
-            return data.ToList().Select(x => new TIMS_ProjectInterfaceAgreementWorkflowViewModel(x, true)).ToList();
+            var results = data.ToList().Select(x => new TIMS_ProjectInterfaceAgreementWorkflowViewModel(x, true)).ToList();
+
+            return results;
         }
 
         public TIMS_ProjectInterfaceAgreementWorkflow Get(Guid id)
@@ -123,7 +149,7 @@ namespace WorkflowWeb.Controllers
 
         public ActionResult New()
         {
-            var vm = new TIMS_ProjectInterfaceAgreementWorkflowViewModel() {  };
+            var vm = RouteFilter != null ? new TIMS_ProjectInterfaceAgreementWorkflowViewModel(RouteFilter) : new TIMS_ProjectInterfaceAgreementWorkflowViewModel() {  };
                        
             ViewBag.Lookups = GetLookups();
             return PartialView(vm);

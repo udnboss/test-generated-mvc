@@ -15,6 +15,40 @@ namespace WorkflowWeb.Controllers
 {
     public class TIMS_ProjectInterfacePointController : BaseController
     {
+        private TIMS_ProjectInterfacePoint _routeFilter;
+        public TIMS_ProjectInterfacePoint RouteFilter
+        {
+            get
+            {
+                if (_routeFilter != null)
+                {
+                    return _routeFilter;
+                }
+
+                var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+                if (!string.IsNullOrEmpty(ui_route_filter))
+                {
+                    try
+                    {
+                        var bytes = Convert.FromBase64String(ui_route_filter);
+                        ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
+
+                        var filter = JsonConvert.DeserializeObject<TIMS_ProjectInterfacePointViewModel>(ui_route_filter).ToModel();
+
+                        _routeFilter = filter;
+
+                        return filter;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+
+                return null;
+            }
+        }
+
         public List<TIMS_ProjectInterfacePointViewModel> GetList()
         {
             db.Configuration.ProxyCreationEnabled = false;
@@ -24,16 +58,11 @@ namespace WorkflowWeb.Controllers
 				.Include(x => x.TIMS_ProjectPackage2).AsQueryable();
 
             var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
-            if (!string.IsNullOrEmpty(ui_route_filter))
+            var filter = RouteFilter;
+
+            if (filter != null)
             {
-                try
-                {
-                    var bytes = Convert.FromBase64String(ui_route_filter);
-                    ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
-
-                    var filter = JsonConvert.DeserializeObject<TIMS_ProjectInterfacePointViewModel>(ui_route_filter).ToModel();
-
-                    if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
+                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
 					if (filter.ProjectID != null && filter.ProjectID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectID == filter.ProjectID);
 					if (filter.LeadPackageID != null && filter.LeadPackageID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.LeadPackageID == filter.LeadPackageID);
 					if (filter.InterfacePackageID != null && filter.InterfacePackageID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.InterfacePackageID == filter.InterfacePackageID);
@@ -42,14 +71,11 @@ namespace WorkflowWeb.Controllers
 					if (filter.IssueDate != null && filter.IssueDate.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.IssueDate == filter.IssueDate);
 					if (filter.FinalizeDate != null && filter.FinalizeDate.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.FinalizeDate == filter.FinalizeDate);
 					if (filter.CloseDate != null && filter.CloseDate.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.CloseDate == filter.CloseDate);                        
-                }
-                catch
-                {
-
-                }
             }
 
-            return data.ToList().Select(x => new TIMS_ProjectInterfacePointViewModel(x, true)).ToList();
+            var results = data.ToList().Select(x => new TIMS_ProjectInterfacePointViewModel(x, true)).ToList();
+
+            return results;
         }
 
         public TIMS_ProjectInterfacePoint Get(Guid id)
@@ -116,7 +142,7 @@ namespace WorkflowWeb.Controllers
 
         public ActionResult New()
         {
-            var vm = new TIMS_ProjectInterfacePointViewModel() {  };
+            var vm = RouteFilter != null ? new TIMS_ProjectInterfacePointViewModel(RouteFilter) : new TIMS_ProjectInterfacePointViewModel() {  };
                        
             ViewBag.Lookups = GetLookups();
             return PartialView(vm);

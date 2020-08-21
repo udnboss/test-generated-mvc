@@ -19,16 +19,16 @@ namespace WorkflowWeb.ViewModels
 		[DisplayName("Comment")]
 		public String Comment { get; set; }
 		
-		[DisplayName("Project Interface Point Workflow ID")]
+		[DisplayName("Project Interface Point Workflow")]
 		public Guid? ProjectInterfacePointWorkflowID { get; set; }
 		
-		[DisplayName("Project Interface Agreement Workflow ID")]
+		[DisplayName("Project Interface Agreement Workflow")]
 		public Guid? ProjectInterfaceAgreementWorkflowID { get; set; }
 		
-		[DisplayName("Project Action Item Workflow ID")]
+		[DisplayName("Project Action Item Workflow")]
 		public Guid? ProjectActionItemWorkflowID { get; set; }
 		
-		[DisplayName("User ID")]
+		[DisplayName("User")]
 		public Guid? UserID { get; set; }
 		
 		[DisplayName("Date Added")]
@@ -91,7 +91,7 @@ namespace WorkflowWeb.ViewModels
 
         public string ToRouteFilter()
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID,Comment,ProjectInterfacePointWorkflowID,ProjectInterfaceAgreementWorkflowID,ProjectActionItemWorkflowID,UserID,DateAdded });
+            var route_filter = JsonConvert.SerializeObject(new { ID, Comment, ProjectInterfacePointWorkflowID, ProjectInterfaceAgreementWorkflowID, ProjectActionItemWorkflowID, UserID, DateAdded });
             var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
             route_filter = Convert.ToBase64String(bytes);
             return route_filter;

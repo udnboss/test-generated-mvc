@@ -20,25 +20,25 @@ namespace WorkflowWeb.ViewModels
 		[DisplayName("Name")]
 		public String Name { get; set; }
 		
-		[DisplayName("Interface Point ID")]
+		[DisplayName("Interface Point")]
 		public Guid? InterfacePointID { get; set; }
 		
-		[DisplayName("Requestor Package ID")]
+		[DisplayName("Requestor Package")]
 		public Guid? RequestorPackageID { get; set; }
 		
-		[DisplayName("Responder Package ID")]
+		[DisplayName("Responder Package")]
 		public Guid? ResponderPackageID { get; set; }
 		
-		[DisplayName("Requestor User ID")]
+		[DisplayName("Requestor User")]
 		public Guid? RequestorUserID { get; set; }
 		
-		[DisplayName("Requestor Technical Contact ID")]
+		[DisplayName("Requestor Technical Contact")]
 		public Guid? RequestorTechnicalContactID { get; set; }
 		
-		[DisplayName("Responder Interface Manager ID")]
+		[DisplayName("Responder Interface Manager")]
 		public Guid? ResponderInterfaceManagerID { get; set; }
 		
-		[DisplayName("Responder Technical Contact ID")]
+		[DisplayName("Responder Technical Contact")]
 		public Guid? ResponderTechnicalContactID { get; set; }
 		
 		[DisplayName("Create Date")]
@@ -142,7 +142,7 @@ namespace WorkflowWeb.ViewModels
 
         public string ToRouteFilter()
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID,Name,InterfacePointID,RequestorPackageID,ResponderPackageID,RequestorUserID,RequestorTechnicalContactID,ResponderInterfaceManagerID,ResponderTechnicalContactID,CreateDate,NeedDate,IssuedDate,AcceptedDate,ResponseDate,CloseDate });
+            var route_filter = JsonConvert.SerializeObject(new { ID, Name, InterfacePointID, RequestorPackageID, ResponderPackageID, RequestorUserID, RequestorTechnicalContactID, ResponderInterfaceManagerID, ResponderTechnicalContactID, CreateDate, NeedDate, IssuedDate, AcceptedDate, ResponseDate, CloseDate });
             var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
             route_filter = Convert.ToBase64String(bytes);
             return route_filter;

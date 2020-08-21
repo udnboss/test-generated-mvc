@@ -129,6 +129,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Attributes\HandleParameters.cs" />
+    <Compile Include="Business\BaseBusiness.cs" />
+    <Compile Include="Business\BusinessResult.cs" />
+    <Compile Include="Business\IBusiness.cs" />
+    <Compile Include="Business\TIMS_ProjectBusiness.cs" />
     <Compile Include="Controllers\Comment1Controller.cs" />
     <Compile Include="Controllers\TIMS_ContractorController.cs" />
     <Compile Include="Controllers\TIMS_DisciplineController.cs" />

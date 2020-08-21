@@ -48,7 +48,7 @@
 		<div class="form-group row">
 		    @Html.LabelFor(model => model.UserID, htmlAttributes: new { @class = "control-label col-md-2" })
 		    <div class="col-md-10">
-		        @Html.DropDownList("UserID", lookups["UserID"] as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+		        @Html.DropDownList("UserID", (lookups["UserID"] as IEnumerable<SelectListItem>).Prepend(new SelectListItem { Text = "-", Value = "" }), htmlAttributes: new { @class = "form-control" })
 		        @Html.ValidationMessageFor(model => model.UserID, "", new { @class = "text-danger" })
 		    </div>
 		</div>
@@ -56,7 +56,7 @@
 		<div class="form-group row">
 		    @Html.LabelFor(model => model.ProjectID, htmlAttributes: new { @class = "control-label col-md-2" })
 		    <div class="col-md-10">
-		        @Html.DropDownList("ProjectID", lookups["ProjectID"] as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+		        @Html.DropDownList("ProjectID", (lookups["ProjectID"] as IEnumerable<SelectListItem>).Prepend(new SelectListItem { Text = "-", Value = "" }), htmlAttributes: new { @class = "form-control" })
 		        @Html.ValidationMessageFor(model => model.ProjectID, "", new { @class = "text-danger" })
 		    </div>
 		</div>
@@ -64,7 +64,7 @@
 		<div class="form-group row">
 		    @Html.LabelFor(model => model.ProjectPackageID, htmlAttributes: new { @class = "control-label col-md-2" })
 		    <div class="col-md-10">
-		        @Html.DropDownList("ProjectPackageID", lookups["ProjectPackageID"] as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+		        @Html.DropDownList("ProjectPackageID", (lookups["ProjectPackageID"] as IEnumerable<SelectListItem>).Prepend(new SelectListItem { Text = "-", Value = "" }), htmlAttributes: new { @class = "form-control" })
 		        @Html.ValidationMessageFor(model => model.ProjectPackageID, "", new { @class = "text-danger" })
 		    </div>
 		</div>
@@ -72,17 +72,13 @@
 		<div class="form-group row">
 		    @Html.LabelFor(model => model.RoleID, htmlAttributes: new { @class = "control-label col-md-2" })
 		    <div class="col-md-10">
-		        @Html.DropDownList("RoleID", lookups["RoleID"] as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+		        @Html.DropDownList("RoleID", (lookups["RoleID"] as IEnumerable<SelectListItem>).Prepend(new SelectListItem { Text = "-", Value = "" }), htmlAttributes: new { @class = "form-control" })
 		        @Html.ValidationMessageFor(model => model.RoleID, "", new { @class = "text-danger" })
 		    </div>
 		</div>
 
         <script>
             $(function () {
-                $('form#@ui_form_id select').each(function () {
-                    $(this).prepend('<option value=""></option>'); //allow empty selections
-                });
-
                 $.validator.unobtrusive.parse("form#@ui_form_id"); //enable validations
             });
         </script>

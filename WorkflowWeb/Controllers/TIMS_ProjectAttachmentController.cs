@@ -15,6 +15,40 @@ namespace WorkflowWeb.Controllers
 {
     public class TIMS_ProjectAttachmentController : BaseController
     {
+        private TIMS_ProjectAttachment _routeFilter;
+        public TIMS_ProjectAttachment RouteFilter
+        {
+            get
+            {
+                if (_routeFilter != null)
+                {
+                    return _routeFilter;
+                }
+
+                var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+                if (!string.IsNullOrEmpty(ui_route_filter))
+                {
+                    try
+                    {
+                        var bytes = Convert.FromBase64String(ui_route_filter);
+                        ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
+
+                        var filter = JsonConvert.DeserializeObject<TIMS_ProjectAttachmentViewModel>(ui_route_filter).ToModel();
+
+                        _routeFilter = filter;
+
+                        return filter;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+
+                return null;
+            }
+        }
+
         public List<TIMS_ProjectAttachmentViewModel> GetList()
         {
             db.Configuration.ProxyCreationEnabled = false;
@@ -25,16 +59,11 @@ namespace WorkflowWeb.Controllers
 				.Include(x => x.TIMS_User).AsQueryable();
 
             var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
-            if (!string.IsNullOrEmpty(ui_route_filter))
+            var filter = RouteFilter;
+
+            if (filter != null)
             {
-                try
-                {
-                    var bytes = Convert.FromBase64String(ui_route_filter);
-                    ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
-
-                    var filter = JsonConvert.DeserializeObject<TIMS_ProjectAttachmentViewModel>(ui_route_filter).ToModel();
-
-                    if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
+                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
 					if (filter.Name != null && filter.Name.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.Name == filter.Name);
 					if (filter.ProjectInterfacePointWorkflowID != null && filter.ProjectInterfacePointWorkflowID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectInterfacePointWorkflowID == filter.ProjectInterfacePointWorkflowID);
 					if (filter.ProjectInterfaceAgreementWorkflowID != null && filter.ProjectInterfaceAgreementWorkflowID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectInterfaceAgreementWorkflowID == filter.ProjectInterfaceAgreementWorkflowID);
@@ -43,14 +72,11 @@ namespace WorkflowWeb.Controllers
 					if (filter.Filename != null && filter.Filename.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.Filename == filter.Filename);
 					if (filter.DateUploaded != null && filter.DateUploaded.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.DateUploaded == filter.DateUploaded);
 					if (filter.UserID != null && filter.UserID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.UserID == filter.UserID);                        
-                }
-                catch
-                {
-
-                }
             }
 
-            return data.ToList().Select(x => new TIMS_ProjectAttachmentViewModel(x, true)).ToList();
+            var results = data.ToList().Select(x => new TIMS_ProjectAttachmentViewModel(x, true)).ToList();
+
+            return results;
         }
 
         public TIMS_ProjectAttachment Get(Guid id)
@@ -119,7 +145,7 @@ namespace WorkflowWeb.Controllers
 
         public ActionResult New()
         {
-            var vm = new TIMS_ProjectAttachmentViewModel() {  };
+            var vm = RouteFilter != null ? new TIMS_ProjectAttachmentViewModel(RouteFilter) : new TIMS_ProjectAttachmentViewModel() {  };
                        
             ViewBag.Lookups = GetLookups();
             return PartialView(vm);

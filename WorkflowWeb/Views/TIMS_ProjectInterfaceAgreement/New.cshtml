@@ -39,7 +39,7 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>@Model.Name</h4>
+        <h4>Create New Project Interface Agreement</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -56,7 +56,7 @@
 		<div class="form-group row">
 		    @Html.LabelFor(model => model.InterfacePointID, htmlAttributes: new { @class = "control-label col-md-2" })
 		    <div class="col-md-10">
-		        @Html.DropDownList("InterfacePointID", lookups["InterfacePointID"] as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+		        @Html.DropDownList("InterfacePointID", (lookups["InterfacePointID"] as IEnumerable<SelectListItem>).Prepend(new SelectListItem { Text = "-", Value = "" }), htmlAttributes: new { @class = "form-control" })
 		        @Html.ValidationMessageFor(model => model.InterfacePointID, "", new { @class = "text-danger" })
 		    </div>
 		</div>
@@ -64,7 +64,7 @@
 		<div class="form-group row">
 		    @Html.LabelFor(model => model.RequestorPackageID, htmlAttributes: new { @class = "control-label col-md-2" })
 		    <div class="col-md-10">
-		        @Html.DropDownList("RequestorPackageID", lookups["RequestorPackageID"] as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+		        @Html.DropDownList("RequestorPackageID", (lookups["RequestorPackageID"] as IEnumerable<SelectListItem>).Prepend(new SelectListItem { Text = "-", Value = "" }), htmlAttributes: new { @class = "form-control" })
 		        @Html.ValidationMessageFor(model => model.RequestorPackageID, "", new { @class = "text-danger" })
 		    </div>
 		</div>
@@ -72,7 +72,7 @@
 		<div class="form-group row">
 		    @Html.LabelFor(model => model.ResponderPackageID, htmlAttributes: new { @class = "control-label col-md-2" })
 		    <div class="col-md-10">
-		        @Html.DropDownList("ResponderPackageID", lookups["ResponderPackageID"] as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
+		        @Html.DropDownList("ResponderPackageID", (lookups["ResponderPackageID"] as IEnumerable<SelectListItem>).Prepend(new SelectListItem { Text = "-", Value = "" }), htmlAttributes: new { @class = "form-control" })
 		        @Html.ValidationMessageFor(model => model.ResponderPackageID, "", new { @class = "text-danger" })
 		    </div>
 		</div>
@@ -159,10 +159,6 @@
 
         <script>
             $(function () {
-                $('form#@ui_form_id select').each(function () {
-                    $(this).prepend('<option value=""></option>'); //allow empty selections
-                });
-
                 $.validator.unobtrusive.parse("form#@ui_form_id"); //enable validations
             });
         </script>

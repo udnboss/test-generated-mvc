@@ -43,7 +43,29 @@
             <div class="list-group">
                 @foreach (var item in Model)
                 {
-                    <a href="@Url.Action(actionName: "Index", controllerName: controller, routeValues: new { id = item.ID, ui_route_filter })" class="list-group-item list-group-item-action @(currentItem != null && currentItem.ID == item.ID ? "list-group-item-primary" : "")">@item.ID</a>
+                    @*<a href="@Url.Action(actionName: "Index", controllerName: controller, routeValues: new { id = item.ID, ui_route_filter })" class="list-group-item list-group-item-action @(currentItem != null && currentItem.ID == item.ID ? "list-group-item-primary" : "")">@item.ID</a>*@
+
+                        @Ajax.ActionLink(
+                           linkText: item.ID.ToString(),
+                           actionName: "ListDetail",
+                           controllerName: controller,
+                           routeValues: new { id = item.ID, ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter },
+                           ajaxOptions: new AjaxOptions
+                           {
+                               HttpMethod = "GET",
+                               OnBegin = "",
+                               OnSuccess = "",
+                               Confirm = null,
+                               AllowCache = false,
+                               InsertionMode = InsertionMode.Replace,
+                               OnFailure = "show_error",
+                               OnComplete = "modal_loading(false)",
+                               UpdateTargetId = ui_html_target
+                           },
+                            htmlAttributes: new
+                            {
+                                @class = "btn btn-outline-primary btn-sm"
+                            })
                 }
             </div>
         </div>
@@ -70,10 +92,10 @@
                     </script>
                     <ul class="nav nav-tabs mb-3" id="tabs-TIMS_ProjectInterfacePoint">
                         <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_ProjectInterfacePoint-TIMS_ProjectInterfaceAgreement">TIMS_ProjectInterfaceAgreement</a>
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_ProjectInterfacePoint-TIMS_ProjectInterfaceAgreement">Project Interface Agreements</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_ProjectInterfacePoint-TIMS_UserWatchlistItem">TIMS_UserWatchlistItem</a>
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_ProjectInterfacePoint-TIMS_UserWatchlistItem">User Watchlist Items</a>
 </li>
                     </ul>
                     <div class="tab-content" id="tabContent-TIMS_ProjectInterfacePoint">

@@ -15,6 +15,40 @@ namespace WorkflowWeb.Controllers
 {
     public class TIMS_ProjectInterfacePointFieldEntryController : BaseController
     {
+        private TIMS_ProjectInterfacePointFieldEntry _routeFilter;
+        public TIMS_ProjectInterfacePointFieldEntry RouteFilter
+        {
+            get
+            {
+                if (_routeFilter != null)
+                {
+                    return _routeFilter;
+                }
+
+                var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+                if (!string.IsNullOrEmpty(ui_route_filter))
+                {
+                    try
+                    {
+                        var bytes = Convert.FromBase64String(ui_route_filter);
+                        ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
+
+                        var filter = JsonConvert.DeserializeObject<TIMS_ProjectInterfacePointFieldEntryViewModel>(ui_route_filter).ToModel();
+
+                        _routeFilter = filter;
+
+                        return filter;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+
+                return null;
+            }
+        }
+
         public List<TIMS_ProjectInterfacePointFieldEntryViewModel> GetList()
         {
             db.Configuration.ProxyCreationEnabled = false;
@@ -22,27 +56,19 @@ namespace WorkflowWeb.Controllers
 				.Include(x => x.TIMS_ProjectDisciplineInterfaceTypeField).AsQueryable();
 
             var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
-            if (!string.IsNullOrEmpty(ui_route_filter))
+            var filter = RouteFilter;
+
+            if (filter != null)
             {
-                try
-                {
-                    var bytes = Convert.FromBase64String(ui_route_filter);
-                    ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
-
-                    var filter = JsonConvert.DeserializeObject<TIMS_ProjectInterfacePointFieldEntryViewModel>(ui_route_filter).ToModel();
-
-                    if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
+                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
 					if (filter.InterfacePointWorkflowID != null && filter.InterfacePointWorkflowID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.InterfacePointWorkflowID == filter.InterfacePointWorkflowID);
 					if (filter.InterfaceTypeFieldID != null && filter.InterfaceTypeFieldID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.InterfaceTypeFieldID == filter.InterfaceTypeFieldID);
 					if (filter.Value != null && filter.Value.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.Value == filter.Value);                        
-                }
-                catch
-                {
-
-                }
             }
 
-            return data.ToList().Select(x => new TIMS_ProjectInterfacePointFieldEntryViewModel(x, true)).ToList();
+            var results = data.ToList().Select(x => new TIMS_ProjectInterfacePointFieldEntryViewModel(x, true)).ToList();
+
+            return results;
         }
 
         public TIMS_ProjectInterfacePointFieldEntry Get(Guid id)
@@ -105,7 +131,7 @@ namespace WorkflowWeb.Controllers
 
         public ActionResult New()
         {
-            var vm = new TIMS_ProjectInterfacePointFieldEntryViewModel() {  };
+            var vm = RouteFilter != null ? new TIMS_ProjectInterfacePointFieldEntryViewModel(RouteFilter) : new TIMS_ProjectInterfacePointFieldEntryViewModel() {  };
                        
             ViewBag.Lookups = GetLookups();
             return PartialView(vm);

@@ -70,28 +70,28 @@
                     </script>
                     <ul class="nav nav-tabs mb-3" id="tabs-TIMS_Project">
                         <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectActionItem">TIMS_ProjectActionItem</a>
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectActionItem">Action Items</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectArea">TIMS_ProjectArea</a>
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectArea">Areas</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectContractor">TIMS_ProjectContractor</a>
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectContractor">Contractors</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectDiscipline">TIMS_ProjectDiscipline</a>
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectDiscipline">Disciplines</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectInterfacePoint">TIMS_ProjectInterfacePoint</a>
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectInterfacePoint">Interface Points</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectPackage">TIMS_ProjectPackage</a>
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectPackage">Packages</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectPhysicalArea">TIMS_ProjectPhysicalArea</a>
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectPhysicalArea">Physical Areas</a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_UserRole">TIMS_UserRole</a>
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_UserRole">User Roles</a>
 </li>
                     </ul>
                     <div class="tab-content" id="tabContent-TIMS_Project">
@@ -108,7 +108,7 @@
     @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectDiscipline", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectDisciplineViewModel { ProjectID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_Project-TIMS_ProjectDiscipline", ui_list_view = "ListTable" })
 </div>
 <div class="tab-pane fade" id="tab-TIMS_Project-TIMS_ProjectInterfacePoint">
-    @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectInterfacePoint", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfacePointViewModel { ProjectID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_Project-TIMS_ProjectInterfacePoint", ui_list_view = "ListTable" })
+    @Html.Action(actionName: "ListDetail", controllerName: "TIMS_ProjectInterfacePoint", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfacePointViewModel { ProjectID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_Project-TIMS_ProjectInterfacePoint", ui_list_view = "ListDetail" })
 </div>
 <div class="tab-pane fade" id="tab-TIMS_Project-TIMS_ProjectPackage">
     @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectPackage", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectPackageViewModel { ProjectID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_Project-TIMS_ProjectPackage", ui_list_view = "ListTable" })
