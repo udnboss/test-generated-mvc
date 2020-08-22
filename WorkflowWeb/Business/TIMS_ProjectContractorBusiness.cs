@@ -11,7 +11,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.Business
 {
-    public class TIMS_ProjectContractorBusiness : BaseBusiness<TIMS_ProjectContractor>
+    public partial class TIMS_ProjectContractorBusiness : BaseBusiness<TIMS_ProjectContractor>
     {
         public TIMS_ProjectContractorBusiness() { }
         public TIMS_ProjectContractorBusiness(DbContext db, string user) : base(db, user) { }
@@ -36,7 +36,13 @@ namespace WorkflowWeb.Business
             return AccessDenied<List<TIMS_ProjectContractor>>(o);
         }
 
-        private IQueryable<TIMS_ProjectContractor> GetIQueryable(TIMS_ProjectContractor filter)
+        public override IQueryable<TIMS_ProjectContractor> GetIQueryable()
+        {
+            return db.TIMS_ProjectContractor.Include(x => x.TIMS_Project)
+				.Include(x => x.TIMS_Contractor).AsQueryable();
+        }
+
+        public IQueryable<TIMS_ProjectContractor> GetIQueryable(TIMS_ProjectContractor filter)
         {
             var data = GetIQueryable();
 

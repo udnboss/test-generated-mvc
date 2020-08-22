@@ -68,7 +68,7 @@
 
                         });
                     </script>
-                    <ul class="nav nav-tabs mb-3" id="tabs-TIMS_ProjectDiscipline">
+                    <ul class="nav nav-tabs" id="tabs-TIMS_ProjectDiscipline">
                         <li class="nav-item">
     <a class="nav-link" data-toggle="tab" href="#tab-TIMS_ProjectDiscipline-TIMS_ProjectDisciplineInterfaceType">Interface Types</a>
 </li>
@@ -77,10 +77,10 @@
 </li>
                     </ul>
                     <div class="tab-content" id="tabContent-TIMS_ProjectDiscipline">
-                        <div class="tab-pane fade" id="tab-TIMS_ProjectDiscipline-TIMS_ProjectDisciplineInterfaceType">
+                        <div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_ProjectDiscipline-TIMS_ProjectDisciplineInterfaceType">
     @Html.Action(actionName: "List", controllerName: "TIMS_ProjectDisciplineInterfaceType", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectDisciplineInterfaceTypeViewModel { ProjectIDisciplineID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectDiscipline-TIMS_ProjectDisciplineInterfaceType", ui_list_view = "ListTable" })
 </div>
-<div class="tab-pane fade" id="tab-TIMS_ProjectDiscipline-TIMS_ProjectInterfaceAgreementWorkflow">
+<div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_ProjectDiscipline-TIMS_ProjectInterfaceAgreementWorkflow">
     @Html.Action(actionName: "List", controllerName: "TIMS_ProjectInterfaceAgreementWorkflow", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfaceAgreementWorkflowViewModel { DisciplineID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectDiscipline-TIMS_ProjectInterfaceAgreementWorkflow", ui_list_view = "ListTable" })
 </div>
                     </div>

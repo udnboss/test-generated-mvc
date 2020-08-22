@@ -14,25 +14,27 @@ using WorkflowWeb.ViewModels;
 
 namespace WorkflowWeb.Controllers
 {
-    public class TIMS_ProjectActionItemWorkflowController : BaseController<TIMS_ProjectActionItemWorkflow, TIMS_ProjectActionItemWorkflowBusiness, TIMS_ProjectActionItemWorkflowViewModel>
+    public partial class TIMS_ProjectActionItemWorkflowController : BaseController<TIMS_ProjectActionItemWorkflow, TIMS_ProjectActionItemWorkflowBusiness, TIMS_ProjectActionItemWorkflowViewModel>
     {
         public TIMS_ProjectActionItemWorkflowController()
         {
             business = new TIMS_ProjectActionItemWorkflowBusiness(db, user);
         }
 
-        public override Dictionary<string, object> GetLookups()
+        public Dictionary<string, object> GetLookups()
         {
+            var routeFilter = GetRouteFilter();
+
             return new Dictionary<string, object> {
-                {"ActionItemID", db.TIMS_ProjectActionItem.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"UserID", db.TIMS_User.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"WorkflowTypeID", db.TIMS_WorkflowType.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
+                {"ActionItemID", db.TIMS_ProjectActionItem.Where(x => routeFilter.ActionItemID == null || x.ID == routeFilter.ActionItemID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"UserID", db.TIMS_User.Where(x => routeFilter.UserID == null || x.ID == routeFilter.UserID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"WorkflowTypeID", db.TIMS_WorkflowType.Where(x => routeFilter.WorkflowTypeID == null || x.ID == routeFilter.WorkflowTypeID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
             };
         }
 
         public ActionResult Index(Guid? id = null)
         {
-            return View(id);
+            return View((object)id);
         }
 
         public ActionResult List(Guid? id = null, string ui_list_view = null)

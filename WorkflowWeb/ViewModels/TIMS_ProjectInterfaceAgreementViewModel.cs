@@ -10,7 +10,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.ViewModels
 {
-    public class TIMS_ProjectInterfaceAgreementViewModel : BaseViewModel<TIMS_ProjectInterfaceAgreement>, IValidatableObject
+    public partial class TIMS_ProjectInterfaceAgreementViewModel : BaseViewModel<TIMS_ProjectInterfaceAgreement>, IValidatableObject
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "ID is required.")]
 		[DisplayName("ID")]

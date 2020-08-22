@@ -159,6 +159,7 @@
     <Compile Include="Business\TIMS_WorkflowActionBusiness.cs" />
     <Compile Include="Business\TIMS_WorkflowStateBusiness.cs" />
     <Compile Include="Business\TIMS_WorkflowTypeBusiness.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TIMS_ContractorController.cs" />
     <Compile Include="Controllers\TIMS_DisciplineController.cs" />
     <Compile Include="Controllers\TIMS_PhaseController.cs" />
@@ -2261,6 +2262,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\" />
+    <Folder Include="Controllers\Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -14,15 +14,17 @@ using WorkflowWeb.ViewModels;
 
 namespace WorkflowWeb.Controllers
 {
-    public class TIMS_WorkflowTypeController : BaseController<TIMS_WorkflowType, TIMS_WorkflowTypeBusiness, TIMS_WorkflowTypeViewModel>
+    public partial class TIMS_WorkflowTypeController : BaseController<TIMS_WorkflowType, TIMS_WorkflowTypeBusiness, TIMS_WorkflowTypeViewModel>
     {
         public TIMS_WorkflowTypeController()
         {
             business = new TIMS_WorkflowTypeBusiness(db, user);
         }
 
-        public override Dictionary<string, object> GetLookups()
+        public Dictionary<string, object> GetLookups()
         {
+            var routeFilter = GetRouteFilter();
+
             return new Dictionary<string, object> {
                 
             };
@@ -30,7 +32,7 @@ namespace WorkflowWeb.Controllers
 
         public ActionResult Index(String id = null)
         {
-            return View(id);
+            return View((object)id);
         }
 
         public ActionResult List(String id = null, string ui_list_view = null)

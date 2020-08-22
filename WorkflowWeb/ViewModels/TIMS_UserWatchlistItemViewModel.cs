@@ -10,7 +10,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.ViewModels
 {
-    public class TIMS_UserWatchlistItemViewModel : BaseViewModel<TIMS_UserWatchlistItem>, IValidatableObject
+    public partial class TIMS_UserWatchlistItemViewModel : BaseViewModel<TIMS_UserWatchlistItem>, IValidatableObject
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "ID is required.")]
 		[DisplayName("ID")]

@@ -68,13 +68,13 @@
 
                         });
                     </script>
-                    <ul class="nav nav-tabs mb-3" id="tabs-TIMS_Contractor">
+                    <ul class="nav nav-tabs" id="tabs-TIMS_Contractor">
                         <li class="nav-item">
     <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Contractor-TIMS_ProjectContractor">Project Contractors</a>
 </li>
                     </ul>
                     <div class="tab-content" id="tabContent-TIMS_Contractor">
-                        <div class="tab-pane fade" id="tab-TIMS_Contractor-TIMS_ProjectContractor">
+                        <div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_Contractor-TIMS_ProjectContractor">
     @Html.Action(actionName: "List", controllerName: "TIMS_ProjectContractor", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectContractorViewModel { ContractorID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_Contractor-TIMS_ProjectContractor", ui_list_view = "ListTable" })
 </div>
                     </div>

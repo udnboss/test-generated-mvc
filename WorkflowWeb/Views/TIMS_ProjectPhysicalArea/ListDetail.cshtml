@@ -68,13 +68,13 @@
 
                         });
                     </script>
-                    <ul class="nav nav-tabs mb-3" id="tabs-TIMS_ProjectPhysicalArea">
+                    <ul class="nav nav-tabs" id="tabs-TIMS_ProjectPhysicalArea">
                         <li class="nav-item">
     <a class="nav-link" data-toggle="tab" href="#tab-TIMS_ProjectPhysicalArea-TIMS_ProjectInterfacePointWorkflow">Project Interface Point Workflows</a>
 </li>
                     </ul>
                     <div class="tab-content" id="tabContent-TIMS_ProjectPhysicalArea">
-                        <div class="tab-pane fade" id="tab-TIMS_ProjectPhysicalArea-TIMS_ProjectInterfacePointWorkflow">
+                        <div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_ProjectPhysicalArea-TIMS_ProjectInterfacePointWorkflow">
     @Html.Action(actionName: "List", controllerName: "TIMS_ProjectInterfacePointWorkflow", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfacePointWorkflowViewModel { ProjectPhysicalAreaID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectPhysicalArea-TIMS_ProjectInterfacePointWorkflow", ui_list_view = "ListTable" })
 </div>
                     </div>

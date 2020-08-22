@@ -14,24 +14,26 @@ using WorkflowWeb.ViewModels;
 
 namespace WorkflowWeb.Controllers
 {
-    public class TIMS_ProjectInterfacePointFieldEntryController : BaseController<TIMS_ProjectInterfacePointFieldEntry, TIMS_ProjectInterfacePointFieldEntryBusiness, TIMS_ProjectInterfacePointFieldEntryViewModel>
+    public partial class TIMS_ProjectInterfacePointFieldEntryController : BaseController<TIMS_ProjectInterfacePointFieldEntry, TIMS_ProjectInterfacePointFieldEntryBusiness, TIMS_ProjectInterfacePointFieldEntryViewModel>
     {
         public TIMS_ProjectInterfacePointFieldEntryController()
         {
             business = new TIMS_ProjectInterfacePointFieldEntryBusiness(db, user);
         }
 
-        public override Dictionary<string, object> GetLookups()
+        public Dictionary<string, object> GetLookups()
         {
+            var routeFilter = GetRouteFilter();
+
             return new Dictionary<string, object> {
-                {"InterfaceTypeFieldID", db.TIMS_ProjectDisciplineInterfaceTypeField.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"InterfacePointWorkflowID", db.TIMS_ProjectInterfacePointWorkflow.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) }
+                {"InterfaceTypeFieldID", db.TIMS_ProjectDisciplineInterfaceTypeField.Where(x => routeFilter.InterfaceTypeFieldID == null || x.ID == routeFilter.InterfaceTypeFieldID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"InterfacePointWorkflowID", db.TIMS_ProjectInterfacePointWorkflow.Where(x => routeFilter.InterfacePointWorkflowID == null || x.ID == routeFilter.InterfacePointWorkflowID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) }
             };
         }
 
         public ActionResult Index(Guid? id = null)
         {
-            return View(id);
+            return View((object)id);
         }
 
         public ActionResult List(Guid? id = null, string ui_list_view = null)

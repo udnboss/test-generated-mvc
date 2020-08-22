@@ -14,26 +14,28 @@ using WorkflowWeb.ViewModels;
 
 namespace WorkflowWeb.Controllers
 {
-    public class TIMS_UserRoleController : BaseController<TIMS_UserRole, TIMS_UserRoleBusiness, TIMS_UserRoleViewModel>
+    public partial class TIMS_UserRoleController : BaseController<TIMS_UserRole, TIMS_UserRoleBusiness, TIMS_UserRoleViewModel>
     {
         public TIMS_UserRoleController()
         {
             business = new TIMS_UserRoleBusiness(db, user);
         }
 
-        public override Dictionary<string, object> GetLookups()
+        public Dictionary<string, object> GetLookups()
         {
+            var routeFilter = GetRouteFilter();
+
             return new Dictionary<string, object> {
-                {"ProjectID", db.TIMS_Project.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"ProjectPackageID", db.TIMS_ProjectPackage.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"RoleID", db.TIMS_Role.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"UserID", db.TIMS_User.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
+                {"ProjectID", db.TIMS_Project.Where(x => routeFilter.ProjectID == null || x.ID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"ProjectPackageID", db.TIMS_ProjectPackage.Where(x => routeFilter.ProjectPackageID == null || x.ID == routeFilter.ProjectPackageID).Where(x => routeFilter.ProjectID == null ||  x.TIMS_Project.ID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"RoleID", db.TIMS_Role.Where(x => routeFilter.RoleID == null || x.ID == routeFilter.RoleID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"UserID", db.TIMS_User.Where(x => routeFilter.UserID == null || x.ID == routeFilter.UserID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
             };
         }
 
         public ActionResult Index(Guid? id = null)
         {
-            return View(id);
+            return View((object)id);
         }
 
         public ActionResult List(Guid? id = null, string ui_list_view = null)

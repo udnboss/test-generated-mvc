@@ -11,7 +11,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.Business
 {
-    public class TIMS_UserWatchlistItemBusiness : BaseBusiness<TIMS_UserWatchlistItem>
+    public partial class TIMS_UserWatchlistItemBusiness : BaseBusiness<TIMS_UserWatchlistItem>
     {
         public TIMS_UserWatchlistItemBusiness() { }
         public TIMS_UserWatchlistItemBusiness(DbContext db, string user) : base(db, user) { }
@@ -36,7 +36,15 @@ namespace WorkflowWeb.Business
             return AccessDenied<List<TIMS_UserWatchlistItem>>(o);
         }
 
-        private IQueryable<TIMS_UserWatchlistItem> GetIQueryable(TIMS_UserWatchlistItem filter)
+        public override IQueryable<TIMS_UserWatchlistItem> GetIQueryable()
+        {
+            return db.TIMS_UserWatchlistItem.Include(x => x.TIMS_User)
+				.Include(x => x.TIMS_ProjectInterfacePoint)
+				.Include(x => x.TIMS_ProjectInterfaceAgreement)
+				.Include(x => x.TIMS_ProjectActionItem).AsQueryable();
+        }
+
+        public IQueryable<TIMS_UserWatchlistItem> GetIQueryable(TIMS_UserWatchlistItem filter)
         {
             var data = GetIQueryable();
 

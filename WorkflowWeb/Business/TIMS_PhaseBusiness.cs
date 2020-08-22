@@ -11,7 +11,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.Business
 {
-    public class TIMS_PhaseBusiness : BaseBusiness<TIMS_Phase>
+    public partial class TIMS_PhaseBusiness : BaseBusiness<TIMS_Phase>
     {
         public TIMS_PhaseBusiness() { }
         public TIMS_PhaseBusiness(DbContext db, string user) : base(db, user) { }
@@ -36,7 +36,12 @@ namespace WorkflowWeb.Business
             return AccessDenied<List<TIMS_Phase>>(o);
         }
 
-        private IQueryable<TIMS_Phase> GetIQueryable(TIMS_Phase filter)
+        public override IQueryable<TIMS_Phase> GetIQueryable()
+        {
+            return db.TIMS_Phase.AsQueryable();
+        }
+
+        public IQueryable<TIMS_Phase> GetIQueryable(TIMS_Phase filter)
         {
             var data = GetIQueryable();
 

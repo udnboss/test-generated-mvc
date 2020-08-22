@@ -14,24 +14,26 @@ using WorkflowWeb.ViewModels;
 
 namespace WorkflowWeb.Controllers
 {
-    public class TIMS_ProjectContractorController : BaseController<TIMS_ProjectContractor, TIMS_ProjectContractorBusiness, TIMS_ProjectContractorViewModel>
+    public partial class TIMS_ProjectContractorController : BaseController<TIMS_ProjectContractor, TIMS_ProjectContractorBusiness, TIMS_ProjectContractorViewModel>
     {
         public TIMS_ProjectContractorController()
         {
             business = new TIMS_ProjectContractorBusiness(db, user);
         }
 
-        public override Dictionary<string, object> GetLookups()
+        public Dictionary<string, object> GetLookups()
         {
+            var routeFilter = GetRouteFilter();
+
             return new Dictionary<string, object> {
-                {"ContractorID", db.TIMS_Contractor.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"ProjectID", db.TIMS_Project.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
+                {"ContractorID", db.TIMS_Contractor.Where(x => routeFilter.ContractorID == null || x.ID == routeFilter.ContractorID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"ProjectID", db.TIMS_Project.Where(x => routeFilter.ProjectID == null || x.ID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
             };
         }
 
         public ActionResult Index(Guid? id = null)
         {
-            return View(id);
+            return View((object)id);
         }
 
         public ActionResult List(Guid? id = null, string ui_list_view = null)

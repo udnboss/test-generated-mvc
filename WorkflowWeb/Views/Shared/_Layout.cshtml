@@ -83,8 +83,10 @@
                         Dropdown
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
+                        @foreach (var x in typeof(WorkflowWeb.Models.IMSEntities).GetProperties().Where(p => p.PropertyType.Name.StartsWith("DbSet")))
+                        {
+                            @Html.ActionLink(x.Name, "Index", x.Name, null, new { @class = "dropdown-item" })
+                        }
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">Something else here</a>
                     </div>
@@ -100,7 +102,7 @@
         </div>
     </nav>
 
-    <div class="container body-content">
+    <div class="container-fluid body-content">
         @RenderBody()
         <hr />
         <footer>

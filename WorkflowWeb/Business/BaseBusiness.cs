@@ -215,10 +215,5 @@ namespace WorkflowWeb.Business
             return data;
         }
 
-        public IBusiness<T> CreateInstance(DbContext db, string user)
-        {
-            var newBusiness = new BaseBusiness<T>(db, user);
-            return newBusiness;
-        }
     }
 }

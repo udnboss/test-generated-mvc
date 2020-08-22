@@ -11,7 +11,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.Business
 {
-    public class TIMS_ProjectDisciplineInterfaceTypeFieldBusiness : BaseBusiness<TIMS_ProjectDisciplineInterfaceTypeField>
+    public partial class TIMS_ProjectDisciplineInterfaceTypeFieldBusiness : BaseBusiness<TIMS_ProjectDisciplineInterfaceTypeField>
     {
         public TIMS_ProjectDisciplineInterfaceTypeFieldBusiness() { }
         public TIMS_ProjectDisciplineInterfaceTypeFieldBusiness(DbContext db, string user) : base(db, user) { }
@@ -36,7 +36,12 @@ namespace WorkflowWeb.Business
             return AccessDenied<List<TIMS_ProjectDisciplineInterfaceTypeField>>(o);
         }
 
-        private IQueryable<TIMS_ProjectDisciplineInterfaceTypeField> GetIQueryable(TIMS_ProjectDisciplineInterfaceTypeField filter)
+        public override IQueryable<TIMS_ProjectDisciplineInterfaceTypeField> GetIQueryable()
+        {
+            return db.TIMS_ProjectDisciplineInterfaceTypeField.Include(x => x.TIMS_ProjectDisciplineInterfaceType).AsQueryable();
+        }
+
+        public IQueryable<TIMS_ProjectDisciplineInterfaceTypeField> GetIQueryable(TIMS_ProjectDisciplineInterfaceTypeField filter)
         {
             var data = GetIQueryable();
 

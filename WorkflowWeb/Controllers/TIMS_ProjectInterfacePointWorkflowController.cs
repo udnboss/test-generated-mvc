@@ -14,31 +14,33 @@ using WorkflowWeb.ViewModels;
 
 namespace WorkflowWeb.Controllers
 {
-    public class TIMS_ProjectInterfacePointWorkflowController : BaseController<TIMS_ProjectInterfacePointWorkflow, TIMS_ProjectInterfacePointWorkflowBusiness, TIMS_ProjectInterfacePointWorkflowViewModel>
+    public partial class TIMS_ProjectInterfacePointWorkflowController : BaseController<TIMS_ProjectInterfacePointWorkflow, TIMS_ProjectInterfacePointWorkflowBusiness, TIMS_ProjectInterfacePointWorkflowViewModel>
     {
         public TIMS_ProjectInterfacePointWorkflowController()
         {
             business = new TIMS_ProjectInterfacePointWorkflowBusiness(db, user);
         }
 
-        public override Dictionary<string, object> GetLookups()
+        public Dictionary<string, object> GetLookups()
         {
+            var routeFilter = GetRouteFilter();
+
             return new Dictionary<string, object> {
-                {"PhaseID", db.TIMS_Phase.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"ProjectAreaID", db.TIMS_ProjectArea.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"InterfaceTypeID", db.TIMS_ProjectDisciplineInterfaceType.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"ProjectPhysicalAreaID", db.TIMS_ProjectPhysicalArea.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"UserID", db.TIMS_User.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"LeadStateID", db.TIMS_WorkflowState.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"InterfaceStateID", db.TIMS_WorkflowState.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"SupportStateID", db.TIMS_WorkflowState.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"WorkflowTypeID", db.TIMS_WorkflowType.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
+                {"PhaseID", db.TIMS_Phase.Where(x => routeFilter.PhaseID == null || x.ID == routeFilter.PhaseID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"ProjectAreaID", db.TIMS_ProjectArea.Where(x => routeFilter.ProjectAreaID == null || x.ID == routeFilter.ProjectAreaID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"InterfaceTypeID", db.TIMS_ProjectDisciplineInterfaceType.Where(x => routeFilter.InterfaceTypeID == null || x.ID == routeFilter.InterfaceTypeID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"ProjectPhysicalAreaID", db.TIMS_ProjectPhysicalArea.Where(x => routeFilter.ProjectPhysicalAreaID == null || x.ID == routeFilter.ProjectPhysicalAreaID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"UserID", db.TIMS_User.Where(x => routeFilter.UserID == null || x.ID == routeFilter.UserID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"LeadStateID", db.TIMS_WorkflowState.Where(x => routeFilter.LeadStateID == null || x.ID == routeFilter.LeadStateID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"InterfaceStateID", db.TIMS_WorkflowState.Where(x => routeFilter.InterfaceStateID == null || x.ID == routeFilter.InterfaceStateID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"SupportStateID", db.TIMS_WorkflowState.Where(x => routeFilter.SupportStateID == null || x.ID == routeFilter.SupportStateID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"WorkflowTypeID", db.TIMS_WorkflowType.Where(x => routeFilter.WorkflowTypeID == null || x.ID == routeFilter.WorkflowTypeID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
             };
         }
 
         public ActionResult Index(Guid? id = null)
         {
-            return View(id);
+            return View((object)id);
         }
 
         public ActionResult List(Guid? id = null, string ui_list_view = null)

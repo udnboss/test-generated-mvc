@@ -14,26 +14,28 @@ using WorkflowWeb.ViewModels;
 
 namespace WorkflowWeb.Controllers
 {
-    public class TIMS_ProjectCommentController : BaseController<TIMS_ProjectComment, TIMS_ProjectCommentBusiness, TIMS_ProjectCommentViewModel>
+    public partial class TIMS_ProjectCommentController : BaseController<TIMS_ProjectComment, TIMS_ProjectCommentBusiness, TIMS_ProjectCommentViewModel>
     {
         public TIMS_ProjectCommentController()
         {
             business = new TIMS_ProjectCommentBusiness(db, user);
         }
 
-        public override Dictionary<string, object> GetLookups()
+        public Dictionary<string, object> GetLookups()
         {
+            var routeFilter = GetRouteFilter();
+
             return new Dictionary<string, object> {
-                {"ProjectActionItemWorkflowID", db.TIMS_ProjectActionItemWorkflow.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
-				{"ProjectInterfaceAgreementWorkflowID", db.TIMS_ProjectInterfaceAgreementWorkflow.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
-				{"ProjectInterfacePointWorkflowID", db.TIMS_ProjectInterfacePointWorkflow.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
-				{"UserID", db.TIMS_User.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
+                {"ProjectActionItemWorkflowID", db.TIMS_ProjectActionItemWorkflow.Where(x => routeFilter.ProjectActionItemWorkflowID == null || x.ID == routeFilter.ProjectActionItemWorkflowID).Where(x => routeFilter.UserID == null ||  x.TIMS_User.ID == routeFilter.UserID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
+				{"ProjectInterfaceAgreementWorkflowID", db.TIMS_ProjectInterfaceAgreementWorkflow.Where(x => routeFilter.ProjectInterfaceAgreementWorkflowID == null || x.ID == routeFilter.ProjectInterfaceAgreementWorkflowID).Where(x => routeFilter.UserID == null ||  x.TIMS_User.ID == routeFilter.UserID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
+				{"ProjectInterfacePointWorkflowID", db.TIMS_ProjectInterfacePointWorkflow.Where(x => routeFilter.ProjectInterfacePointWorkflowID == null || x.ID == routeFilter.ProjectInterfacePointWorkflowID).Where(x => routeFilter.UserID == null ||  x.TIMS_User.ID == routeFilter.UserID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
+				{"UserID", db.TIMS_User.Where(x => routeFilter.UserID == null || x.ID == routeFilter.UserID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
             };
         }
 
         public ActionResult Index(Guid? id = null)
         {
-            return View(id);
+            return View((object)id);
         }
 
         public ActionResult List(Guid? id = null, string ui_list_view = null)

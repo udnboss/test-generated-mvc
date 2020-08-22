@@ -68,7 +68,7 @@
 
                         });
                     </script>
-                    <ul class="nav nav-tabs mb-3" id="tabs-TIMS_ProjectInterfacePointWorkflow">
+                    <ul class="nav nav-tabs" id="tabs-TIMS_ProjectInterfacePointWorkflow">
                         <li class="nav-item">
     <a class="nav-link" data-toggle="tab" href="#tab-TIMS_ProjectInterfacePointWorkflow-TIMS_ProjectAttachment">Project Attachments</a>
 </li>
@@ -80,13 +80,13 @@
 </li>
                     </ul>
                     <div class="tab-content" id="tabContent-TIMS_ProjectInterfacePointWorkflow">
-                        <div class="tab-pane fade" id="tab-TIMS_ProjectInterfacePointWorkflow-TIMS_ProjectAttachment">
+                        <div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_ProjectInterfacePointWorkflow-TIMS_ProjectAttachment">
     @Html.Action(actionName: "List", controllerName: "TIMS_ProjectAttachment", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectAttachmentViewModel { ProjectInterfacePointWorkflowID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectInterfacePointWorkflow-TIMS_ProjectAttachment", ui_list_view = "ListTable" })
 </div>
-<div class="tab-pane fade" id="tab-TIMS_ProjectInterfacePointWorkflow-TIMS_ProjectComment">
+<div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_ProjectInterfacePointWorkflow-TIMS_ProjectComment">
     @Html.Action(actionName: "List", controllerName: "TIMS_ProjectComment", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectCommentViewModel { ProjectInterfacePointWorkflowID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectInterfacePointWorkflow-TIMS_ProjectComment", ui_list_view = "ListTable" })
 </div>
-<div class="tab-pane fade" id="tab-TIMS_ProjectInterfacePointWorkflow-TIMS_ProjectInterfacePointFieldEntry">
+<div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_ProjectInterfacePointWorkflow-TIMS_ProjectInterfacePointFieldEntry">
     @Html.Action(actionName: "List", controllerName: "TIMS_ProjectInterfacePointFieldEntry", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfacePointFieldEntryViewModel { InterfacePointWorkflowID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectInterfacePointWorkflow-TIMS_ProjectInterfacePointFieldEntry", ui_list_view = "ListTable" })
 </div>
                     </div>

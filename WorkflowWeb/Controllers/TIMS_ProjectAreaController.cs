@@ -14,23 +14,25 @@ using WorkflowWeb.ViewModels;
 
 namespace WorkflowWeb.Controllers
 {
-    public class TIMS_ProjectAreaController : BaseController<TIMS_ProjectArea, TIMS_ProjectAreaBusiness, TIMS_ProjectAreaViewModel>
+    public partial class TIMS_ProjectAreaController : BaseController<TIMS_ProjectArea, TIMS_ProjectAreaBusiness, TIMS_ProjectAreaViewModel>
     {
         public TIMS_ProjectAreaController()
         {
             business = new TIMS_ProjectAreaBusiness(db, user);
         }
 
-        public override Dictionary<string, object> GetLookups()
+        public Dictionary<string, object> GetLookups()
         {
+            var routeFilter = GetRouteFilter();
+
             return new Dictionary<string, object> {
-                {"ProjectID", db.TIMS_Project.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
+                {"ProjectID", db.TIMS_Project.Where(x => routeFilter.ProjectID == null || x.ID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
             };
         }
 
         public ActionResult Index(Guid? id = null)
         {
-            return View(id);
+            return View((object)id);
         }
 
         public ActionResult List(Guid? id = null, string ui_list_view = null)

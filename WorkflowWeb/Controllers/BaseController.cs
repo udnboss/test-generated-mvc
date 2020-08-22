@@ -11,7 +11,7 @@ using WorkflowWeb.ViewModels;
 
 namespace WorkflowWeb.Controllers
 {
-    public class BaseController<T, B, VM> : Controller where B : IBusiness<T>, new() where VM : BaseViewModel<T>, new()
+    public class BaseController<T, B, VM> : Controller where B : IBusiness<T>, new() where VM : BaseViewModel<T>, new() where T : new()
     {
         protected string user;
         protected IBusiness<T> business;
@@ -19,15 +19,9 @@ namespace WorkflowWeb.Controllers
 
         public BaseController()
         {
-            //business = business.CreateInstance(db, user);
-            //business = new BaseBusiness<T>(db, user) ;
-            //business.SetDB(db);
+            user = "Ali";
         }
 
-        public virtual Dictionary<string, object> GetLookups()
-        {
-            throw new NotImplementedException();
-        }
         protected ContentResult JsonOut(object data)
         {
             string json = JsonConvert.SerializeObject(data, Formatting.Indented);
@@ -58,118 +52,136 @@ namespace WorkflowWeb.Controllers
                 }
                 catch
                 {
-                    return default;
+                    return new T();
                 }
             }
 
-            return default;
+            return new T();
         }
 
-        private ActionResult Index(object id = null)
+        protected HttpStatusCode GetResponseCode<X>(BusinessResult<X> result)
         {
-            return View(id);
+            switch (result.Status)
+            {
+                case State.AccessDenied:
+                    return HttpStatusCode.Forbidden;
+                case State.Error:
+                    return HttpStatusCode.InternalServerError;
+                case State.NoRecordFound:
+                case State.NoRecordsAffected:
+                    return HttpStatusCode.NotFound;
+                case State.Success:
+                    return HttpStatusCode.OK;
+                default:
+                    return HttpStatusCode.Conflict;
+            }
         }
 
-        private ActionResult List(object id = null, string ui_list_view = null)
-        {
-            ViewBag.CurrentID = id;
-            var uiListView = ui_list_view ?? (RouteData.Values["ui_list_view"] ?? Request.QueryString["ui_list_view"]) as string;
+        //private ActionResult Index(object id = null)
+        //{
+        //    return View(id);
+        //}
 
-            if (uiListView != null && uiListView != "ListDetail" && uiListView != "ListTable") //invalid
-            {
-                return HttpNotFound();
-            }
+        //private ActionResult List(object id = null, string ui_list_view = null)
+        //{
+        //    ViewBag.CurrentID = id;
+        //    var uiListView = ui_list_view ?? (RouteData.Values["ui_list_view"] ?? Request.QueryString["ui_list_view"]) as string;
 
-            var results = business.GetList(GetRouteFilter());
+        //    if (uiListView != null && uiListView != "ListDetail" && uiListView != "ListTable") //invalid
+        //    {
+        //        return HttpNotFound();
+        //    }
 
-            var message = results.Message;
+        //    var results = business.GetList(GetRouteFilter());
 
-            var responseCode = GetResponseCode(results);
-            Response.StatusCode = (int)responseCode;
+        //    var message = results.Message;
 
-            if (responseCode == HttpStatusCode.OK)
-            {
-                var data = results.Data.Select(x => new VM().FromModel(x, true)).ToList().Cast<VM>().ToList();
-                return PartialView(uiListView ?? "ListTable", data);
-            }
+        //    var responseCode = GetResponseCode(results);
+        //    Response.StatusCode = (int)responseCode;
 
-            return Json(new string[] { message });
-        }
+        //    if (responseCode == HttpStatusCode.OK)
+        //    {
+        //        var data = results.Data.Select(x => new VM().FromModel(x, true)).ToList().Cast<VM>().ToList();
+        //        return PartialView(uiListView ?? "ListTable", data);
+        //    }
 
-        private ActionResult Details(object id)
-        {
-            string message;
+        //    return Json(new string[] { message });
+        //}
 
-            if (id == null)
-            {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                message = "Bad Request: missing identifier";
-            }
-            else
-            {
-                var r = business.Get(id);
-                message = r.Message;
+        //private ActionResult Details(object id)
+        //{
+        //    string message;
 
-                var responseCode = GetResponseCode(r);
-                Response.StatusCode = (int)responseCode;
+        //    if (id == null)
+        //    {
+        //        Response.StatusCode = (int)HttpStatusCode.BadRequest;
+        //        message = "Bad Request: missing identifier";
+        //    }
+        //    else
+        //    {
+        //        var r = business.Get(id);
+        //        message = r.Message;
 
-                if (responseCode == HttpStatusCode.OK)
-                {
-                    var m = r.Data;
-                    var vm = new VM().FromModel(m, true);
-                    return PartialView(vm);
-                }
-            }
+        //        var responseCode = GetResponseCode(r);
+        //        Response.StatusCode = (int)responseCode;
 
-            return Json(new string[] { message });
-        }
+        //        if (responseCode == HttpStatusCode.OK)
+        //        {
+        //            var m = r.Data;
+        //            var vm = new VM().FromModel(m, true);
+        //            return PartialView(vm);
+        //        }
+        //    }
 
-        private ActionResult New()
-        {
-            var routeFilter = GetRouteFilter();
-            var vm = routeFilter != null ? new VM().FromModel(routeFilter, false) : new VM();
-            var r = business.New(routeFilter);
-            var message = r.Message;
+        //    return Json(new string[] { message });
+        //}
 
-            var responseCode = GetResponseCode(r);
-            Response.StatusCode = (int)responseCode;
+        //private ActionResult New()
+        //{
+        //    var routeFilter = GetRouteFilter();
+        //    var vm = routeFilter != null ? new VM().FromModel(routeFilter, false) : new VM();
+        //    var r = business.New(routeFilter);
+        //    var message = r.Message;
 
-            if (responseCode == HttpStatusCode.OK)
-            {
-                ViewBag.Lookups = GetLookups();
-                return PartialView(vm);
-            }
+        //    var responseCode = GetResponseCode(r);
+        //    Response.StatusCode = (int)responseCode;
 
-            return Json(new string[] { message });
-        }
+        //    if (responseCode == HttpStatusCode.OK)
+        //    {
+        //        ViewBag.Lookups = GetLookups();
+        //        return PartialView(vm);
+        //    }
 
-        private ActionResult Edit(object id)
-        {
-            string message;
+        //    return Json(new string[] { message });
+        //}
 
-            if (id == null)
-            {
-                Response.StatusCode = HttpStatusCode.BadRequest.GetHashCode();
-                message = "Bad Request: missing identifier";
-            }
-            else
-            {
-                var r = business.Edit(id);
-                message = r.Message;
+        //private ActionResult Edit(object id)
+        //{
+        //    string message;
 
-                var responseCode = GetResponseCode(r);
-                Response.StatusCode = (int)responseCode;
-                if (responseCode == HttpStatusCode.OK)
-                {
-                    var m = r.Data;
-                    var vm = new VM().FromModel(m, true);
-                    ViewBag.Lookups = GetLookups();
-                    return PartialView(vm);
-                }
-            }
+        //    if (id == null)
+        //    {
+        //        Response.StatusCode = HttpStatusCode.BadRequest.GetHashCode();
+        //        message = "Bad Request: missing identifier";
+        //    }
+        //    else
+        //    {
+        //        var r = business.Edit(id);
+        //        message = r.Message;
 
-            return Json(new string[] { message });
-        }
+        //        var responseCode = GetResponseCode(r);
+        //        Response.StatusCode = (int)responseCode;
+        //        if (responseCode == HttpStatusCode.OK)
+        //        {
+        //            var m = r.Data;
+        //            var vm = new VM().FromModel(m, true);
+        //            ViewBag.Lookups = GetLookups();
+        //            return PartialView(vm);
+        //        }
+        //    }
+
+        //    return Json(new string[] { message });
+        //}
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
@@ -256,22 +268,6 @@ namespace WorkflowWeb.Controllers
         //    return Json(new string[] { message });
         //}
 
-        protected HttpStatusCode GetResponseCode<X>(BusinessResult<X> result)
-        {
-            switch (result.Status)
-            {
-                case State.AccessDenied:
-                    return HttpStatusCode.Forbidden;
-                case State.Error:
-                    return HttpStatusCode.InternalServerError;
-                case State.NoRecordFound:
-                case State.NoRecordsAffected:
-                    return HttpStatusCode.NotFound;
-                case State.Success:
-                    return HttpStatusCode.OK;
-                default:
-                    return HttpStatusCode.Conflict;                    
-            }
-        }
+
     }
 }

@@ -11,7 +11,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.Business
 {
-    public class TIMS_ProjectInterfacePointWorkflowBusiness : BaseBusiness<TIMS_ProjectInterfacePointWorkflow>
+    public partial class TIMS_ProjectInterfacePointWorkflowBusiness : BaseBusiness<TIMS_ProjectInterfacePointWorkflow>
     {
         public TIMS_ProjectInterfacePointWorkflowBusiness() { }
         public TIMS_ProjectInterfacePointWorkflowBusiness(DbContext db, string user) : base(db, user) { }
@@ -36,7 +36,20 @@ namespace WorkflowWeb.Business
             return AccessDenied<List<TIMS_ProjectInterfacePointWorkflow>>(o);
         }
 
-        private IQueryable<TIMS_ProjectInterfacePointWorkflow> GetIQueryable(TIMS_ProjectInterfacePointWorkflow filter)
+        public override IQueryable<TIMS_ProjectInterfacePointWorkflow> GetIQueryable()
+        {
+            return db.TIMS_ProjectInterfacePointWorkflow.Include(x => x.TIMS_WorkflowType)
+				.Include(x => x.TIMS_WorkflowState)
+				.Include(x => x.TIMS_WorkflowState1)
+				.Include(x => x.TIMS_WorkflowState2)
+				.Include(x => x.TIMS_ProjectArea)
+				.Include(x => x.TIMS_ProjectPhysicalArea)
+				.Include(x => x.TIMS_Phase)
+				.Include(x => x.TIMS_ProjectDisciplineInterfaceType)
+				.Include(x => x.TIMS_User).AsQueryable();
+        }
+
+        public IQueryable<TIMS_ProjectInterfacePointWorkflow> GetIQueryable(TIMS_ProjectInterfacePointWorkflow filter)
         {
             var data = GetIQueryable();
 

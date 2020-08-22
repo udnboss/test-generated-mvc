@@ -10,7 +10,6 @@ namespace WorkflowWeb.Business
 {
     public interface IBusiness<T>
     {
-        IBusiness<T> CreateInstance(DbContext db, string user);
         bool CheckAuthorization(object m, Operation o, string user);
 
         IQueryable<T> GetIQueryable();
