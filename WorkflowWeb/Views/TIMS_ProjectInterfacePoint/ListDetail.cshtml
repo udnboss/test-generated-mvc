@@ -43,29 +43,7 @@
             <div class="list-group">
                 @foreach (var item in Model)
                 {
-                    @*<a href="@Url.Action(actionName: "Index", controllerName: controller, routeValues: new { id = item.ID, ui_route_filter })" class="list-group-item list-group-item-action @(currentItem != null && currentItem.ID == item.ID ? "list-group-item-primary" : "")">@item.ID</a>*@
-
-                        @Ajax.ActionLink(
-                           linkText: item.ID.ToString(),
-                           actionName: "ListDetail",
-                           controllerName: controller,
-                           routeValues: new { id = item.ID, ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter },
-                           ajaxOptions: new AjaxOptions
-                           {
-                               HttpMethod = "GET",
-                               OnBegin = "",
-                               OnSuccess = "",
-                               Confirm = null,
-                               AllowCache = false,
-                               InsertionMode = InsertionMode.Replace,
-                               OnFailure = "show_error",
-                               OnComplete = "modal_loading(false)",
-                               UpdateTargetId = ui_html_target
-                           },
-                            htmlAttributes: new
-                            {
-                                @class = "btn btn-outline-primary btn-sm"
-                            })
+                    <a href="@Url.Action(actionName: "Index", controllerName: controller, routeValues: new { id = item.ID, ui_route_filter })" class="list-group-item list-group-item-action @(currentItem != null && currentItem.ID == item.ID ? "list-group-item-primary" : "")">@item.ID</a>
                 }
             </div>
         </div>
@@ -100,10 +78,10 @@
                     </ul>
                     <div class="tab-content" id="tabContent-TIMS_ProjectInterfacePoint">
                         <div class="tab-pane fade" id="tab-TIMS_ProjectInterfacePoint-TIMS_ProjectInterfaceAgreement">
-    @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectInterfaceAgreement", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfaceAgreementViewModel { InterfacePointID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectInterfacePoint-TIMS_ProjectInterfaceAgreement", ui_list_view = "ListTable" })
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectInterfaceAgreement", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfaceAgreementViewModel { InterfacePointID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectInterfacePoint-TIMS_ProjectInterfaceAgreement", ui_list_view = "ListTable" })
 </div>
 <div class="tab-pane fade" id="tab-TIMS_ProjectInterfacePoint-TIMS_UserWatchlistItem">
-    @Html.Action(actionName: "ListTable", controllerName: "TIMS_UserWatchlistItem", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_UserWatchlistItemViewModel { ProjectInterfacePointID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectInterfacePoint-TIMS_UserWatchlistItem", ui_list_view = "ListTable" })
+    @Html.Action(actionName: "List", controllerName: "TIMS_UserWatchlistItem", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_UserWatchlistItemViewModel { ProjectInterfacePointID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectInterfacePoint-TIMS_UserWatchlistItem", ui_list_view = "ListTable" })
 </div>
                     </div>
                 </div>

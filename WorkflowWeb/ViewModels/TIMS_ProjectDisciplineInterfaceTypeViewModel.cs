@@ -10,7 +10,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.ViewModels
 {
-    public class TIMS_ProjectDisciplineInterfaceTypeViewModel : IValidatableObject
+    public class TIMS_ProjectDisciplineInterfaceTypeViewModel : BaseViewModel<TIMS_ProjectDisciplineInterfaceType>, IValidatableObject
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "ID is required.")]
 		[DisplayName("ID")]
@@ -51,29 +51,37 @@ namespace WorkflowWeb.ViewModels
             }
         }
 
-        public TIMS_ProjectDisciplineInterfaceType ToModel(bool convertSubs = false)
+        public override TIMS_ProjectDisciplineInterfaceType ToModel(bool convertSubs = false)
         {
             var m = new TIMS_ProjectDisciplineInterfaceType();
 
             m.ID = this.ID;
 			m.Name = this.Name;
 			m.ProjectIDisciplineID = this.ProjectIDisciplineID;
-			m.TIMS_ProjectDiscipline = convertSubs ? this.TIMS_ProjectDiscipline.ToModel() : null;
-			m.TIMS_ProjectDisciplineInterfaceTypeField = convertSubs ? this.TIMS_ProjectDisciplineInterfaceTypeField.Select(x => x.ToModel()).ToList() : null;
-			m.TIMS_ProjectInterfacePointWorkflow = convertSubs ? this.TIMS_ProjectInterfacePointWorkflow.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectDiscipline = convertSubs && this.TIMS_ProjectDiscipline != null ?  this.TIMS_ProjectDiscipline.ToModel() : null;
+			m.TIMS_ProjectDisciplineInterfaceTypeField = convertSubs && this.TIMS_ProjectDisciplineInterfaceTypeField != null  ? this.TIMS_ProjectDisciplineInterfaceTypeField.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectInterfacePointWorkflow = convertSubs && this.TIMS_ProjectInterfacePointWorkflow != null  ? this.TIMS_ProjectInterfacePointWorkflow.Select(x => x.ToModel()).ToList() : null;
 
             return m;
         }
 
-        public string ToRouteFilter()
+        public override BaseViewModel<TIMS_ProjectDisciplineInterfaceType> FromModel<M>(M mo, bool convertSubs)
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID, Name, ProjectIDisciplineID });
-            var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
-            route_filter = Convert.ToBase64String(bytes);
-            return route_filter;
+            var m = mo as TIMS_ProjectDisciplineInterfaceType;
+            if (m != null)
+            {
+                this.ID = m.ID;
+				this.Name = m.Name;
+				this.ProjectIDisciplineID = m.ProjectIDisciplineID;
+				this.TIMS_ProjectDiscipline = convertSubs ? new TIMS_ProjectDisciplineViewModel(m.TIMS_ProjectDiscipline) : null;
+				this.TIMS_ProjectDisciplineInterfaceTypeField = convertSubs && m.TIMS_ProjectDisciplineInterfaceTypeField != null ? m.TIMS_ProjectDisciplineInterfaceTypeField.Select(x => new TIMS_ProjectDisciplineInterfaceTypeFieldViewModel(x)).ToList() : null;
+				this.TIMS_ProjectInterfacePointWorkflow = convertSubs && m.TIMS_ProjectInterfacePointWorkflow != null ? m.TIMS_ProjectInterfacePointWorkflow.Select(x => new TIMS_ProjectInterfacePointWorkflowViewModel(x)).ToList() : null;
+            }
+
+            return this;
         }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (ID == null)
             {

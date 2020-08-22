@@ -10,7 +10,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.ViewModels
 {
-    public class TIMS_WorkflowStateViewModel : IValidatableObject
+    public class TIMS_WorkflowStateViewModel : BaseViewModel<TIMS_WorkflowState>, IValidatableObject
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "ID is required.")]
 		[DisplayName("ID")]
@@ -47,28 +47,35 @@ namespace WorkflowWeb.ViewModels
             }
         }
 
-        public TIMS_WorkflowState ToModel(bool convertSubs = false)
+        public override TIMS_WorkflowState ToModel(bool convertSubs = false)
         {
             var m = new TIMS_WorkflowState();
 
             m.ID = this.ID;
 			m.Name = this.Name;
-			m.TIMS_ProjectInterfacePointWorkflow = convertSubs ? this.TIMS_ProjectInterfacePointWorkflow.Select(x => x.ToModel()).ToList() : null;
-			m.TIMS_ProjectInterfacePointWorkflow1 = convertSubs ? this.TIMS_ProjectInterfacePointWorkflow1.Select(x => x.ToModel()).ToList() : null;
-			m.TIMS_ProjectInterfacePointWorkflow2 = convertSubs ? this.TIMS_ProjectInterfacePointWorkflow2.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectInterfacePointWorkflow = convertSubs && this.TIMS_ProjectInterfacePointWorkflow != null  ? this.TIMS_ProjectInterfacePointWorkflow.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectInterfacePointWorkflow1 = convertSubs && this.TIMS_ProjectInterfacePointWorkflow1 != null  ? this.TIMS_ProjectInterfacePointWorkflow1.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectInterfacePointWorkflow2 = convertSubs && this.TIMS_ProjectInterfacePointWorkflow2 != null  ? this.TIMS_ProjectInterfacePointWorkflow2.Select(x => x.ToModel()).ToList() : null;
 
             return m;
         }
 
-        public string ToRouteFilter()
+        public override BaseViewModel<TIMS_WorkflowState> FromModel<M>(M mo, bool convertSubs)
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID, Name });
-            var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
-            route_filter = Convert.ToBase64String(bytes);
-            return route_filter;
+            var m = mo as TIMS_WorkflowState;
+            if (m != null)
+            {
+                this.ID = m.ID;
+				this.Name = m.Name;
+				this.TIMS_ProjectInterfacePointWorkflow = convertSubs && m.TIMS_ProjectInterfacePointWorkflow != null ? m.TIMS_ProjectInterfacePointWorkflow.Select(x => new TIMS_ProjectInterfacePointWorkflowViewModel(x)).ToList() : null;
+				this.TIMS_ProjectInterfacePointWorkflow1 = convertSubs && m.TIMS_ProjectInterfacePointWorkflow1 != null ? m.TIMS_ProjectInterfacePointWorkflow1.Select(x => new TIMS_ProjectInterfacePointWorkflowViewModel(x)).ToList() : null;
+				this.TIMS_ProjectInterfacePointWorkflow2 = convertSubs && m.TIMS_ProjectInterfacePointWorkflow2 != null ? m.TIMS_ProjectInterfacePointWorkflow2.Select(x => new TIMS_ProjectInterfacePointWorkflowViewModel(x)).ToList() : null;
+            }
+
+            return this;
         }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (ID == null)
             {

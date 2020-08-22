@@ -10,7 +10,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.ViewModels
 {
-    public class TIMS_WorkflowActionViewModel : IValidatableObject
+    public class TIMS_WorkflowActionViewModel : BaseViewModel<TIMS_WorkflowAction>, IValidatableObject
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "ID is required.")]
 		[DisplayName("ID")]
@@ -35,7 +35,7 @@ namespace WorkflowWeb.ViewModels
             }
         }
 
-        public TIMS_WorkflowAction ToModel(bool convertSubs = false)
+        public override TIMS_WorkflowAction ToModel(bool convertSubs = false)
         {
             var m = new TIMS_WorkflowAction();
 
@@ -45,15 +45,19 @@ namespace WorkflowWeb.ViewModels
             return m;
         }
 
-        public string ToRouteFilter()
+        public override BaseViewModel<TIMS_WorkflowAction> FromModel<M>(M mo, bool convertSubs)
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID, Name });
-            var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
-            route_filter = Convert.ToBase64String(bytes);
-            return route_filter;
+            var m = mo as TIMS_WorkflowAction;
+            if (m != null)
+            {
+                this.ID = m.ID;
+				this.Name = m.Name;
+            }
+
+            return this;
         }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (ID == null)
             {

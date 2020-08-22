@@ -1,24 +1,25 @@
-﻿using System;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.Linq;
 using System.Web;
-using System.Web.Services.Protocols;
 using WorkflowWeb.Models;
 
 namespace WorkflowWeb.Business
 {
-    public partial class TIMS_ProjectBusiness : BaseBusiness<TIMS_Project>
+    public class TIMS_ProjectBusiness : BaseBusiness<TIMS_Project>
     {
-        public TIMS_ProjectBusiness(IMSEntities db) : base(db)
-        {
-
-        }
-        public BusinessResult<List<TIMS_Project>> GetList(TIMS_Project filter)
+        public TIMS_ProjectBusiness() { }
+        public TIMS_ProjectBusiness(DbContext db, string user) : base(db, user) { }
+        public override BusinessResult<List<TIMS_Project>> GetList(TIMS_Project filter)
         {
             var o = Operation.Select;
 
-            if (CheckAuthorization(filter, o))
+            if (CheckAuthorization(filter, o, user))
             {
                 try
                 {
@@ -36,16 +37,17 @@ namespace WorkflowWeb.Business
         }
 
         private IQueryable<TIMS_Project> GetIQueryable(TIMS_Project filter)
-        {            
+        {
             var data = GetIQueryable();
 
             if (filter != null)
             {
                 if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
-                if (filter.Name != null && filter.Name.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.Name == filter.Name);
+					if (filter.Name != null && filter.Name.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.Name == filter.Name);
             }
 
-            return data;           
+            return data;
         }
     }
+
 }

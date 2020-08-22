@@ -10,7 +10,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.ViewModels
 {
-    public class TIMS_ProjectViewModel : IValidatableObject
+    public class TIMS_ProjectViewModel : BaseViewModel<TIMS_Project>, IValidatableObject
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "ID is required.")]
 		[DisplayName("ID")]
@@ -67,33 +67,45 @@ namespace WorkflowWeb.ViewModels
             }
         }
 
-        public TIMS_Project ToModel(bool convertSubs = false)
+        public override TIMS_Project ToModel(bool convertSubs = false)
         {
             var m = new TIMS_Project();
 
             m.ID = this.ID;
 			m.Name = this.Name;
-			m.TIMS_ProjectActionItem = convertSubs ? this.TIMS_ProjectActionItem.Select(x => x.ToModel()).ToList() : null;
-			m.TIMS_ProjectArea = convertSubs ? this.TIMS_ProjectArea.Select(x => x.ToModel()).ToList() : null;
-			m.TIMS_ProjectContractor = convertSubs ? this.TIMS_ProjectContractor.Select(x => x.ToModel()).ToList() : null;
-			m.TIMS_ProjectDiscipline = convertSubs ? this.TIMS_ProjectDiscipline.Select(x => x.ToModel()).ToList() : null;
-			m.TIMS_ProjectInterfacePoint = convertSubs ? this.TIMS_ProjectInterfacePoint.Select(x => x.ToModel()).ToList() : null;
-			m.TIMS_ProjectPackage = convertSubs ? this.TIMS_ProjectPackage.Select(x => x.ToModel()).ToList() : null;
-			m.TIMS_ProjectPhysicalArea = convertSubs ? this.TIMS_ProjectPhysicalArea.Select(x => x.ToModel()).ToList() : null;
-			m.TIMS_UserRole = convertSubs ? this.TIMS_UserRole.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectActionItem = convertSubs && this.TIMS_ProjectActionItem != null  ? this.TIMS_ProjectActionItem.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectArea = convertSubs && this.TIMS_ProjectArea != null  ? this.TIMS_ProjectArea.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectContractor = convertSubs && this.TIMS_ProjectContractor != null  ? this.TIMS_ProjectContractor.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectDiscipline = convertSubs && this.TIMS_ProjectDiscipline != null  ? this.TIMS_ProjectDiscipline.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectInterfacePoint = convertSubs && this.TIMS_ProjectInterfacePoint != null  ? this.TIMS_ProjectInterfacePoint.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectPackage = convertSubs && this.TIMS_ProjectPackage != null  ? this.TIMS_ProjectPackage.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectPhysicalArea = convertSubs && this.TIMS_ProjectPhysicalArea != null  ? this.TIMS_ProjectPhysicalArea.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_UserRole = convertSubs && this.TIMS_UserRole != null  ? this.TIMS_UserRole.Select(x => x.ToModel()).ToList() : null;
 
             return m;
         }
 
-        public string ToRouteFilter()
+        public override BaseViewModel<TIMS_Project> FromModel<M>(M mo, bool convertSubs)
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID, Name });
-            var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
-            route_filter = Convert.ToBase64String(bytes);
-            return route_filter;
+            var m = mo as TIMS_Project;
+            if (m != null)
+            {
+                this.ID = m.ID;
+				this.Name = m.Name;
+				this.TIMS_ProjectActionItem = convertSubs && m.TIMS_ProjectActionItem != null ? m.TIMS_ProjectActionItem.Select(x => new TIMS_ProjectActionItemViewModel(x)).ToList() : null;
+				this.TIMS_ProjectArea = convertSubs && m.TIMS_ProjectArea != null ? m.TIMS_ProjectArea.Select(x => new TIMS_ProjectAreaViewModel(x)).ToList() : null;
+				this.TIMS_ProjectContractor = convertSubs && m.TIMS_ProjectContractor != null ? m.TIMS_ProjectContractor.Select(x => new TIMS_ProjectContractorViewModel(x)).ToList() : null;
+				this.TIMS_ProjectDiscipline = convertSubs && m.TIMS_ProjectDiscipline != null ? m.TIMS_ProjectDiscipline.Select(x => new TIMS_ProjectDisciplineViewModel(x)).ToList() : null;
+				this.TIMS_ProjectInterfacePoint = convertSubs && m.TIMS_ProjectInterfacePoint != null ? m.TIMS_ProjectInterfacePoint.Select(x => new TIMS_ProjectInterfacePointViewModel(x)).ToList() : null;
+				this.TIMS_ProjectPackage = convertSubs && m.TIMS_ProjectPackage != null ? m.TIMS_ProjectPackage.Select(x => new TIMS_ProjectPackageViewModel(x)).ToList() : null;
+				this.TIMS_ProjectPhysicalArea = convertSubs && m.TIMS_ProjectPhysicalArea != null ? m.TIMS_ProjectPhysicalArea.Select(x => new TIMS_ProjectPhysicalAreaViewModel(x)).ToList() : null;
+				this.TIMS_UserRole = convertSubs && m.TIMS_UserRole != null ? m.TIMS_UserRole.Select(x => new TIMS_UserRoleViewModel(x)).ToList() : null;
+            }
+
+            return this;
         }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (ID == null)
             {

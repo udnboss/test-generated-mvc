@@ -81,13 +81,13 @@
                     </ul>
                     <div class="tab-content" id="tabContent-TIMS_WorkflowType">
                         <div class="tab-pane fade" id="tab-TIMS_WorkflowType-TIMS_ProjectActionItemWorkflow">
-    @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectActionItemWorkflow", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectActionItemWorkflowViewModel { WorkflowTypeID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_WorkflowType-TIMS_ProjectActionItemWorkflow", ui_list_view = "ListTable" })
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectActionItemWorkflow", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectActionItemWorkflowViewModel { WorkflowTypeID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_WorkflowType-TIMS_ProjectActionItemWorkflow", ui_list_view = "ListTable" })
 </div>
 <div class="tab-pane fade" id="tab-TIMS_WorkflowType-TIMS_ProjectInterfaceAgreementWorkflow">
-    @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectInterfaceAgreementWorkflow", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfaceAgreementWorkflowViewModel { WorkflowTypeID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_WorkflowType-TIMS_ProjectInterfaceAgreementWorkflow", ui_list_view = "ListTable" })
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectInterfaceAgreementWorkflow", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfaceAgreementWorkflowViewModel { WorkflowTypeID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_WorkflowType-TIMS_ProjectInterfaceAgreementWorkflow", ui_list_view = "ListTable" })
 </div>
 <div class="tab-pane fade" id="tab-TIMS_WorkflowType-TIMS_ProjectInterfacePointWorkflow">
-    @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectInterfacePointWorkflow", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfacePointWorkflowViewModel { WorkflowTypeID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_WorkflowType-TIMS_ProjectInterfacePointWorkflow", ui_list_view = "ListTable" })
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectInterfacePointWorkflow", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfacePointWorkflowViewModel { WorkflowTypeID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_WorkflowType-TIMS_ProjectInterfacePointWorkflow", ui_list_view = "ListTable" })
 </div>
                     </div>
                 </div>

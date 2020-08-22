@@ -9,73 +9,19 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WorkflowWeb.Models;
+using WorkflowWeb.Business;
 using WorkflowWeb.ViewModels;
 
 namespace WorkflowWeb.Controllers
 {
-    public class TIMS_ProjectDisciplineInterfaceTypeFieldController : BaseController
+    public class TIMS_ProjectDisciplineInterfaceTypeFieldController : BaseController<TIMS_ProjectDisciplineInterfaceTypeField, TIMS_ProjectDisciplineInterfaceTypeFieldBusiness, TIMS_ProjectDisciplineInterfaceTypeFieldViewModel>
     {
-        private TIMS_ProjectDisciplineInterfaceTypeField _routeFilter;
-        public TIMS_ProjectDisciplineInterfaceTypeField RouteFilter
+        public TIMS_ProjectDisciplineInterfaceTypeFieldController()
         {
-            get
-            {
-                if (_routeFilter != null)
-                {
-                    return _routeFilter;
-                }
-
-                var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
-                if (!string.IsNullOrEmpty(ui_route_filter))
-                {
-                    try
-                    {
-                        var bytes = Convert.FromBase64String(ui_route_filter);
-                        ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
-
-                        var filter = JsonConvert.DeserializeObject<TIMS_ProjectDisciplineInterfaceTypeFieldViewModel>(ui_route_filter).ToModel();
-
-                        _routeFilter = filter;
-
-                        return filter;
-                    }
-                    catch
-                    {
-                        return null;
-                    }
-                }
-
-                return null;
-            }
+            business = new TIMS_ProjectDisciplineInterfaceTypeFieldBusiness(db, user);
         }
 
-        public List<TIMS_ProjectDisciplineInterfaceTypeFieldViewModel> GetList()
-        {
-            db.Configuration.ProxyCreationEnabled = false;
-            var data = db.TIMS_ProjectDisciplineInterfaceTypeField.Include(x => x.TIMS_ProjectDisciplineInterfaceType).AsQueryable();
-
-            var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
-            var filter = RouteFilter;
-
-            if (filter != null)
-            {
-                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
-					if (filter.Name != null && filter.Name.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.Name == filter.Name);
-					if (filter.InterfaceTypeID != null && filter.InterfaceTypeID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.InterfaceTypeID == filter.InterfaceTypeID);                        
-            }
-
-            var results = data.ToList().Select(x => new TIMS_ProjectDisciplineInterfaceTypeFieldViewModel(x, true)).ToList();
-
-            return results;
-        }
-
-        public TIMS_ProjectDisciplineInterfaceTypeField Get(Guid id)
-        {
-            db.Configuration.ProxyCreationEnabled = false;
-            return db.TIMS_ProjectDisciplineInterfaceTypeField.Include(x => x.TIMS_ProjectDisciplineInterfaceType).FirstOrDefault(x=> x.ID == id);
-        }
-
-        public Dictionary<string, object> GetLookups()
+        public override Dictionary<string, object> GetLookups()
         {
             return new Dictionary<string, object> {
                 {"InterfaceTypeID", db.TIMS_ProjectDisciplineInterfaceType.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
@@ -87,89 +33,137 @@ namespace WorkflowWeb.Controllers
             return View(id);
         }
 
-        public ActionResult ListDetail(Guid? id = null)
+        public ActionResult List(Guid? id = null, string ui_list_view = null)
         {
             ViewBag.CurrentID = id;
-            return PartialView(GetList());
-        }
+            var uiListView = ui_list_view ?? (RouteData.Values["ui_list_view"] ?? Request.QueryString["ui_list_view"]) as string;
 
-        public ActionResult ListTable(Guid? id = null)
-        {
-            ViewBag.CurrentID = id;
-            return PartialView(GetList());
-        }
+            if (uiListView != null && uiListView != "ListDetail" && uiListView != "ListTable") //invalid
+            {
+                return HttpNotFound();
+            }
 
-        public ActionResult List(Guid? id = null)
-        {
-            ViewBag.CurrentID = id;
-            var ui_list_view = (RouteData.Values["ui_list_view"] ?? Request.QueryString["ui_list_view"]) as string;
+            var routeFilter = GetRouteFilter();
+            var results = business.GetList(routeFilter);
 
-            return PartialView(ui_list_view ?? "ListTableView", GetList());
+            var message = results.Message;
+
+            var responseCode = GetResponseCode(results);
+            Response.StatusCode = (int)responseCode;
+
+            if (responseCode == HttpStatusCode.OK)
+            {
+                var data = results.Data.Select(x => new TIMS_ProjectDisciplineInterfaceTypeFieldViewModel(x, true)).ToList();
+                return PartialView(uiListView ?? "ListTable", data);
+            }
+
+            return Json(new string[] { message });
         }
 
         public ActionResult Details(Guid id)
         {
+            string message;
+
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                message = "Bad Request: missing identifier";
             }
-            var m = Get(id);
-            if (m == null)
+            else
             {
-                Response.StatusCode = HttpStatusCode.NotFound.GetHashCode();
-                return Json(new string[] { "Item not found." });
+                var r = business.Get(id);
+                message = r.Message;
+
+                var responseCode = GetResponseCode(r);
+                Response.StatusCode = (int)responseCode;
+
+                if (responseCode == HttpStatusCode.OK)
+                {
+                    var m = r.Data;
+                    var vm = new TIMS_ProjectDisciplineInterfaceTypeFieldViewModel(m, true);
+                    return PartialView(vm);
+                }
             }
 
-            var vm = new TIMS_ProjectDisciplineInterfaceTypeFieldViewModel(m, true);
-
-            return PartialView(vm);
+            return Json(new string[] { message });
         }
 
         public ActionResult New()
         {
-            var vm = RouteFilter != null ? new TIMS_ProjectDisciplineInterfaceTypeFieldViewModel(RouteFilter) : new TIMS_ProjectDisciplineInterfaceTypeFieldViewModel() {  };
-                       
-            ViewBag.Lookups = GetLookups();
-            return PartialView(vm);
+            var routeFilter = GetRouteFilter();
+            var vm = routeFilter != null ? new TIMS_ProjectDisciplineInterfaceTypeFieldViewModel(routeFilter) : new TIMS_ProjectDisciplineInterfaceTypeFieldViewModel() { };
+            var r = business.New(routeFilter);
+            var message = r.Message;
+
+            var responseCode = GetResponseCode(r);
+            Response.StatusCode = (int)responseCode;
+
+            if (responseCode == HttpStatusCode.OK)
+            {
+                ViewBag.Lookups = GetLookups();
+                return PartialView(vm);
+            }
+
+            return Json(new string[] { message });
         }
 
         public ActionResult Edit(Guid id)
         {
+            string message;
+
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                Response.StatusCode = HttpStatusCode.BadRequest.GetHashCode();
+                message = "Bad Request: missing identifier";
             }
-            var m = Get(id);
-            if (m == null)
+            else
             {
-                Response.StatusCode = HttpStatusCode.NotFound.GetHashCode();
-                return Json(new string[] { "Item not found." });
+                var r = business.Edit(id);
+                message = r.Message;
+
+                var responseCode = GetResponseCode(r);
+                Response.StatusCode = (int)responseCode;
+                if (responseCode == HttpStatusCode.OK)
+                {
+                    var m = r.Data;
+                    var vm = new TIMS_ProjectDisciplineInterfaceTypeFieldViewModel(m, true);
+                    ViewBag.Lookups = GetLookups();
+                    return PartialView(vm);
+                }
             }
 
-            var vm = new TIMS_ProjectDisciplineInterfaceTypeFieldViewModel(m);
-            ViewBag.Lookups = GetLookups();
-
-            return PartialView(vm);
+            return Json(new string[] { message });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(TIMS_ProjectDisciplineInterfaceTypeFieldViewModel vm)
         {
+            string message;
+
             if (ModelState.IsValid)
             {
                 var m = vm.ToModel();
                 m.ID = Guid.NewGuid(); 
-                db.TIMS_ProjectDisciplineInterfaceTypeField.Add(m);
-                db.SaveChanges();
-                return List(m.ID);
+                var r = business.Insert(m);
+                message = r.Message;
+
+                var responseCode = GetResponseCode(r);
+                Response.StatusCode = (int)responseCode;
+
+                if (responseCode == HttpStatusCode.OK)
+                {
+                    return List(m.ID);
+                }
+
+                return Json(new string[] { message });
             }
 
             var errors = ModelState.SelectMany(x => x.Value.Errors)
                 .Select(x => x.ErrorMessage)
                 .ToList();
 
-            Response.StatusCode = HttpStatusCode.BadRequest.GetHashCode();
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
             return Json(errors);
         }
@@ -178,19 +172,29 @@ namespace WorkflowWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Update(TIMS_ProjectDisciplineInterfaceTypeFieldViewModel vm)
         {
+            string message;
+
             if (ModelState.IsValid)
             {
                 var m = vm.ToModel();
-                db.Entry(m).State = EntityState.Modified;
-                db.SaveChanges();
-                return List(m.ID);
+                var r = business.Update(m);
+                message = r.Message;
+
+                var responseCode = GetResponseCode(r);
+                Response.StatusCode = (int)responseCode;
+                if (responseCode == HttpStatusCode.OK)
+                {
+                    return List(m.ID);
+                }
+
+                return Json(new string[] { message });
             }
 
             var errors = ModelState.SelectMany(x => x.Value.Errors)
                 .Select(x => x.ErrorMessage)
                 .ToList();
 
-            Response.StatusCode = HttpStatusCode.BadRequest.GetHashCode();
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
             return Json(errors);
         }
@@ -199,28 +203,20 @@ namespace WorkflowWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(TIMS_ProjectDisciplineInterfaceTypeFieldViewModel vm)
         {
-            if (ModelState.IsValid)
+            string message;
+
+            var m = vm.ToModel();
+            var r = business.Delete(m);
+
+            message = r.Message;
+            var responseCode = GetResponseCode(r);
+            Response.StatusCode = (int)responseCode;
+            if (responseCode == HttpStatusCode.OK)
             {
-                var em = Get(vm.ID);
-                if (em == null)
-                {
-                    Response.StatusCode = HttpStatusCode.NotFound.GetHashCode();
-                    return Json(new string[] { "Item not found." });
-                }
-
-                db.TIMS_ProjectDisciplineInterfaceTypeField.Remove(em);
-                db.SaveChanges();
-
                 return List(null);
             }
 
-            var errors = ModelState.SelectMany(x => x.Value.Errors)
-                .Select(x => x.ErrorMessage)
-                .ToList();
-
-            Response.StatusCode = HttpStatusCode.BadRequest.GetHashCode();
-
-            return Json(errors);
+            return Json(new string[] { message });
         }
     }
 }

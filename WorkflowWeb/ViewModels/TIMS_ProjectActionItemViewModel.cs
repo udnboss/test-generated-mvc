@@ -10,7 +10,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.ViewModels
 {
-    public class TIMS_ProjectActionItemViewModel : IValidatableObject
+    public class TIMS_ProjectActionItemViewModel : BaseViewModel<TIMS_ProjectActionItem>, IValidatableObject
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "ID is required.")]
 		[DisplayName("ID")]
@@ -59,7 +59,7 @@ namespace WorkflowWeb.ViewModels
             }
         }
 
-        public TIMS_ProjectActionItem ToModel(bool convertSubs = false)
+        public override TIMS_ProjectActionItem ToModel(bool convertSubs = false)
         {
             var m = new TIMS_ProjectActionItem();
 
@@ -67,23 +67,33 @@ namespace WorkflowWeb.ViewModels
 			m.Name = this.Name;
 			m.ProjectID = this.ProjectID;
 			m.InterfaceAgreementID = this.InterfaceAgreementID;
-			m.TIMS_Project = convertSubs ? this.TIMS_Project.ToModel() : null;
-			m.TIMS_ProjectInterfaceAgreement = convertSubs ? this.TIMS_ProjectInterfaceAgreement.ToModel() : null;
-			m.TIMS_ProjectActionItemWorkflow = convertSubs ? this.TIMS_ProjectActionItemWorkflow.Select(x => x.ToModel()).ToList() : null;
-			m.TIMS_UserWatchlistItem = convertSubs ? this.TIMS_UserWatchlistItem.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_Project = convertSubs && this.TIMS_Project != null ?  this.TIMS_Project.ToModel() : null;
+			m.TIMS_ProjectInterfaceAgreement = convertSubs && this.TIMS_ProjectInterfaceAgreement != null ?  this.TIMS_ProjectInterfaceAgreement.ToModel() : null;
+			m.TIMS_ProjectActionItemWorkflow = convertSubs && this.TIMS_ProjectActionItemWorkflow != null  ? this.TIMS_ProjectActionItemWorkflow.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_UserWatchlistItem = convertSubs && this.TIMS_UserWatchlistItem != null  ? this.TIMS_UserWatchlistItem.Select(x => x.ToModel()).ToList() : null;
 
             return m;
         }
 
-        public string ToRouteFilter()
+        public override BaseViewModel<TIMS_ProjectActionItem> FromModel<M>(M mo, bool convertSubs)
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID, Name, ProjectID, InterfaceAgreementID });
-            var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
-            route_filter = Convert.ToBase64String(bytes);
-            return route_filter;
+            var m = mo as TIMS_ProjectActionItem;
+            if (m != null)
+            {
+                this.ID = m.ID;
+				this.Name = m.Name;
+				this.ProjectID = m.ProjectID;
+				this.InterfaceAgreementID = m.InterfaceAgreementID;
+				this.TIMS_Project = convertSubs ? new TIMS_ProjectViewModel(m.TIMS_Project) : null;
+				this.TIMS_ProjectInterfaceAgreement = convertSubs ? new TIMS_ProjectInterfaceAgreementViewModel(m.TIMS_ProjectInterfaceAgreement) : null;
+				this.TIMS_ProjectActionItemWorkflow = convertSubs && m.TIMS_ProjectActionItemWorkflow != null ? m.TIMS_ProjectActionItemWorkflow.Select(x => new TIMS_ProjectActionItemWorkflowViewModel(x)).ToList() : null;
+				this.TIMS_UserWatchlistItem = convertSubs && m.TIMS_UserWatchlistItem != null ? m.TIMS_UserWatchlistItem.Select(x => new TIMS_UserWatchlistItemViewModel(x)).ToList() : null;
+            }
+
+            return this;
         }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (ID == null)
             {

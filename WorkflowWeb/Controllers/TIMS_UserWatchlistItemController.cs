@@ -9,81 +9,19 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WorkflowWeb.Models;
+using WorkflowWeb.Business;
 using WorkflowWeb.ViewModels;
 
 namespace WorkflowWeb.Controllers
 {
-    public class TIMS_UserWatchlistItemController : BaseController
+    public class TIMS_UserWatchlistItemController : BaseController<TIMS_UserWatchlistItem, TIMS_UserWatchlistItemBusiness, TIMS_UserWatchlistItemViewModel>
     {
-        private TIMS_UserWatchlistItem _routeFilter;
-        public TIMS_UserWatchlistItem RouteFilter
+        public TIMS_UserWatchlistItemController()
         {
-            get
-            {
-                if (_routeFilter != null)
-                {
-                    return _routeFilter;
-                }
-
-                var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
-                if (!string.IsNullOrEmpty(ui_route_filter))
-                {
-                    try
-                    {
-                        var bytes = Convert.FromBase64String(ui_route_filter);
-                        ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
-
-                        var filter = JsonConvert.DeserializeObject<TIMS_UserWatchlistItemViewModel>(ui_route_filter).ToModel();
-
-                        _routeFilter = filter;
-
-                        return filter;
-                    }
-                    catch
-                    {
-                        return null;
-                    }
-                }
-
-                return null;
-            }
+            business = new TIMS_UserWatchlistItemBusiness(db, user);
         }
 
-        public List<TIMS_UserWatchlistItemViewModel> GetList()
-        {
-            db.Configuration.ProxyCreationEnabled = false;
-            var data = db.TIMS_UserWatchlistItem.Include(x => x.TIMS_User)
-				.Include(x => x.TIMS_ProjectInterfacePoint)
-				.Include(x => x.TIMS_ProjectInterfaceAgreement)
-				.Include(x => x.TIMS_ProjectActionItem).AsQueryable();
-
-            var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
-            var filter = RouteFilter;
-
-            if (filter != null)
-            {
-                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
-					if (filter.UserID != null && filter.UserID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.UserID == filter.UserID);
-					if (filter.ProjectInterfacePointID != null && filter.ProjectInterfacePointID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectInterfacePointID == filter.ProjectInterfacePointID);
-					if (filter.ProjectInterfaceAgreementID != null && filter.ProjectInterfaceAgreementID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectInterfaceAgreementID == filter.ProjectInterfaceAgreementID);
-					if (filter.ProjectActionItemID != null && filter.ProjectActionItemID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectActionItemID == filter.ProjectActionItemID);                        
-            }
-
-            var results = data.ToList().Select(x => new TIMS_UserWatchlistItemViewModel(x, true)).ToList();
-
-            return results;
-        }
-
-        public TIMS_UserWatchlistItem Get(Guid id)
-        {
-            db.Configuration.ProxyCreationEnabled = false;
-            return db.TIMS_UserWatchlistItem.Include(x => x.TIMS_User)
-				.Include(x => x.TIMS_ProjectInterfacePoint)
-				.Include(x => x.TIMS_ProjectInterfaceAgreement)
-				.Include(x => x.TIMS_ProjectActionItem).FirstOrDefault(x=> x.ID == id);
-        }
-
-        public Dictionary<string, object> GetLookups()
+        public override Dictionary<string, object> GetLookups()
         {
             return new Dictionary<string, object> {
                 {"ProjectActionItemID", db.TIMS_ProjectActionItem.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
@@ -98,89 +36,137 @@ namespace WorkflowWeb.Controllers
             return View(id);
         }
 
-        public ActionResult ListDetail(Guid? id = null)
+        public ActionResult List(Guid? id = null, string ui_list_view = null)
         {
             ViewBag.CurrentID = id;
-            return PartialView(GetList());
-        }
+            var uiListView = ui_list_view ?? (RouteData.Values["ui_list_view"] ?? Request.QueryString["ui_list_view"]) as string;
 
-        public ActionResult ListTable(Guid? id = null)
-        {
-            ViewBag.CurrentID = id;
-            return PartialView(GetList());
-        }
+            if (uiListView != null && uiListView != "ListDetail" && uiListView != "ListTable") //invalid
+            {
+                return HttpNotFound();
+            }
 
-        public ActionResult List(Guid? id = null)
-        {
-            ViewBag.CurrentID = id;
-            var ui_list_view = (RouteData.Values["ui_list_view"] ?? Request.QueryString["ui_list_view"]) as string;
+            var routeFilter = GetRouteFilter();
+            var results = business.GetList(routeFilter);
 
-            return PartialView(ui_list_view ?? "ListTableView", GetList());
+            var message = results.Message;
+
+            var responseCode = GetResponseCode(results);
+            Response.StatusCode = (int)responseCode;
+
+            if (responseCode == HttpStatusCode.OK)
+            {
+                var data = results.Data.Select(x => new TIMS_UserWatchlistItemViewModel(x, true)).ToList();
+                return PartialView(uiListView ?? "ListTable", data);
+            }
+
+            return Json(new string[] { message });
         }
 
         public ActionResult Details(Guid id)
         {
+            string message;
+
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                message = "Bad Request: missing identifier";
             }
-            var m = Get(id);
-            if (m == null)
+            else
             {
-                Response.StatusCode = HttpStatusCode.NotFound.GetHashCode();
-                return Json(new string[] { "Item not found." });
+                var r = business.Get(id);
+                message = r.Message;
+
+                var responseCode = GetResponseCode(r);
+                Response.StatusCode = (int)responseCode;
+
+                if (responseCode == HttpStatusCode.OK)
+                {
+                    var m = r.Data;
+                    var vm = new TIMS_UserWatchlistItemViewModel(m, true);
+                    return PartialView(vm);
+                }
             }
 
-            var vm = new TIMS_UserWatchlistItemViewModel(m, true);
-
-            return PartialView(vm);
+            return Json(new string[] { message });
         }
 
         public ActionResult New()
         {
-            var vm = RouteFilter != null ? new TIMS_UserWatchlistItemViewModel(RouteFilter) : new TIMS_UserWatchlistItemViewModel() {  };
-                       
-            ViewBag.Lookups = GetLookups();
-            return PartialView(vm);
+            var routeFilter = GetRouteFilter();
+            var vm = routeFilter != null ? new TIMS_UserWatchlistItemViewModel(routeFilter) : new TIMS_UserWatchlistItemViewModel() { };
+            var r = business.New(routeFilter);
+            var message = r.Message;
+
+            var responseCode = GetResponseCode(r);
+            Response.StatusCode = (int)responseCode;
+
+            if (responseCode == HttpStatusCode.OK)
+            {
+                ViewBag.Lookups = GetLookups();
+                return PartialView(vm);
+            }
+
+            return Json(new string[] { message });
         }
 
         public ActionResult Edit(Guid id)
         {
+            string message;
+
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                Response.StatusCode = HttpStatusCode.BadRequest.GetHashCode();
+                message = "Bad Request: missing identifier";
             }
-            var m = Get(id);
-            if (m == null)
+            else
             {
-                Response.StatusCode = HttpStatusCode.NotFound.GetHashCode();
-                return Json(new string[] { "Item not found." });
+                var r = business.Edit(id);
+                message = r.Message;
+
+                var responseCode = GetResponseCode(r);
+                Response.StatusCode = (int)responseCode;
+                if (responseCode == HttpStatusCode.OK)
+                {
+                    var m = r.Data;
+                    var vm = new TIMS_UserWatchlistItemViewModel(m, true);
+                    ViewBag.Lookups = GetLookups();
+                    return PartialView(vm);
+                }
             }
 
-            var vm = new TIMS_UserWatchlistItemViewModel(m);
-            ViewBag.Lookups = GetLookups();
-
-            return PartialView(vm);
+            return Json(new string[] { message });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(TIMS_UserWatchlistItemViewModel vm)
         {
+            string message;
+
             if (ModelState.IsValid)
             {
                 var m = vm.ToModel();
                 m.ID = Guid.NewGuid(); 
-                db.TIMS_UserWatchlistItem.Add(m);
-                db.SaveChanges();
-                return List(m.ID);
+                var r = business.Insert(m);
+                message = r.Message;
+
+                var responseCode = GetResponseCode(r);
+                Response.StatusCode = (int)responseCode;
+
+                if (responseCode == HttpStatusCode.OK)
+                {
+                    return List(m.ID);
+                }
+
+                return Json(new string[] { message });
             }
 
             var errors = ModelState.SelectMany(x => x.Value.Errors)
                 .Select(x => x.ErrorMessage)
                 .ToList();
 
-            Response.StatusCode = HttpStatusCode.BadRequest.GetHashCode();
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
             return Json(errors);
         }
@@ -189,19 +175,29 @@ namespace WorkflowWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Update(TIMS_UserWatchlistItemViewModel vm)
         {
+            string message;
+
             if (ModelState.IsValid)
             {
                 var m = vm.ToModel();
-                db.Entry(m).State = EntityState.Modified;
-                db.SaveChanges();
-                return List(m.ID);
+                var r = business.Update(m);
+                message = r.Message;
+
+                var responseCode = GetResponseCode(r);
+                Response.StatusCode = (int)responseCode;
+                if (responseCode == HttpStatusCode.OK)
+                {
+                    return List(m.ID);
+                }
+
+                return Json(new string[] { message });
             }
 
             var errors = ModelState.SelectMany(x => x.Value.Errors)
                 .Select(x => x.ErrorMessage)
                 .ToList();
 
-            Response.StatusCode = HttpStatusCode.BadRequest.GetHashCode();
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
 
             return Json(errors);
         }
@@ -210,28 +206,20 @@ namespace WorkflowWeb.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(TIMS_UserWatchlistItemViewModel vm)
         {
-            if (ModelState.IsValid)
+            string message;
+
+            var m = vm.ToModel();
+            var r = business.Delete(m);
+
+            message = r.Message;
+            var responseCode = GetResponseCode(r);
+            Response.StatusCode = (int)responseCode;
+            if (responseCode == HttpStatusCode.OK)
             {
-                var em = Get(vm.ID);
-                if (em == null)
-                {
-                    Response.StatusCode = HttpStatusCode.NotFound.GetHashCode();
-                    return Json(new string[] { "Item not found." });
-                }
-
-                db.TIMS_UserWatchlistItem.Remove(em);
-                db.SaveChanges();
-
                 return List(null);
             }
 
-            var errors = ModelState.SelectMany(x => x.Value.Errors)
-                .Select(x => x.ErrorMessage)
-                .ToList();
-
-            Response.StatusCode = HttpStatusCode.BadRequest.GetHashCode();
-
-            return Json(errors);
+            return Json(new string[] { message });
         }
     }
 }

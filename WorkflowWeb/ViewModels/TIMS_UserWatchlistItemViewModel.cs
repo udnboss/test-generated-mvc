@@ -10,7 +10,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.ViewModels
 {
-    public class TIMS_UserWatchlistItemViewModel : IValidatableObject
+    public class TIMS_UserWatchlistItemViewModel : BaseViewModel<TIMS_UserWatchlistItem>, IValidatableObject
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "ID is required.")]
 		[DisplayName("ID")]
@@ -62,7 +62,7 @@ namespace WorkflowWeb.ViewModels
             }
         }
 
-        public TIMS_UserWatchlistItem ToModel(bool convertSubs = false)
+        public override TIMS_UserWatchlistItem ToModel(bool convertSubs = false)
         {
             var m = new TIMS_UserWatchlistItem();
 
@@ -71,23 +71,34 @@ namespace WorkflowWeb.ViewModels
 			m.ProjectInterfacePointID = this.ProjectInterfacePointID;
 			m.ProjectInterfaceAgreementID = this.ProjectInterfaceAgreementID;
 			m.ProjectActionItemID = this.ProjectActionItemID;
-			m.TIMS_ProjectActionItem = convertSubs ? this.TIMS_ProjectActionItem.ToModel() : null;
-			m.TIMS_ProjectInterfaceAgreement = convertSubs ? this.TIMS_ProjectInterfaceAgreement.ToModel() : null;
-			m.TIMS_ProjectInterfacePoint = convertSubs ? this.TIMS_ProjectInterfacePoint.ToModel() : null;
-			m.TIMS_User = convertSubs ? this.TIMS_User.ToModel() : null;
+			m.TIMS_ProjectActionItem = convertSubs && this.TIMS_ProjectActionItem != null ?  this.TIMS_ProjectActionItem.ToModel() : null;
+			m.TIMS_ProjectInterfaceAgreement = convertSubs && this.TIMS_ProjectInterfaceAgreement != null ?  this.TIMS_ProjectInterfaceAgreement.ToModel() : null;
+			m.TIMS_ProjectInterfacePoint = convertSubs && this.TIMS_ProjectInterfacePoint != null ?  this.TIMS_ProjectInterfacePoint.ToModel() : null;
+			m.TIMS_User = convertSubs && this.TIMS_User != null ?  this.TIMS_User.ToModel() : null;
 
             return m;
         }
 
-        public string ToRouteFilter()
+        public override BaseViewModel<TIMS_UserWatchlistItem> FromModel<M>(M mo, bool convertSubs)
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID, UserID, ProjectInterfacePointID, ProjectInterfaceAgreementID, ProjectActionItemID });
-            var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
-            route_filter = Convert.ToBase64String(bytes);
-            return route_filter;
+            var m = mo as TIMS_UserWatchlistItem;
+            if (m != null)
+            {
+                this.ID = m.ID;
+				this.UserID = m.UserID;
+				this.ProjectInterfacePointID = m.ProjectInterfacePointID;
+				this.ProjectInterfaceAgreementID = m.ProjectInterfaceAgreementID;
+				this.ProjectActionItemID = m.ProjectActionItemID;
+				this.TIMS_ProjectActionItem = convertSubs ? new TIMS_ProjectActionItemViewModel(m.TIMS_ProjectActionItem) : null;
+				this.TIMS_ProjectInterfaceAgreement = convertSubs ? new TIMS_ProjectInterfaceAgreementViewModel(m.TIMS_ProjectInterfaceAgreement) : null;
+				this.TIMS_ProjectInterfacePoint = convertSubs ? new TIMS_ProjectInterfacePointViewModel(m.TIMS_ProjectInterfacePoint) : null;
+				this.TIMS_User = convertSubs ? new TIMS_UserViewModel(m.TIMS_User) : null;
+            }
+
+            return this;
         }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (ID == null)
             {

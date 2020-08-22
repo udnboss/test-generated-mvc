@@ -84,16 +84,16 @@
                     </ul>
                     <div class="tab-content" id="tabContent-TIMS_ProjectPackage">
                         <div class="tab-pane fade" id="tab-TIMS_ProjectPackage-TIMS_ProjectAttachment">
-    @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectAttachment", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectAttachmentViewModel { PackageID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectPackage-TIMS_ProjectAttachment", ui_list_view = "ListTable" })
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectAttachment", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectAttachmentViewModel { PackageID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectPackage-TIMS_ProjectAttachment", ui_list_view = "ListTable" })
 </div>
 <div class="tab-pane fade" id="tab-TIMS_ProjectPackage-TIMS_ProjectInterfaceAgreement">
-    @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectInterfaceAgreement", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfaceAgreementViewModel { RequestorPackageID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectPackage-TIMS_ProjectInterfaceAgreement", ui_list_view = "ListTable" })
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectInterfaceAgreement", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfaceAgreementViewModel { RequestorPackageID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectPackage-TIMS_ProjectInterfaceAgreement", ui_list_view = "ListTable" })
 </div>
 <div class="tab-pane fade" id="tab-TIMS_ProjectPackage-TIMS_ProjectInterfacePoint">
-    @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectInterfacePoint", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfacePointViewModel { LeadPackageID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectPackage-TIMS_ProjectInterfacePoint", ui_list_view = "ListTable" })
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectInterfacePoint", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfacePointViewModel { LeadPackageID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectPackage-TIMS_ProjectInterfacePoint", ui_list_view = "ListTable" })
 </div>
 <div class="tab-pane fade" id="tab-TIMS_ProjectPackage-TIMS_UserRole">
-    @Html.Action(actionName: "ListTable", controllerName: "TIMS_UserRole", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_UserRoleViewModel { ProjectPackageID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectPackage-TIMS_UserRole", ui_list_view = "ListTable" })
+    @Html.Action(actionName: "List", controllerName: "TIMS_UserRole", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_UserRoleViewModel { ProjectPackageID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectPackage-TIMS_UserRole", ui_list_view = "ListTable" })
 </div>
                     </div>
                 </div>

@@ -75,7 +75,7 @@
                     </ul>
                     <div class="tab-content" id="tabContent-TIMS_Role">
                         <div class="tab-pane fade" id="tab-TIMS_Role-TIMS_UserRole">
-    @Html.Action(actionName: "ListTable", controllerName: "TIMS_UserRole", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_UserRoleViewModel { RoleID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_Role-TIMS_UserRole", ui_list_view = "ListTable" })
+    @Html.Action(actionName: "List", controllerName: "TIMS_UserRole", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_UserRoleViewModel { RoleID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_Role-TIMS_UserRole", ui_list_view = "ListTable" })
 </div>
                     </div>
                 </div>

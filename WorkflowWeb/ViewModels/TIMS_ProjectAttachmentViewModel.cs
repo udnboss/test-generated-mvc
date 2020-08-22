@@ -10,7 +10,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.ViewModels
 {
-    public class TIMS_ProjectAttachmentViewModel : IValidatableObject
+    public class TIMS_ProjectAttachmentViewModel : BaseViewModel<TIMS_ProjectAttachment>, IValidatableObject
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "ID is required.")]
 		[DisplayName("ID")]
@@ -83,7 +83,7 @@ namespace WorkflowWeb.ViewModels
             }
         }
 
-        public TIMS_ProjectAttachment ToModel(bool convertSubs = false)
+        public override TIMS_ProjectAttachment ToModel(bool convertSubs = false)
         {
             var m = new TIMS_ProjectAttachment();
 
@@ -96,24 +96,40 @@ namespace WorkflowWeb.ViewModels
 			m.Filename = this.Filename;
 			m.DateUploaded = this.DateUploaded;
 			m.UserID = this.UserID;
-			m.TIMS_ProjectActionItemWorkflow = convertSubs ? this.TIMS_ProjectActionItemWorkflow.ToModel() : null;
-			m.TIMS_ProjectInterfaceAgreementWorkflow = convertSubs ? this.TIMS_ProjectInterfaceAgreementWorkflow.ToModel() : null;
-			m.TIMS_ProjectInterfacePointWorkflow = convertSubs ? this.TIMS_ProjectInterfacePointWorkflow.ToModel() : null;
-			m.TIMS_ProjectPackage = convertSubs ? this.TIMS_ProjectPackage.ToModel() : null;
-			m.TIMS_User = convertSubs ? this.TIMS_User.ToModel() : null;
+			m.TIMS_ProjectActionItemWorkflow = convertSubs && this.TIMS_ProjectActionItemWorkflow != null ?  this.TIMS_ProjectActionItemWorkflow.ToModel() : null;
+			m.TIMS_ProjectInterfaceAgreementWorkflow = convertSubs && this.TIMS_ProjectInterfaceAgreementWorkflow != null ?  this.TIMS_ProjectInterfaceAgreementWorkflow.ToModel() : null;
+			m.TIMS_ProjectInterfacePointWorkflow = convertSubs && this.TIMS_ProjectInterfacePointWorkflow != null ?  this.TIMS_ProjectInterfacePointWorkflow.ToModel() : null;
+			m.TIMS_ProjectPackage = convertSubs && this.TIMS_ProjectPackage != null ?  this.TIMS_ProjectPackage.ToModel() : null;
+			m.TIMS_User = convertSubs && this.TIMS_User != null ?  this.TIMS_User.ToModel() : null;
 
             return m;
         }
 
-        public string ToRouteFilter()
+        public override BaseViewModel<TIMS_ProjectAttachment> FromModel<M>(M mo, bool convertSubs)
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID, Name, ProjectInterfacePointWorkflowID, ProjectInterfaceAgreementWorkflowID, ProjectActionItemWorkflowID, PackageID, Filename, DateUploaded, UserID });
-            var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
-            route_filter = Convert.ToBase64String(bytes);
-            return route_filter;
+            var m = mo as TIMS_ProjectAttachment;
+            if (m != null)
+            {
+                this.ID = m.ID;
+				this.Name = m.Name;
+				this.ProjectInterfacePointWorkflowID = m.ProjectInterfacePointWorkflowID;
+				this.ProjectInterfaceAgreementWorkflowID = m.ProjectInterfaceAgreementWorkflowID;
+				this.ProjectActionItemWorkflowID = m.ProjectActionItemWorkflowID;
+				this.PackageID = m.PackageID;
+				this.Filename = m.Filename;
+				this.DateUploaded = m.DateUploaded;
+				this.UserID = m.UserID;
+				this.TIMS_ProjectActionItemWorkflow = convertSubs ? new TIMS_ProjectActionItemWorkflowViewModel(m.TIMS_ProjectActionItemWorkflow) : null;
+				this.TIMS_ProjectInterfaceAgreementWorkflow = convertSubs ? new TIMS_ProjectInterfaceAgreementWorkflowViewModel(m.TIMS_ProjectInterfaceAgreementWorkflow) : null;
+				this.TIMS_ProjectInterfacePointWorkflow = convertSubs ? new TIMS_ProjectInterfacePointWorkflowViewModel(m.TIMS_ProjectInterfacePointWorkflow) : null;
+				this.TIMS_ProjectPackage = convertSubs ? new TIMS_ProjectPackageViewModel(m.TIMS_ProjectPackage) : null;
+				this.TIMS_User = convertSubs ? new TIMS_UserViewModel(m.TIMS_User) : null;
+            }
+
+            return this;
         }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (ID == null)
             {

@@ -10,7 +10,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.ViewModels
 {
-    public class TIMS_ProjectInterfacePointFieldEntryViewModel : IValidatableObject
+    public class TIMS_ProjectInterfacePointFieldEntryViewModel : BaseViewModel<TIMS_ProjectInterfacePointFieldEntry>, IValidatableObject
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "ID is required.")]
 		[DisplayName("ID")]
@@ -50,7 +50,7 @@ namespace WorkflowWeb.ViewModels
             }
         }
 
-        public TIMS_ProjectInterfacePointFieldEntry ToModel(bool convertSubs = false)
+        public override TIMS_ProjectInterfacePointFieldEntry ToModel(bool convertSubs = false)
         {
             var m = new TIMS_ProjectInterfacePointFieldEntry();
 
@@ -58,21 +58,29 @@ namespace WorkflowWeb.ViewModels
 			m.InterfacePointWorkflowID = this.InterfacePointWorkflowID;
 			m.InterfaceTypeFieldID = this.InterfaceTypeFieldID;
 			m.Value = this.Value;
-			m.TIMS_ProjectDisciplineInterfaceTypeField = convertSubs ? this.TIMS_ProjectDisciplineInterfaceTypeField.ToModel() : null;
-			m.TIMS_ProjectInterfacePointWorkflow = convertSubs ? this.TIMS_ProjectInterfacePointWorkflow.ToModel() : null;
+			m.TIMS_ProjectDisciplineInterfaceTypeField = convertSubs && this.TIMS_ProjectDisciplineInterfaceTypeField != null ?  this.TIMS_ProjectDisciplineInterfaceTypeField.ToModel() : null;
+			m.TIMS_ProjectInterfacePointWorkflow = convertSubs && this.TIMS_ProjectInterfacePointWorkflow != null ?  this.TIMS_ProjectInterfacePointWorkflow.ToModel() : null;
 
             return m;
         }
 
-        public string ToRouteFilter()
+        public override BaseViewModel<TIMS_ProjectInterfacePointFieldEntry> FromModel<M>(M mo, bool convertSubs)
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID, InterfacePointWorkflowID, InterfaceTypeFieldID, Value });
-            var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
-            route_filter = Convert.ToBase64String(bytes);
-            return route_filter;
+            var m = mo as TIMS_ProjectInterfacePointFieldEntry;
+            if (m != null)
+            {
+                this.ID = m.ID;
+				this.InterfacePointWorkflowID = m.InterfacePointWorkflowID;
+				this.InterfaceTypeFieldID = m.InterfaceTypeFieldID;
+				this.Value = m.Value;
+				this.TIMS_ProjectDisciplineInterfaceTypeField = convertSubs ? new TIMS_ProjectDisciplineInterfaceTypeFieldViewModel(m.TIMS_ProjectDisciplineInterfaceTypeField) : null;
+				this.TIMS_ProjectInterfacePointWorkflow = convertSubs ? new TIMS_ProjectInterfacePointWorkflowViewModel(m.TIMS_ProjectInterfacePointWorkflow) : null;
+            }
+
+            return this;
         }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (ID == null)
             {

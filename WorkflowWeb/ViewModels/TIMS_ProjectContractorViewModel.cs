@@ -10,7 +10,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.ViewModels
 {
-    public class TIMS_ProjectContractorViewModel : IValidatableObject
+    public class TIMS_ProjectContractorViewModel : BaseViewModel<TIMS_ProjectContractor>, IValidatableObject
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "ID is required.")]
 		[DisplayName("ID")]
@@ -55,7 +55,7 @@ namespace WorkflowWeb.ViewModels
             }
         }
 
-        public TIMS_ProjectContractor ToModel(bool convertSubs = false)
+        public override TIMS_ProjectContractor ToModel(bool convertSubs = false)
         {
             var m = new TIMS_ProjectContractor();
 
@@ -63,22 +63,31 @@ namespace WorkflowWeb.ViewModels
 			m.Name = this.Name;
 			m.ProjectID = this.ProjectID;
 			m.ContractorID = this.ContractorID;
-			m.TIMS_Contractor = convertSubs ? this.TIMS_Contractor.ToModel() : null;
-			m.TIMS_Project = convertSubs ? this.TIMS_Project.ToModel() : null;
-			m.TIMS_ProjectPackage = convertSubs ? this.TIMS_ProjectPackage.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_Contractor = convertSubs && this.TIMS_Contractor != null ?  this.TIMS_Contractor.ToModel() : null;
+			m.TIMS_Project = convertSubs && this.TIMS_Project != null ?  this.TIMS_Project.ToModel() : null;
+			m.TIMS_ProjectPackage = convertSubs && this.TIMS_ProjectPackage != null  ? this.TIMS_ProjectPackage.Select(x => x.ToModel()).ToList() : null;
 
             return m;
         }
 
-        public string ToRouteFilter()
+        public override BaseViewModel<TIMS_ProjectContractor> FromModel<M>(M mo, bool convertSubs)
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID, Name, ProjectID, ContractorID });
-            var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
-            route_filter = Convert.ToBase64String(bytes);
-            return route_filter;
+            var m = mo as TIMS_ProjectContractor;
+            if (m != null)
+            {
+                this.ID = m.ID;
+				this.Name = m.Name;
+				this.ProjectID = m.ProjectID;
+				this.ContractorID = m.ContractorID;
+				this.TIMS_Contractor = convertSubs ? new TIMS_ContractorViewModel(m.TIMS_Contractor) : null;
+				this.TIMS_Project = convertSubs ? new TIMS_ProjectViewModel(m.TIMS_Project) : null;
+				this.TIMS_ProjectPackage = convertSubs && m.TIMS_ProjectPackage != null ? m.TIMS_ProjectPackage.Select(x => new TIMS_ProjectPackageViewModel(x)).ToList() : null;
+            }
+
+            return this;
         }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (ID == null)
             {

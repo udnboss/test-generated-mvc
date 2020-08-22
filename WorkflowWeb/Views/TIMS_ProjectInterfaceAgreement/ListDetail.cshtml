@@ -81,13 +81,13 @@
                     </ul>
                     <div class="tab-content" id="tabContent-TIMS_ProjectInterfaceAgreement">
                         <div class="tab-pane fade" id="tab-TIMS_ProjectInterfaceAgreement-TIMS_ProjectActionItem">
-    @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectActionItem", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectActionItemViewModel { InterfaceAgreementID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectInterfaceAgreement-TIMS_ProjectActionItem", ui_list_view = "ListTable" })
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectActionItem", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectActionItemViewModel { InterfaceAgreementID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectInterfaceAgreement-TIMS_ProjectActionItem", ui_list_view = "ListTable" })
 </div>
 <div class="tab-pane fade" id="tab-TIMS_ProjectInterfaceAgreement-TIMS_ProjectInterfaceAgreementWorkflow">
-    @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectInterfaceAgreementWorkflow", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfaceAgreementWorkflowViewModel { InterfaceAgreementID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectInterfaceAgreement-TIMS_ProjectInterfaceAgreementWorkflow", ui_list_view = "ListTable" })
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectInterfaceAgreementWorkflow", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfaceAgreementWorkflowViewModel { InterfaceAgreementID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectInterfaceAgreement-TIMS_ProjectInterfaceAgreementWorkflow", ui_list_view = "ListTable" })
 </div>
 <div class="tab-pane fade" id="tab-TIMS_ProjectInterfaceAgreement-TIMS_UserWatchlistItem">
-    @Html.Action(actionName: "ListTable", controllerName: "TIMS_UserWatchlistItem", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_UserWatchlistItemViewModel { ProjectInterfaceAgreementID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectInterfaceAgreement-TIMS_UserWatchlistItem", ui_list_view = "ListTable" })
+    @Html.Action(actionName: "List", controllerName: "TIMS_UserWatchlistItem", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_UserWatchlistItemViewModel { ProjectInterfaceAgreementID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectInterfaceAgreement-TIMS_UserWatchlistItem", ui_list_view = "ListTable" })
 </div>
                     </div>
                 </div>

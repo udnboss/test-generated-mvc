@@ -10,7 +10,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.ViewModels
 {
-    public class TIMS_ContractorViewModel : IValidatableObject
+    public class TIMS_ContractorViewModel : BaseViewModel<TIMS_Contractor>, IValidatableObject
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "ID is required.")]
 		[DisplayName("ID")]
@@ -39,26 +39,31 @@ namespace WorkflowWeb.ViewModels
             }
         }
 
-        public TIMS_Contractor ToModel(bool convertSubs = false)
+        public override TIMS_Contractor ToModel(bool convertSubs = false)
         {
             var m = new TIMS_Contractor();
 
             m.ID = this.ID;
 			m.Name = this.Name;
-			m.TIMS_ProjectContractor = convertSubs ? this.TIMS_ProjectContractor.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectContractor = convertSubs && this.TIMS_ProjectContractor != null  ? this.TIMS_ProjectContractor.Select(x => x.ToModel()).ToList() : null;
 
             return m;
         }
 
-        public string ToRouteFilter()
+        public override BaseViewModel<TIMS_Contractor> FromModel<M>(M mo, bool convertSubs)
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID, Name });
-            var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
-            route_filter = Convert.ToBase64String(bytes);
-            return route_filter;
+            var m = mo as TIMS_Contractor;
+            if (m != null)
+            {
+                this.ID = m.ID;
+				this.Name = m.Name;
+				this.TIMS_ProjectContractor = convertSubs && m.TIMS_ProjectContractor != null ? m.TIMS_ProjectContractor.Select(x => new TIMS_ProjectContractorViewModel(x)).ToList() : null;
+            }
+
+            return this;
         }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (ID == null)
             {

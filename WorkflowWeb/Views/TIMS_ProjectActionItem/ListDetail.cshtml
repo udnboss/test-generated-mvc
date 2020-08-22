@@ -78,10 +78,10 @@
                     </ul>
                     <div class="tab-content" id="tabContent-TIMS_ProjectActionItem">
                         <div class="tab-pane fade" id="tab-TIMS_ProjectActionItem-TIMS_ProjectActionItemWorkflow">
-    @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectActionItemWorkflow", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectActionItemWorkflowViewModel { ActionItemID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectActionItem-TIMS_ProjectActionItemWorkflow", ui_list_view = "ListTable" })
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectActionItemWorkflow", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectActionItemWorkflowViewModel { ActionItemID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectActionItem-TIMS_ProjectActionItemWorkflow", ui_list_view = "ListTable" })
 </div>
 <div class="tab-pane fade" id="tab-TIMS_ProjectActionItem-TIMS_UserWatchlistItem">
-    @Html.Action(actionName: "ListTable", controllerName: "TIMS_UserWatchlistItem", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_UserWatchlistItemViewModel { ProjectActionItemID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectActionItem-TIMS_UserWatchlistItem", ui_list_view = "ListTable" })
+    @Html.Action(actionName: "List", controllerName: "TIMS_UserWatchlistItem", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_UserWatchlistItemViewModel { ProjectActionItemID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectActionItem-TIMS_UserWatchlistItem", ui_list_view = "ListTable" })
 </div>
                     </div>
                 </div>

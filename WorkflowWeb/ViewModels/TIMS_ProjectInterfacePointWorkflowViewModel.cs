@@ -10,7 +10,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.ViewModels
 {
-    public class TIMS_ProjectInterfacePointWorkflowViewModel : IValidatableObject
+    public class TIMS_ProjectInterfacePointWorkflowViewModel : BaseViewModel<TIMS_ProjectInterfacePointWorkflow>, IValidatableObject
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "ID is required.")]
 		[DisplayName("ID")]
@@ -126,7 +126,7 @@ namespace WorkflowWeb.ViewModels
             }
         }
 
-        public TIMS_ProjectInterfacePointWorkflow ToModel(bool convertSubs = false)
+        public override TIMS_ProjectInterfacePointWorkflow ToModel(bool convertSubs = false)
         {
             var m = new TIMS_ProjectInterfacePointWorkflow();
 
@@ -143,31 +143,58 @@ namespace WorkflowWeb.ViewModels
 			m.InterfaceTypeID = this.InterfaceTypeID;
 			m.UserID = this.UserID;
 			m.IsDraft = this.IsDraft;
-			m.TIMS_Phase = convertSubs ? this.TIMS_Phase.ToModel() : null;
-			m.TIMS_ProjectArea = convertSubs ? this.TIMS_ProjectArea.ToModel() : null;
-			m.TIMS_ProjectAttachment = convertSubs ? this.TIMS_ProjectAttachment.Select(x => x.ToModel()).ToList() : null;
-			m.TIMS_ProjectComment = convertSubs ? this.TIMS_ProjectComment.Select(x => x.ToModel()).ToList() : null;
-			m.TIMS_ProjectDisciplineInterfaceType = convertSubs ? this.TIMS_ProjectDisciplineInterfaceType.ToModel() : null;
-			m.TIMS_ProjectInterfacePointFieldEntry = convertSubs ? this.TIMS_ProjectInterfacePointFieldEntry.Select(x => x.ToModel()).ToList() : null;
-			m.TIMS_ProjectPhysicalArea = convertSubs ? this.TIMS_ProjectPhysicalArea.ToModel() : null;
-			m.TIMS_User = convertSubs ? this.TIMS_User.ToModel() : null;
-			m.TIMS_WorkflowState = convertSubs ? this.TIMS_WorkflowState.ToModel() : null;
-			m.TIMS_WorkflowState1 = convertSubs ? this.TIMS_WorkflowState1.ToModel() : null;
-			m.TIMS_WorkflowState2 = convertSubs ? this.TIMS_WorkflowState2.ToModel() : null;
-			m.TIMS_WorkflowType = convertSubs ? this.TIMS_WorkflowType.ToModel() : null;
+			m.TIMS_Phase = convertSubs && this.TIMS_Phase != null ?  this.TIMS_Phase.ToModel() : null;
+			m.TIMS_ProjectArea = convertSubs && this.TIMS_ProjectArea != null ?  this.TIMS_ProjectArea.ToModel() : null;
+			m.TIMS_ProjectAttachment = convertSubs && this.TIMS_ProjectAttachment != null  ? this.TIMS_ProjectAttachment.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectComment = convertSubs && this.TIMS_ProjectComment != null  ? this.TIMS_ProjectComment.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectDisciplineInterfaceType = convertSubs && this.TIMS_ProjectDisciplineInterfaceType != null ?  this.TIMS_ProjectDisciplineInterfaceType.ToModel() : null;
+			m.TIMS_ProjectInterfacePointFieldEntry = convertSubs && this.TIMS_ProjectInterfacePointFieldEntry != null  ? this.TIMS_ProjectInterfacePointFieldEntry.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectPhysicalArea = convertSubs && this.TIMS_ProjectPhysicalArea != null ?  this.TIMS_ProjectPhysicalArea.ToModel() : null;
+			m.TIMS_User = convertSubs && this.TIMS_User != null ?  this.TIMS_User.ToModel() : null;
+			m.TIMS_WorkflowState = convertSubs && this.TIMS_WorkflowState != null ?  this.TIMS_WorkflowState.ToModel() : null;
+			m.TIMS_WorkflowState1 = convertSubs && this.TIMS_WorkflowState1 != null ?  this.TIMS_WorkflowState1.ToModel() : null;
+			m.TIMS_WorkflowState2 = convertSubs && this.TIMS_WorkflowState2 != null ?  this.TIMS_WorkflowState2.ToModel() : null;
+			m.TIMS_WorkflowType = convertSubs && this.TIMS_WorkflowType != null ?  this.TIMS_WorkflowType.ToModel() : null;
 
             return m;
         }
 
-        public string ToRouteFilter()
+        public override BaseViewModel<TIMS_ProjectInterfacePointWorkflow> FromModel<M>(M mo, bool convertSubs)
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID, WorkflowTypeID, InterfacePointID, DateInitiated, LeadStateID, InterfaceStateID, SupportStateID, ProjectAreaID, ProjectPhysicalAreaID, PhaseID, InterfaceTypeID, UserID, IsDraft });
-            var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
-            route_filter = Convert.ToBase64String(bytes);
-            return route_filter;
+            var m = mo as TIMS_ProjectInterfacePointWorkflow;
+            if (m != null)
+            {
+                this.ID = m.ID;
+				this.WorkflowTypeID = m.WorkflowTypeID;
+				this.InterfacePointID = m.InterfacePointID;
+				this.DateInitiated = m.DateInitiated;
+				this.LeadStateID = m.LeadStateID;
+				this.InterfaceStateID = m.InterfaceStateID;
+				this.SupportStateID = m.SupportStateID;
+				this.ProjectAreaID = m.ProjectAreaID;
+				this.ProjectPhysicalAreaID = m.ProjectPhysicalAreaID;
+				this.PhaseID = m.PhaseID;
+				this.InterfaceTypeID = m.InterfaceTypeID;
+				this.UserID = m.UserID;
+				this.IsDraft = m.IsDraft;
+				this.TIMS_Phase = convertSubs ? new TIMS_PhaseViewModel(m.TIMS_Phase) : null;
+				this.TIMS_ProjectArea = convertSubs ? new TIMS_ProjectAreaViewModel(m.TIMS_ProjectArea) : null;
+				this.TIMS_ProjectAttachment = convertSubs && m.TIMS_ProjectAttachment != null ? m.TIMS_ProjectAttachment.Select(x => new TIMS_ProjectAttachmentViewModel(x)).ToList() : null;
+				this.TIMS_ProjectComment = convertSubs && m.TIMS_ProjectComment != null ? m.TIMS_ProjectComment.Select(x => new TIMS_ProjectCommentViewModel(x)).ToList() : null;
+				this.TIMS_ProjectDisciplineInterfaceType = convertSubs ? new TIMS_ProjectDisciplineInterfaceTypeViewModel(m.TIMS_ProjectDisciplineInterfaceType) : null;
+				this.TIMS_ProjectInterfacePointFieldEntry = convertSubs && m.TIMS_ProjectInterfacePointFieldEntry != null ? m.TIMS_ProjectInterfacePointFieldEntry.Select(x => new TIMS_ProjectInterfacePointFieldEntryViewModel(x)).ToList() : null;
+				this.TIMS_ProjectPhysicalArea = convertSubs ? new TIMS_ProjectPhysicalAreaViewModel(m.TIMS_ProjectPhysicalArea) : null;
+				this.TIMS_User = convertSubs ? new TIMS_UserViewModel(m.TIMS_User) : null;
+				this.TIMS_WorkflowState = convertSubs ? new TIMS_WorkflowStateViewModel(m.TIMS_WorkflowState) : null;
+				this.TIMS_WorkflowState1 = convertSubs ? new TIMS_WorkflowStateViewModel(m.TIMS_WorkflowState1) : null;
+				this.TIMS_WorkflowState2 = convertSubs ? new TIMS_WorkflowStateViewModel(m.TIMS_WorkflowState2) : null;
+				this.TIMS_WorkflowType = convertSubs ? new TIMS_WorkflowTypeViewModel(m.TIMS_WorkflowType) : null;
+            }
+
+            return this;
         }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (ID == null)
             {

@@ -9,55 +9,19 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WorkflowWeb.Models;
-using WorkflowWeb.ViewModels;
 using WorkflowWeb.Business;
+using WorkflowWeb.ViewModels;
 
 namespace WorkflowWeb.Controllers
 {
-    public class TIMS_ProjectController : BaseController
+    public class TIMS_ProjectController : BaseController<TIMS_Project, TIMS_ProjectBusiness, TIMS_ProjectViewModel>
     {
-        private TIMS_ProjectBusiness business;
-
         public TIMS_ProjectController()
         {
-            business = new TIMS_ProjectBusiness(db);
+            business = new TIMS_ProjectBusiness(db, user);
         }
 
-        private TIMS_Project _routeFilter;
-        public TIMS_Project RouteFilter
-        {
-            get
-            {
-                if (_routeFilter != null)
-                {
-                    return _routeFilter;
-                }
-
-                var ui_route_filter = (RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
-                if (!string.IsNullOrEmpty(ui_route_filter))
-                {
-                    try
-                    {
-                        var bytes = Convert.FromBase64String(ui_route_filter);
-                        ui_route_filter = System.Text.Encoding.ASCII.GetString(bytes);
-
-                        var filter = JsonConvert.DeserializeObject<TIMS_ProjectViewModel>(ui_route_filter).ToModel();
-
-                        _routeFilter = filter;
-
-                        return filter;
-                    }
-                    catch
-                    {
-                        return null;
-                    }
-                }
-
-                return null;
-            }
-        }
-
-        public Dictionary<string, object> GetLookups()
+        public override Dictionary<string, object> GetLookups()
         {
             return new Dictionary<string, object> {
                 
@@ -74,13 +38,14 @@ namespace WorkflowWeb.Controllers
             ViewBag.CurrentID = id;
             var uiListView = ui_list_view ?? (RouteData.Values["ui_list_view"] ?? Request.QueryString["ui_list_view"]) as string;
 
-            if(uiListView != null && uiListView != "ListDetail" && uiListView != "ListTable") //invalid
+            if (uiListView != null && uiListView != "ListDetail" && uiListView != "ListTable") //invalid
             {
                 return HttpNotFound();
             }
 
-            var results = business.GetList(RouteFilter);
-            
+            var routeFilter = GetRouteFilter();
+            var results = business.GetList(routeFilter);
+
             var message = results.Message;
 
             var responseCode = GetResponseCode(results);
@@ -117,7 +82,7 @@ namespace WorkflowWeb.Controllers
                     var m = r.Data;
                     var vm = new TIMS_ProjectViewModel(m, true);
                     return PartialView(vm);
-                }               
+                }
             }
 
             return Json(new string[] { message });
@@ -125,8 +90,9 @@ namespace WorkflowWeb.Controllers
 
         public ActionResult New()
         {
-            var vm = RouteFilter != null ? new TIMS_ProjectViewModel(RouteFilter) : new TIMS_ProjectViewModel() {  };
-            var r = business.New(RouteFilter);
+            var routeFilter = GetRouteFilter();
+            var vm = routeFilter != null ? new TIMS_ProjectViewModel(routeFilter) : new TIMS_ProjectViewModel() { };
+            var r = business.New(routeFilter);
             var message = r.Message;
 
             var responseCode = GetResponseCode(r);
@@ -163,7 +129,7 @@ namespace WorkflowWeb.Controllers
                     var vm = new TIMS_ProjectViewModel(m, true);
                     ViewBag.Lookups = GetLookups();
                     return PartialView(vm);
-                }                
+                }
             }
 
             return Json(new string[] { message });
@@ -178,7 +144,7 @@ namespace WorkflowWeb.Controllers
             if (ModelState.IsValid)
             {
                 var m = vm.ToModel();
-                m.ID = Guid.NewGuid();
+                m.ID = Guid.NewGuid(); 
                 var r = business.Insert(m);
                 message = r.Message;
 
@@ -238,8 +204,8 @@ namespace WorkflowWeb.Controllers
         public ActionResult Delete(TIMS_ProjectViewModel vm)
         {
             string message;
-            
-            var m = vm.ToModel();               
+
+            var m = vm.ToModel();
             var r = business.Delete(m);
 
             message = r.Message;
@@ -250,7 +216,7 @@ namespace WorkflowWeb.Controllers
                 return List(null);
             }
 
-            return Json(new string[] { message });            
+            return Json(new string[] { message });
         }
     }
 }

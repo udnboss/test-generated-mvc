@@ -10,7 +10,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.ViewModels
 {
-    public class TIMS_DisciplineViewModel : IValidatableObject
+    public class TIMS_DisciplineViewModel : BaseViewModel<TIMS_Discipline>, IValidatableObject
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "ID is required.")]
 		[DisplayName("ID")]
@@ -39,26 +39,31 @@ namespace WorkflowWeb.ViewModels
             }
         }
 
-        public TIMS_Discipline ToModel(bool convertSubs = false)
+        public override TIMS_Discipline ToModel(bool convertSubs = false)
         {
             var m = new TIMS_Discipline();
 
             m.ID = this.ID;
 			m.Name = this.Name;
-			m.TIMS_ProjectDiscipline = convertSubs ? this.TIMS_ProjectDiscipline.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectDiscipline = convertSubs && this.TIMS_ProjectDiscipline != null  ? this.TIMS_ProjectDiscipline.Select(x => x.ToModel()).ToList() : null;
 
             return m;
         }
 
-        public string ToRouteFilter()
+        public override BaseViewModel<TIMS_Discipline> FromModel<M>(M mo, bool convertSubs)
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID, Name });
-            var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
-            route_filter = Convert.ToBase64String(bytes);
-            return route_filter;
+            var m = mo as TIMS_Discipline;
+            if (m != null)
+            {
+                this.ID = m.ID;
+				this.Name = m.Name;
+				this.TIMS_ProjectDiscipline = convertSubs && m.TIMS_ProjectDiscipline != null ? m.TIMS_ProjectDiscipline.Select(x => new TIMS_ProjectDisciplineViewModel(x)).ToList() : null;
+            }
+
+            return this;
         }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (ID == null)
             {

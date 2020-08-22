@@ -78,10 +78,10 @@
                     </ul>
                     <div class="tab-content" id="tabContent-TIMS_ProjectDiscipline">
                         <div class="tab-pane fade" id="tab-TIMS_ProjectDiscipline-TIMS_ProjectDisciplineInterfaceType">
-    @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectDisciplineInterfaceType", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectDisciplineInterfaceTypeViewModel { ProjectIDisciplineID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectDiscipline-TIMS_ProjectDisciplineInterfaceType", ui_list_view = "ListTable" })
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectDisciplineInterfaceType", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectDisciplineInterfaceTypeViewModel { ProjectIDisciplineID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectDiscipline-TIMS_ProjectDisciplineInterfaceType", ui_list_view = "ListTable" })
 </div>
 <div class="tab-pane fade" id="tab-TIMS_ProjectDiscipline-TIMS_ProjectInterfaceAgreementWorkflow">
-    @Html.Action(actionName: "ListTable", controllerName: "TIMS_ProjectInterfaceAgreementWorkflow", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfaceAgreementWorkflowViewModel { DisciplineID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectDiscipline-TIMS_ProjectInterfaceAgreementWorkflow", ui_list_view = "ListTable" })
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectInterfaceAgreementWorkflow", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfaceAgreementWorkflowViewModel { DisciplineID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectDiscipline-TIMS_ProjectInterfaceAgreementWorkflow", ui_list_view = "ListTable" })
 </div>
                     </div>
                 </div>

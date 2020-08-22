@@ -10,7 +10,7 @@ using WorkflowWeb.Models;
 
 namespace WorkflowWeb.ViewModels
 {
-    public class TIMS_ProjectInterfaceAgreementWorkflowViewModel : IValidatableObject
+    public class TIMS_ProjectInterfaceAgreementWorkflowViewModel : BaseViewModel<TIMS_ProjectInterfaceAgreementWorkflow>, IValidatableObject
     {
         [Required(AllowEmptyStrings = false, ErrorMessage = "ID is required.")]
 		[DisplayName("ID")]
@@ -106,7 +106,7 @@ namespace WorkflowWeb.ViewModels
             }
         }
 
-        public TIMS_ProjectInterfaceAgreementWorkflow ToModel(bool convertSubs = false)
+        public override TIMS_ProjectInterfaceAgreementWorkflow ToModel(bool convertSubs = false)
         {
             var m = new TIMS_ProjectInterfaceAgreementWorkflow();
 
@@ -123,26 +123,48 @@ namespace WorkflowWeb.ViewModels
 			m.AreaID = this.AreaID;
 			m.ShortDescription = this.ShortDescription;
 			m.DetailedDescription = this.DetailedDescription;
-			m.TIMS_ProjectArea = convertSubs ? this.TIMS_ProjectArea.ToModel() : null;
-			m.TIMS_ProjectAttachment = convertSubs ? this.TIMS_ProjectAttachment.Select(x => x.ToModel()).ToList() : null;
-			m.TIMS_ProjectComment = convertSubs ? this.TIMS_ProjectComment.Select(x => x.ToModel()).ToList() : null;
-			m.TIMS_ProjectDiscipline = convertSubs ? this.TIMS_ProjectDiscipline.ToModel() : null;
-			m.TIMS_ProjectInterfaceAgreement = convertSubs ? this.TIMS_ProjectInterfaceAgreement.ToModel() : null;
-			m.TIMS_User = convertSubs ? this.TIMS_User.ToModel() : null;
-			m.TIMS_WorkflowType = convertSubs ? this.TIMS_WorkflowType.ToModel() : null;
+			m.TIMS_ProjectArea = convertSubs && this.TIMS_ProjectArea != null ?  this.TIMS_ProjectArea.ToModel() : null;
+			m.TIMS_ProjectAttachment = convertSubs && this.TIMS_ProjectAttachment != null  ? this.TIMS_ProjectAttachment.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectComment = convertSubs && this.TIMS_ProjectComment != null  ? this.TIMS_ProjectComment.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectDiscipline = convertSubs && this.TIMS_ProjectDiscipline != null ?  this.TIMS_ProjectDiscipline.ToModel() : null;
+			m.TIMS_ProjectInterfaceAgreement = convertSubs && this.TIMS_ProjectInterfaceAgreement != null ?  this.TIMS_ProjectInterfaceAgreement.ToModel() : null;
+			m.TIMS_User = convertSubs && this.TIMS_User != null ?  this.TIMS_User.ToModel() : null;
+			m.TIMS_WorkflowType = convertSubs && this.TIMS_WorkflowType != null ?  this.TIMS_WorkflowType.ToModel() : null;
 
             return m;
         }
 
-        public string ToRouteFilter()
+        public override BaseViewModel<TIMS_ProjectInterfaceAgreementWorkflow> FromModel<M>(M mo, bool convertSubs)
         {
-            var route_filter = JsonConvert.SerializeObject(new { ID, WorkflowTypeID, InterfaceAgreementID, DateInitiated, LeadStateID, InterfaceStateID, UserID, IsDraft, DisciplineID, SystemID, AreaID, ShortDescription, DetailedDescription });
-            var bytes = System.Text.Encoding.ASCII.GetBytes(route_filter);
-            route_filter = Convert.ToBase64String(bytes);
-            return route_filter;
+            var m = mo as TIMS_ProjectInterfaceAgreementWorkflow;
+            if (m != null)
+            {
+                this.ID = m.ID;
+				this.WorkflowTypeID = m.WorkflowTypeID;
+				this.InterfaceAgreementID = m.InterfaceAgreementID;
+				this.DateInitiated = m.DateInitiated;
+				this.LeadStateID = m.LeadStateID;
+				this.InterfaceStateID = m.InterfaceStateID;
+				this.UserID = m.UserID;
+				this.IsDraft = m.IsDraft;
+				this.DisciplineID = m.DisciplineID;
+				this.SystemID = m.SystemID;
+				this.AreaID = m.AreaID;
+				this.ShortDescription = m.ShortDescription;
+				this.DetailedDescription = m.DetailedDescription;
+				this.TIMS_ProjectArea = convertSubs ? new TIMS_ProjectAreaViewModel(m.TIMS_ProjectArea) : null;
+				this.TIMS_ProjectAttachment = convertSubs && m.TIMS_ProjectAttachment != null ? m.TIMS_ProjectAttachment.Select(x => new TIMS_ProjectAttachmentViewModel(x)).ToList() : null;
+				this.TIMS_ProjectComment = convertSubs && m.TIMS_ProjectComment != null ? m.TIMS_ProjectComment.Select(x => new TIMS_ProjectCommentViewModel(x)).ToList() : null;
+				this.TIMS_ProjectDiscipline = convertSubs ? new TIMS_ProjectDisciplineViewModel(m.TIMS_ProjectDiscipline) : null;
+				this.TIMS_ProjectInterfaceAgreement = convertSubs ? new TIMS_ProjectInterfaceAgreementViewModel(m.TIMS_ProjectInterfaceAgreement) : null;
+				this.TIMS_User = convertSubs ? new TIMS_UserViewModel(m.TIMS_User) : null;
+				this.TIMS_WorkflowType = convertSubs ? new TIMS_WorkflowTypeViewModel(m.TIMS_WorkflowType) : null;
+            }
+
+            return this;
         }
 
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (ID == null)
             {
