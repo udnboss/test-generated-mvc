@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
@@ -111,7 +112,7 @@ namespace WorkflowWeb.Business
             if(result.Status == State.Success)
             {
                 db.Set(typeof(T)).Add(m);
-                result = Commit();
+                result = Commit(m, Operation.Insert);
             }
 
             return result;
@@ -123,7 +124,7 @@ namespace WorkflowWeb.Business
             if (CheckAuthorization(m, o, user))
             {
                 db.Entry(m).State = EntityState.Modified;
-                var result = Commit();
+                var result = Commit(m, Operation.Update);
                 return result;
             }
 
@@ -138,19 +139,23 @@ namespace WorkflowWeb.Business
                 //db.Set(typeof(T)).Remove(m);
                 var em = db.Entry(m);
                 em.State = EntityState.Deleted;
-                var result = Commit();
+                var result = Commit(m, Operation.Delete);
                 return result;
             }
 
             return AccessDenied<T>(o);
         }
 
-        public virtual BusinessResult<T> Commit()
+        public virtual BusinessResult<T> Commit(T m, Operation o)
         {
             try
             {
                 var affected = db.SaveChanges();
                 var status = affected > 0 ? State.Success : State.NoRecordsAffected;
+                if(status == State.Success)
+                {
+                    Log(m, o);
+                }
                 return new BusinessResult<T> { Status = status, RecordsAffected = affected, Message = "" };
             }
             catch (Exception e)
@@ -215,5 +220,11 @@ namespace WorkflowWeb.Business
             return data;
         }
 
+        private void Log(T m, Operation o)
+        {
+            //Log to your database here, the variable user has the username.
+            //if(o == Operation.Delete)
+            //    Debug.Assert(true);
+        }
     }
 }

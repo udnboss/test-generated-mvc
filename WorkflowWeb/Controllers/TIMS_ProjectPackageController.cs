@@ -19,9 +19,12 @@ namespace WorkflowWeb.Controllers
         public TIMS_ProjectPackageController()
         {
             business = new TIMS_ProjectPackageBusiness(db, user);
+            this.GetLookups = DefaultGetLookups;
         }
 
-        public Dictionary<string, object> GetLookups()
+        public Func<Dictionary<string, object>> GetLookups { get; set; }
+
+        public Dictionary<string, object> DefaultGetLookups()
         {
             var routeFilter = GetRouteFilter();
 

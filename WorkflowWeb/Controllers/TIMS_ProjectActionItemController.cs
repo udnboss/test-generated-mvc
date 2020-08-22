@@ -19,15 +19,18 @@ namespace WorkflowWeb.Controllers
         public TIMS_ProjectActionItemController()
         {
             business = new TIMS_ProjectActionItemBusiness(db, user);
+            this.GetLookups = DefaultGetLookups;
         }
 
-        public Dictionary<string, object> GetLookups()
+        public Func<Dictionary<string, object>> GetLookups { get; set; }
+
+        public Dictionary<string, object> DefaultGetLookups()
         {
             var routeFilter = GetRouteFilter();
 
             return new Dictionary<string, object> {
                 {"ProjectID", db.TIMS_Project.Where(x => routeFilter.ProjectID == null || x.ID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"InterfaceAgreementID", db.TIMS_ProjectInterfaceAgreement.Where(x => routeFilter.ProjectID == null || x.ID == routeFilter.ProjectID).Where(x => routeFilter.InterfaceAgreementID == null || x.ID == routeFilter.InterfaceAgreementID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
+				{"InterfaceAgreementID", db.TIMS_ProjectInterfaceAgreement.Where(x => routeFilter.InterfaceAgreementID == null || x.ID == routeFilter.InterfaceAgreementID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
             };
         }
 
