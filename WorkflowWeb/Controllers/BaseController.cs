@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using WorkflowWeb.Business;
 using WorkflowWeb.Models;
 using WorkflowWeb.ViewModels;
@@ -75,6 +76,39 @@ namespace WorkflowWeb.Controllers
                 default:
                     return HttpStatusCode.Conflict;
             }
+        }
+
+        protected override void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            Log("OnActionExecuted", filterContext.RouteData);
+            var routeFilter = GetRouteFilter();
+            ViewBag.RouteFilter = routeFilter;
+        }
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            Log("OnActionExecuting", filterContext.RouteData);
+            //var routeFilter = GetRouteFilter();
+            //ViewBag.RouteFilter = routeFilter;
+        }
+
+        protected override void OnResultExecuted(ResultExecutedContext filterContext)
+        {
+            Log("OnResultExecuted", filterContext.RouteData);
+            //var routeFilter = GetRouteFilter();
+            //ViewBag.RouteFilter = routeFilter;
+        }
+
+        protected override void OnResultExecuting(ResultExecutingContext filterContext)
+        {
+            Log("OnResultExecuting ", filterContext.RouteData);
+            //var routeFilter = GetRouteFilter();
+            //ViewBag.RouteFilter = routeFilter;
+        }
+
+        private void Log(string methodName, RouteData routeData)
+        {
+            
         }
 
         //private ActionResult Index(object id = null)

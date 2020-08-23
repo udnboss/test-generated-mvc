@@ -1,4 +1,5 @@
 @using WorkflowWeb.ViewModels
+@using WorkflowWeb.Models
 @model IEnumerable<TIMS_ProjectInterfaceAgreementWorkflowViewModel>
     @{
         var controller = ViewContext.RouteData.Values["controller"].ToString();
@@ -15,12 +16,14 @@
 
         var currentId = ViewBag.CurrentID as object;
         var currentItem = currentId == null ? Model.FirstOrDefault() : Model.FirstOrDefault(x => x.ID.ToString() == currentId.ToString());
+        var currentRouteFilter = ViewBag.RouteFilter as TIMS_ProjectInterfaceAgreementWorkflow;
     }
 
     <div>
-        <div class="text-right mb-5">
+        <h3>Project Interface Agreement Workflows</h3>
+        <div class="text-right mb-2">
             @Ajax.ActionLink(
-            linkText: "Add New TIMS_ProjectInterfaceAgreementWorkflow..",
+            linkText: "Add New Project Interface Agreement Workflow..",
             actionName: "New",
             controllerName: controller,
             routeValues: new { ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter },
@@ -49,18 +52,18 @@
                         <th>
                             View
                         </th>
-                        <th>@Html.DisplayNameFor(m => m.WorkflowTypeID)</th>
-					<th>@Html.DisplayNameFor(m => m.InterfaceAgreementID)</th>
-					<th>@Html.DisplayNameFor(m => m.DateInitiated)</th>
-					<th>@Html.DisplayNameFor(m => m.LeadStateID)</th>
-					<th>@Html.DisplayNameFor(m => m.InterfaceStateID)</th>
-					<th>@Html.DisplayNameFor(m => m.UserID)</th>
-					<th>@Html.DisplayNameFor(m => m.IsDraft)</th>
-					<th>@Html.DisplayNameFor(m => m.DisciplineID)</th>
-					<th>@Html.DisplayNameFor(m => m.SystemID)</th>
-					<th>@Html.DisplayNameFor(m => m.AreaID)</th>
-					<th>@Html.DisplayNameFor(m => m.ShortDescription)</th>
-					<th>@Html.DisplayNameFor(m => m.DetailedDescription)</th>
+                        @if (currentRouteFilter.WorkflowTypeID == null) { <th>@Html.DisplayNameFor(m => m.WorkflowTypeID)</th> }
+						@if (currentRouteFilter.InterfaceAgreementID == null) { <th>@Html.DisplayNameFor(m => m.InterfaceAgreementID)</th> }
+						@if (currentRouteFilter.DateInitiated == null) { <th>@Html.DisplayNameFor(m => m.DateInitiated)</th> }
+						@if (currentRouteFilter.LeadStateID == null) { <th>@Html.DisplayNameFor(m => m.LeadStateID)</th> }
+						@if (currentRouteFilter.InterfaceStateID == null) { <th>@Html.DisplayNameFor(m => m.InterfaceStateID)</th> }
+						@if (currentRouteFilter.UserID == null) { <th>@Html.DisplayNameFor(m => m.UserID)</th> }
+						@if (currentRouteFilter.IsDraft == null) { <th>@Html.DisplayNameFor(m => m.IsDraft)</th> }
+						@if (currentRouteFilter.DisciplineID == null) { <th>@Html.DisplayNameFor(m => m.DisciplineID)</th> }
+						@if (currentRouteFilter.SystemID == null) { <th>@Html.DisplayNameFor(m => m.SystemID)</th> }
+						@if (currentRouteFilter.AreaID == null) { <th>@Html.DisplayNameFor(m => m.AreaID)</th> }
+						@if (currentRouteFilter.ShortDescription == null) { <th>@Html.DisplayNameFor(m => m.ShortDescription)</th> }
+						@if (currentRouteFilter.DetailedDescription == null) { <th>@Html.DisplayNameFor(m => m.DetailedDescription)</th> }
                     </tr>
                 </thead>
                 <tbody>
@@ -90,18 +93,18 @@
                                         @class = "btn btn-outline-primary btn-sm"
                                     })
                             </td>
-                            <td>@Html.DisplayFor(modelItem => item.TIMS_WorkflowType.ID)</td>
-						<td>@Html.DisplayFor(modelItem => item.TIMS_ProjectInterfaceAgreement.Name)</td>
-						<td>@Html.DisplayFor(modelItem => item.DateInitiated)</td>
-						<td>@Html.DisplayFor(modelItem => item.LeadStateID)</td>
-						<td>@Html.DisplayFor(modelItem => item.InterfaceStateID)</td>
-						<td>@Html.DisplayFor(modelItem => item.TIMS_User.Name)</td>
-						<td>@Html.DisplayFor(modelItem => item.IsDraft)</td>
-						<td>@Html.DisplayFor(modelItem => item.TIMS_ProjectDiscipline.Name)</td>
-						<td>@Html.DisplayFor(modelItem => item.SystemID)</td>
-						<td>@Html.DisplayFor(modelItem => item.TIMS_ProjectArea.Name)</td>
-						<td>@Html.DisplayFor(modelItem => item.ShortDescription)</td>
-						<td>@Html.DisplayFor(modelItem => item.DetailedDescription)</td>
+                            @if (currentRouteFilter.WorkflowTypeID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_WorkflowType.ID)</td> }
+						@if (currentRouteFilter.InterfaceAgreementID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_ProjectInterfaceAgreement.Name)</td> }
+						@if (currentRouteFilter.DateInitiated == null) { <td>@Html.DisplayFor(modelItem => item.DateInitiated)</td> }
+						@if (currentRouteFilter.LeadStateID == null) { <td>@Html.DisplayFor(modelItem => item.LeadStateID)</td> }
+						@if (currentRouteFilter.InterfaceStateID == null) { <td>@Html.DisplayFor(modelItem => item.InterfaceStateID)</td> }
+						@if (currentRouteFilter.UserID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_User.Name)</td> }
+						@if (currentRouteFilter.IsDraft == null) { <td>@Html.DisplayFor(modelItem => item.IsDraft)</td> }
+						@if (currentRouteFilter.DisciplineID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_ProjectDiscipline.Name)</td> }
+						@if (currentRouteFilter.SystemID == null) { <td>@Html.DisplayFor(modelItem => item.SystemID)</td> }
+						@if (currentRouteFilter.AreaID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_ProjectArea.Name)</td> }
+						@if (currentRouteFilter.ShortDescription == null) { <td>@Html.DisplayFor(modelItem => item.ShortDescription)</td> }
+						@if (currentRouteFilter.DetailedDescription == null) { <td>@Html.DisplayFor(modelItem => item.DetailedDescription)</td> }
                         </tr>
                     }
                 </tbody>

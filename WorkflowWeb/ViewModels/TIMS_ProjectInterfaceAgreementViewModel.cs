@@ -173,10 +173,18 @@ namespace WorkflowWeb.ViewModels
 
         public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (ID == null)
-            {
-                yield return new ValidationResult("Error", new string[] { "Error Detail" });
-            }
+            var errors = new List<ValidationResult>();
+
+            
+                //unique check for TIMS_ProjectPackage related properties	
+			    if(!IsUniqueList(new List<object> { RequestorPackageID, ResponderPackageID }))
+                {
+				    errors.Add(new ValidationResult("Requestor Package, Responder Package fields must be different.", null));
+
+                }
+                
+
+            return errors.AsEnumerable();
         }
     }
 

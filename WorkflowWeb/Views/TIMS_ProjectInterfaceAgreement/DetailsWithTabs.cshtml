@@ -1,0 +1,58 @@
+@using WorkflowWeb.ViewModels
+@model TIMS_ProjectInterfaceAgreementViewModel
+
+@{
+    var controller = ViewContext.RouteData.Values["controller"].ToString();
+
+    var ui_html_target = (ViewContext.RouteData.Values["ui_html_target"] ?? Request.QueryString["ui_html_target"]) as string;
+    var ui_list_view = (ViewContext.RouteData.Values["ui_list_view"] ?? Request.QueryString["ui_list_view"]) as string;
+    var ui_modal_id = Guid.NewGuid().ToString();
+    var ui_tab_id = (ViewContext.RouteData.Values["ui_tab_id"] ?? Request.QueryString["ui_tab_id"]) as string;
+    var ui_route_filter = (ViewContext.RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+
+    var ui_form_id = Guid.NewGuid().ToString();
+
+    var currentItem = Model;
+}
+
+<h1>@currentItem.Name</h1>
+<div class="card my-5">
+    <div class="card-body">
+        @Html.Action(actionName: "Details", controllerName: controller, routeValues: new { partial = true, id = currentItem.ID, ui_html_target, ui_modal_id, ui_list_view, ui_route_filter })
+    </div>
+</div>
+<div>
+    <script>
+        $(function () {
+            if ("@ui_tab_id" == "") {
+                $('#tabs-TIMS_ProjectInterfaceAgreement a').first().tab('show');
+            }
+            else {
+                $('#tabs-TIMS_ProjectInterfaceAgreement a[href="#@ui_tab_id"]').tab('show');
+            }
+
+        });
+    </script>
+    <ul class="nav nav-tabs" id="tabs-TIMS_ProjectInterfaceAgreement">
+        <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_ProjectInterfaceAgreement-TIMS_ProjectActionItem">Project Action Items</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_ProjectInterfaceAgreement-TIMS_ProjectInterfaceAgreementWorkflow">Workflows</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_ProjectInterfaceAgreement-TIMS_UserWatchlistItem">User Watchlist Items</a>
+</li>
+    </ul>
+    <div class="tab-content" id="tabContent-TIMS_ProjectInterfaceAgreement">
+        <div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_ProjectInterfaceAgreement-TIMS_ProjectActionItem">
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectActionItem", routeValues: new { ui_modal_id, ui_route_filter = (new TIMS_ProjectActionItemViewModel { InterfaceAgreementID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectInterfaceAgreement-TIMS_ProjectActionItem", ui_list_view = "ListTable" })
+</div>
+<div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_ProjectInterfaceAgreement-TIMS_ProjectInterfaceAgreementWorkflow">
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectInterfaceAgreementWorkflow", routeValues: new { ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfaceAgreementWorkflowViewModel { InterfaceAgreementID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectInterfaceAgreement-TIMS_ProjectInterfaceAgreementWorkflow", ui_list_view = "ListTable" })
+</div>
+<div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_ProjectInterfaceAgreement-TIMS_UserWatchlistItem">
+    @Html.Action(actionName: "List", controllerName: "TIMS_UserWatchlistItem", routeValues: new { ui_modal_id, ui_route_filter = (new TIMS_UserWatchlistItemViewModel { ProjectInterfaceAgreementID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectInterfaceAgreement-TIMS_UserWatchlistItem", ui_list_view = "ListTable" })
+</div>
+    </div>
+</div>

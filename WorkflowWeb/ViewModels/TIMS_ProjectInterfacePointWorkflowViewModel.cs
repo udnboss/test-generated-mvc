@@ -196,10 +196,18 @@ namespace WorkflowWeb.ViewModels
 
         public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (ID == null)
-            {
-                yield return new ValidationResult("Error", new string[] { "Error Detail" });
-            }
+            var errors = new List<ValidationResult>();
+
+            
+                //unique check for TIMS_WorkflowState related properties	
+			    if(!IsUniqueList(new List<object> { LeadStateID, InterfaceStateID, SupportStateID }))
+                {
+				    errors.Add(new ValidationResult("Lead State, Interface State, Support State fields must be different.", null));
+
+                }
+                
+
+            return errors.AsEnumerable();
         }
     }
 

@@ -1,4 +1,5 @@
 @using WorkflowWeb.ViewModels
+@using WorkflowWeb.Models
 @model IEnumerable<TIMS_ProjectInterfaceAgreementViewModel>
     @{
         var controller = ViewContext.RouteData.Values["controller"].ToString();
@@ -15,12 +16,14 @@
 
         var currentId = ViewBag.CurrentID as object;
         var currentItem = currentId == null ? Model.FirstOrDefault() : Model.FirstOrDefault(x => x.ID.ToString() == currentId.ToString());
+        var currentRouteFilter = ViewBag.RouteFilter as TIMS_ProjectInterfaceAgreement;
     }
 
     <div>
-        <div class="text-right mb-5">
+        <h3>Project Interface Agreements</h3>
+        <div class="text-right mb-2">
             @Ajax.ActionLink(
-            linkText: "Add New TIMS_ProjectInterfaceAgreement..",
+            linkText: "Add New Project Interface Agreement..",
             actionName: "New",
             controllerName: controller,
             routeValues: new { ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter },
@@ -49,20 +52,20 @@
                         <th>
                             View
                         </th>
-                        <th>@Html.DisplayNameFor(m => m.Name)</th>
-					<th>@Html.DisplayNameFor(m => m.InterfacePointID)</th>
-					<th>@Html.DisplayNameFor(m => m.RequestorPackageID)</th>
-					<th>@Html.DisplayNameFor(m => m.ResponderPackageID)</th>
-					<th>@Html.DisplayNameFor(m => m.RequestorUserID)</th>
-					<th>@Html.DisplayNameFor(m => m.RequestorTechnicalContactID)</th>
-					<th>@Html.DisplayNameFor(m => m.ResponderInterfaceManagerID)</th>
-					<th>@Html.DisplayNameFor(m => m.ResponderTechnicalContactID)</th>
-					<th>@Html.DisplayNameFor(m => m.CreateDate)</th>
-					<th>@Html.DisplayNameFor(m => m.NeedDate)</th>
-					<th>@Html.DisplayNameFor(m => m.IssuedDate)</th>
-					<th>@Html.DisplayNameFor(m => m.AcceptedDate)</th>
-					<th>@Html.DisplayNameFor(m => m.ResponseDate)</th>
-					<th>@Html.DisplayNameFor(m => m.CloseDate)</th>
+                        @if (currentRouteFilter.Name == null) { <th>@Html.DisplayNameFor(m => m.Name)</th> }
+						@if (currentRouteFilter.InterfacePointID == null) { <th>@Html.DisplayNameFor(m => m.InterfacePointID)</th> }
+						@if (currentRouteFilter.RequestorPackageID == null) { <th>@Html.DisplayNameFor(m => m.RequestorPackageID)</th> }
+						@if (currentRouteFilter.ResponderPackageID == null) { <th>@Html.DisplayNameFor(m => m.ResponderPackageID)</th> }
+						@if (currentRouteFilter.RequestorUserID == null) { <th>@Html.DisplayNameFor(m => m.RequestorUserID)</th> }
+						@if (currentRouteFilter.RequestorTechnicalContactID == null) { <th>@Html.DisplayNameFor(m => m.RequestorTechnicalContactID)</th> }
+						@if (currentRouteFilter.ResponderInterfaceManagerID == null) { <th>@Html.DisplayNameFor(m => m.ResponderInterfaceManagerID)</th> }
+						@if (currentRouteFilter.ResponderTechnicalContactID == null) { <th>@Html.DisplayNameFor(m => m.ResponderTechnicalContactID)</th> }
+						@if (currentRouteFilter.CreateDate == null) { <th>@Html.DisplayNameFor(m => m.CreateDate)</th> }
+						@if (currentRouteFilter.NeedDate == null) { <th>@Html.DisplayNameFor(m => m.NeedDate)</th> }
+						@if (currentRouteFilter.IssuedDate == null) { <th>@Html.DisplayNameFor(m => m.IssuedDate)</th> }
+						@if (currentRouteFilter.AcceptedDate == null) { <th>@Html.DisplayNameFor(m => m.AcceptedDate)</th> }
+						@if (currentRouteFilter.ResponseDate == null) { <th>@Html.DisplayNameFor(m => m.ResponseDate)</th> }
+						@if (currentRouteFilter.CloseDate == null) { <th>@Html.DisplayNameFor(m => m.CloseDate)</th> }
                     </tr>
                 </thead>
                 <tbody>
@@ -92,20 +95,20 @@
                                         @class = "btn btn-outline-primary btn-sm"
                                     })
                             </td>
-                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
-						<td>@Html.DisplayFor(modelItem => item.TIMS_ProjectInterfacePoint.ID)</td>
-						<td>@Html.DisplayFor(modelItem => item.TIMS_ProjectPackage.Name)</td>
-						<td>@Html.DisplayFor(modelItem => item.TIMS_ProjectPackage.Name)</td>
-						<td>@Html.DisplayFor(modelItem => item.RequestorUserID)</td>
-						<td>@Html.DisplayFor(modelItem => item.RequestorTechnicalContactID)</td>
-						<td>@Html.DisplayFor(modelItem => item.ResponderInterfaceManagerID)</td>
-						<td>@Html.DisplayFor(modelItem => item.ResponderTechnicalContactID)</td>
-						<td>@Html.DisplayFor(modelItem => item.CreateDate)</td>
-						<td>@Html.DisplayFor(modelItem => item.NeedDate)</td>
-						<td>@Html.DisplayFor(modelItem => item.IssuedDate)</td>
-						<td>@Html.DisplayFor(modelItem => item.AcceptedDate)</td>
-						<td>@Html.DisplayFor(modelItem => item.ResponseDate)</td>
-						<td>@Html.DisplayFor(modelItem => item.CloseDate)</td>
+                            @if (currentRouteFilter.Name == null) { <td>@Html.DisplayFor(modelItem => item.Name)</td> }
+						@if (currentRouteFilter.InterfacePointID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_ProjectInterfacePoint.ID)</td> }
+						@if (currentRouteFilter.RequestorPackageID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_ProjectPackage.Name)</td> }
+						@if (currentRouteFilter.ResponderPackageID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_ProjectPackage1.Name)</td> }
+						@if (currentRouteFilter.RequestorUserID == null) { <td>@Html.DisplayFor(modelItem => item.RequestorUserID)</td> }
+						@if (currentRouteFilter.RequestorTechnicalContactID == null) { <td>@Html.DisplayFor(modelItem => item.RequestorTechnicalContactID)</td> }
+						@if (currentRouteFilter.ResponderInterfaceManagerID == null) { <td>@Html.DisplayFor(modelItem => item.ResponderInterfaceManagerID)</td> }
+						@if (currentRouteFilter.ResponderTechnicalContactID == null) { <td>@Html.DisplayFor(modelItem => item.ResponderTechnicalContactID)</td> }
+						@if (currentRouteFilter.CreateDate == null) { <td>@Html.DisplayFor(modelItem => item.CreateDate)</td> }
+						@if (currentRouteFilter.NeedDate == null) { <td>@Html.DisplayFor(modelItem => item.NeedDate)</td> }
+						@if (currentRouteFilter.IssuedDate == null) { <td>@Html.DisplayFor(modelItem => item.IssuedDate)</td> }
+						@if (currentRouteFilter.AcceptedDate == null) { <td>@Html.DisplayFor(modelItem => item.AcceptedDate)</td> }
+						@if (currentRouteFilter.ResponseDate == null) { <td>@Html.DisplayFor(modelItem => item.ResponseDate)</td> }
+						@if (currentRouteFilter.CloseDate == null) { <td>@Html.DisplayFor(modelItem => item.CloseDate)</td> }
                         </tr>
                     }
                 </tbody>

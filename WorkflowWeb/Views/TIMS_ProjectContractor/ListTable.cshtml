@@ -1,4 +1,5 @@
 @using WorkflowWeb.ViewModels
+@using WorkflowWeb.Models
 @model IEnumerable<TIMS_ProjectContractorViewModel>
     @{
         var controller = ViewContext.RouteData.Values["controller"].ToString();
@@ -15,12 +16,14 @@
 
         var currentId = ViewBag.CurrentID as object;
         var currentItem = currentId == null ? Model.FirstOrDefault() : Model.FirstOrDefault(x => x.ID.ToString() == currentId.ToString());
+        var currentRouteFilter = ViewBag.RouteFilter as TIMS_ProjectContractor;
     }
 
     <div>
-        <div class="text-right mb-5">
+        <h3>Project Contractors</h3>
+        <div class="text-right mb-2">
             @Ajax.ActionLink(
-            linkText: "Add New TIMS_ProjectContractor..",
+            linkText: "Add New Project Contractor..",
             actionName: "New",
             controllerName: controller,
             routeValues: new { ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter },
@@ -49,9 +52,9 @@
                         <th>
                             View
                         </th>
-                        <th>@Html.DisplayNameFor(m => m.Name)</th>
-					<th>@Html.DisplayNameFor(m => m.ProjectID)</th>
-					<th>@Html.DisplayNameFor(m => m.ContractorID)</th>
+                        @if (currentRouteFilter.Name == null) { <th>@Html.DisplayNameFor(m => m.Name)</th> }
+						@if (currentRouteFilter.ProjectID == null) { <th>@Html.DisplayNameFor(m => m.ProjectID)</th> }
+						@if (currentRouteFilter.ContractorID == null) { <th>@Html.DisplayNameFor(m => m.ContractorID)</th> }
                     </tr>
                 </thead>
                 <tbody>
@@ -81,9 +84,9 @@
                                         @class = "btn btn-outline-primary btn-sm"
                                     })
                             </td>
-                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
-						<td>@Html.DisplayFor(modelItem => item.TIMS_Project.Name)</td>
-						<td>@Html.DisplayFor(modelItem => item.TIMS_Contractor.Name)</td>
+                            @if (currentRouteFilter.Name == null) { <td>@Html.DisplayFor(modelItem => item.Name)</td> }
+						@if (currentRouteFilter.ProjectID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_Project.Name)</td> }
+						@if (currentRouteFilter.ContractorID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_Contractor.Name)</td> }
                         </tr>
                     }
                 </tbody>

@@ -14,39 +14,39 @@
 }
 
 <div>
-    <div class="text-right mb-5">
-        @Ajax.ActionLink(
-        linkText: "Add New TIMS_ProjectInterfacePointFieldEntry..",
-        actionName: "New",
-        controllerName: controller,
-        routeValues: new { ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter },
-        ajaxOptions: new AjaxOptions
-        {
-            HttpMethod = "GET",
-            OnBegin = "show_modal('" + ui_modal_id + "')",
-            OnSuccess = "",
-            Confirm = null,
-            AllowCache = false,
-            InsertionMode = InsertionMode.Replace,
-            OnFailure = "show_error",
-            OnComplete = "modal_loading(false)",
-            UpdateTargetId = ui_modal_id + "_body"
-        },
-        htmlAttributes: new
-        {
-            @class = "btn btn-outline-primary btn-sm"
-        })
-    </div>
-
     <div class="row">
         <div class="col-md-4">
+            <h3>Project Interface Point Field Entrys</h3>
+            <div class="text-right mb-5">
+                @Ajax.ActionLink(
+                linkText: "Add New Project Interface Point Field Entry..",
+                actionName: "New",
+                controllerName: controller,
+                routeValues: new { ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter },
+                ajaxOptions: new AjaxOptions
+                {
+                    HttpMethod = "GET",
+                    OnBegin = "show_modal('" + ui_modal_id + "')",
+                    OnSuccess = "",
+                    Confirm = null,
+                    AllowCache = false,
+                    InsertionMode = InsertionMode.Replace,
+                    OnFailure = "show_error",
+                    OnComplete = "modal_loading(false)",
+                    UpdateTargetId = ui_modal_id + "_body"
+                },
+                htmlAttributes: new
+                {
+                    @class = "btn btn-outline-primary btn-sm"
+                })
+            </div>
             <div class="list-group">
                 @foreach (var item in Model)
                 {
                     @*<a href="@Url.Action(actionName: "Index", controllerName: controller, routeValues: new { id = item.ID, ui_route_filter })" class="list-group-item list-group-item-action @(currentItem != null && currentItem.ID == item.ID ? "list-group-item-primary" : "")">@item.Value</a>*@
 
                     @Ajax.ActionLink(
-                        linkText: item.Value,
+                        linkText: item.Value.ToString(),
                         actionName: "List",
                         controllerName: controller,
                         routeValues: new { id = item.ID, ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter },
@@ -72,33 +72,8 @@
         <div class="col-md-8">
             @if (currentItem != null)
             {
-                <h1>@currentItem.Value</h1>
-                <div class="card my-5">
-                    <div class="card-body">
-                        @Html.Action(actionName: "Details", controllerName: controller, routeValues: new { id = currentItem.ID, ui_html_target, ui_modal_id, ui_list_view, ui_route_filter })
-                    </div>
-                </div>
-                <div>
-                    <script>
-                        $(function () {
-                            if ("@ui_tab_id" == "") {
-                                $('#tabs-TIMS_ProjectInterfacePointFieldEntry a').first().tab('show');
-                            }
-                            else {
-                                $('#tabs-TIMS_ProjectInterfacePointFieldEntry a[href="#@ui_tab_id"]').tab('show');
-                            }
-
-                        });
-                    </script>
-                    <ul class="nav nav-tabs" id="tabs-TIMS_ProjectInterfacePointFieldEntry">
-                        
-                    </ul>
-                    <div class="tab-content" id="tabContent-TIMS_ProjectInterfacePointFieldEntry">
-                        
-                    </div>
-                </div>
+                @Html.Action(actionName: "DetailsWithTabs", controllerName: controller, routeValues: new { id = currentItem.ID, ui_html_target, ui_modal_id, ui_list_view, ui_route_filter })
             }
         </div>
     </div>
-
 </div>

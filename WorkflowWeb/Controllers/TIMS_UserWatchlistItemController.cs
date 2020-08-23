@@ -29,8 +29,8 @@ namespace WorkflowWeb.Controllers
             var routeFilter = GetRouteFilter();
 
             return new Dictionary<string, object> {
-                {"ProjectActionItemID", db.TIMS_ProjectActionItem.Where(x => routeFilter.ProjectActionItemID == null || x.ID == routeFilter.ProjectActionItemID).Where(x => routeFilter.ProjectInterfaceAgreementID == null ||  x.TIMS_ProjectInterfaceAgreement.ID == routeFilter.ProjectInterfaceAgreementID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"ProjectInterfaceAgreementID", db.TIMS_ProjectInterfaceAgreement.Where(x => routeFilter.ProjectInterfaceAgreementID == null || x.ID == routeFilter.ProjectInterfaceAgreementID).Where(x => routeFilter.ProjectInterfacePointID == null ||  x.TIMS_ProjectInterfacePoint.ID == routeFilter.ProjectInterfacePointID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+                {"ProjectActionItemID", db.TIMS_ProjectActionItem.Where(x => routeFilter.ProjectActionItemID == null || x.ID == routeFilter.ProjectActionItemID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"ProjectInterfaceAgreementID", db.TIMS_ProjectInterfaceAgreement.Where(x => routeFilter.ProjectInterfaceAgreementID == null || x.ID == routeFilter.ProjectInterfaceAgreementID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
 				{"ProjectInterfacePointID", db.TIMS_ProjectInterfacePoint.Where(x => routeFilter.ProjectInterfacePointID == null || x.ID == routeFilter.ProjectInterfacePointID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
 				{"UserID", db.TIMS_User.Where(x => routeFilter.UserID == null || x.ID == routeFilter.UserID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
             };
@@ -68,7 +68,17 @@ namespace WorkflowWeb.Controllers
             return Json(new string[] { message });
         }
 
-        public ActionResult Details(Guid id)
+        public ActionResult DetailsWithBar(Guid id, bool partial = true)
+        {
+            return Details(id, partial);
+        }
+
+        public ActionResult DetailsWithTabs(Guid id, bool partial = true)
+        {
+            return Details(id, partial);
+
+        }
+        public ActionResult Details(Guid id, bool partial = true)
         {
             string message;
 
@@ -89,7 +99,7 @@ namespace WorkflowWeb.Controllers
                 {
                     var m = r.Data;
                     var vm = new TIMS_UserWatchlistItemViewModel(m, true);
-                    return PartialView(vm);
+                    return partial ? PartialView(vm) as ActionResult : View(vm);
                 }
             }
 

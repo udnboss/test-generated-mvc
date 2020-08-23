@@ -30,7 +30,7 @@ namespace WorkflowWeb.Controllers
 
             return new Dictionary<string, object> {
                 {"ProjectID", db.TIMS_Project.Where(x => routeFilter.ProjectID == null || x.ID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"ProjectPackageID", db.TIMS_ProjectPackage.Where(x => routeFilter.ProjectPackageID == null || x.ID == routeFilter.ProjectPackageID).Where(x => routeFilter.ProjectID == null ||  x.TIMS_Project.ID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"ProjectPackageID", db.TIMS_ProjectPackage.Where(x => routeFilter.ProjectPackageID == null || x.ID == routeFilter.ProjectPackageID).Where(x => routeFilter.ProjectID == null ||  x.TIMS_ProjectContractor.ProjectID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
 				{"RoleID", db.TIMS_Role.Where(x => routeFilter.RoleID == null || x.ID == routeFilter.RoleID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
 				{"UserID", db.TIMS_User.Where(x => routeFilter.UserID == null || x.ID == routeFilter.UserID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
             };
@@ -68,7 +68,17 @@ namespace WorkflowWeb.Controllers
             return Json(new string[] { message });
         }
 
-        public ActionResult Details(Guid id)
+        public ActionResult DetailsWithBar(Guid id, bool partial = true)
+        {
+            return Details(id, partial);
+        }
+
+        public ActionResult DetailsWithTabs(Guid id, bool partial = true)
+        {
+            return Details(id, partial);
+
+        }
+        public ActionResult Details(Guid id, bool partial = true)
         {
             string message;
 
@@ -89,7 +99,7 @@ namespace WorkflowWeb.Controllers
                 {
                     var m = r.Data;
                     var vm = new TIMS_UserRoleViewModel(m, true);
-                    return PartialView(vm);
+                    return partial ? PartialView(vm) as ActionResult : View(vm);
                 }
             }
 

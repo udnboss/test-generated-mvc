@@ -14,39 +14,39 @@
 }
 
 <div>
-    <div class="text-right mb-5">
-        @Ajax.ActionLink(
-        linkText: "Add New TIMS_ProjectDisciplineInterfaceTypeField..",
-        actionName: "New",
-        controllerName: controller,
-        routeValues: new { ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter },
-        ajaxOptions: new AjaxOptions
-        {
-            HttpMethod = "GET",
-            OnBegin = "show_modal('" + ui_modal_id + "')",
-            OnSuccess = "",
-            Confirm = null,
-            AllowCache = false,
-            InsertionMode = InsertionMode.Replace,
-            OnFailure = "show_error",
-            OnComplete = "modal_loading(false)",
-            UpdateTargetId = ui_modal_id + "_body"
-        },
-        htmlAttributes: new
-        {
-            @class = "btn btn-outline-primary btn-sm"
-        })
-    </div>
-
     <div class="row">
         <div class="col-md-4">
+            <h3>Project Discipline Interface Type Fields</h3>
+            <div class="text-right mb-5">
+                @Ajax.ActionLink(
+                linkText: "Add New Project Discipline Interface Type Field..",
+                actionName: "New",
+                controllerName: controller,
+                routeValues: new { ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter },
+                ajaxOptions: new AjaxOptions
+                {
+                    HttpMethod = "GET",
+                    OnBegin = "show_modal('" + ui_modal_id + "')",
+                    OnSuccess = "",
+                    Confirm = null,
+                    AllowCache = false,
+                    InsertionMode = InsertionMode.Replace,
+                    OnFailure = "show_error",
+                    OnComplete = "modal_loading(false)",
+                    UpdateTargetId = ui_modal_id + "_body"
+                },
+                htmlAttributes: new
+                {
+                    @class = "btn btn-outline-primary btn-sm"
+                })
+            </div>
             <div class="list-group">
                 @foreach (var item in Model)
                 {
                     @*<a href="@Url.Action(actionName: "Index", controllerName: controller, routeValues: new { id = item.ID, ui_route_filter })" class="list-group-item list-group-item-action @(currentItem != null && currentItem.ID == item.ID ? "list-group-item-primary" : "")">@item.Name</a>*@
 
                     @Ajax.ActionLink(
-                        linkText: item.Name,
+                        linkText: item.Name.ToString(),
                         actionName: "List",
                         controllerName: controller,
                         routeValues: new { id = item.ID, ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter },
@@ -72,37 +72,8 @@
         <div class="col-md-8">
             @if (currentItem != null)
             {
-                <h1>@currentItem.Name</h1>
-                <div class="card my-5">
-                    <div class="card-body">
-                        @Html.Action(actionName: "Details", controllerName: controller, routeValues: new { id = currentItem.ID, ui_html_target, ui_modal_id, ui_list_view, ui_route_filter })
-                    </div>
-                </div>
-                <div>
-                    <script>
-                        $(function () {
-                            if ("@ui_tab_id" == "") {
-                                $('#tabs-TIMS_ProjectDisciplineInterfaceTypeField a').first().tab('show');
-                            }
-                            else {
-                                $('#tabs-TIMS_ProjectDisciplineInterfaceTypeField a[href="#@ui_tab_id"]').tab('show');
-                            }
-
-                        });
-                    </script>
-                    <ul class="nav nav-tabs" id="tabs-TIMS_ProjectDisciplineInterfaceTypeField">
-                        <li class="nav-item">
-    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_ProjectDisciplineInterfaceTypeField-TIMS_ProjectInterfacePointFieldEntry">Project Interface Point Field Entrys</a>
-</li>
-                    </ul>
-                    <div class="tab-content" id="tabContent-TIMS_ProjectDisciplineInterfaceTypeField">
-                        <div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_ProjectDisciplineInterfaceTypeField-TIMS_ProjectInterfacePointFieldEntry">
-    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectInterfacePointFieldEntry", routeValues: new { id = currentId, ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfacePointFieldEntryViewModel { InterfaceTypeFieldID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectDisciplineInterfaceTypeField-TIMS_ProjectInterfacePointFieldEntry", ui_list_view = "ListTable" })
-</div>
-                    </div>
-                </div>
+                @Html.Action(actionName: "DetailsWithTabs", controllerName: controller, routeValues: new { id = currentItem.ID, ui_html_target, ui_modal_id, ui_list_view, ui_route_filter })
             }
         </div>
     </div>
-
 </div>

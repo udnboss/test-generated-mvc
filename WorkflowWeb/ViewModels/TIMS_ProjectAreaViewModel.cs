@@ -83,10 +83,11 @@ namespace WorkflowWeb.ViewModels
 
         public override IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (ID == null)
-            {
-                yield return new ValidationResult("Error", new string[] { "Error Detail" });
-            }
+            var errors = new List<ValidationResult>();
+
+            
+
+            return errors.AsEnumerable();
         }
     }
 

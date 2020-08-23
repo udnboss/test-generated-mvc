@@ -65,7 +65,17 @@ namespace WorkflowWeb.Controllers
             return Json(new string[] { message });
         }
 
-        public ActionResult Details(String id)
+        public ActionResult DetailsWithBar(String id, bool partial = true)
+        {
+            return Details(id, partial);
+        }
+
+        public ActionResult DetailsWithTabs(String id, bool partial = true)
+        {
+            return Details(id, partial);
+
+        }
+        public ActionResult Details(String id, bool partial = true)
         {
             string message;
 
@@ -86,7 +96,7 @@ namespace WorkflowWeb.Controllers
                 {
                     var m = r.Data;
                     var vm = new TIMS_WorkflowStateViewModel(m, true);
-                    return PartialView(vm);
+                    return partial ? PartialView(vm) as ActionResult : View(vm);
                 }
             }
 

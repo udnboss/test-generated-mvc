@@ -1,0 +1,88 @@
+@using WorkflowWeb.ViewModels
+@model TIMS_ProjectViewModel
+
+@{
+    var controller = ViewContext.RouteData.Values["controller"].ToString();
+
+    var ui_html_target = (ViewContext.RouteData.Values["ui_html_target"] ?? Request.QueryString["ui_html_target"]) as string;
+    var ui_list_view = (ViewContext.RouteData.Values["ui_list_view"] ?? Request.QueryString["ui_list_view"]) as string;
+    var ui_modal_id = Guid.NewGuid().ToString();
+    var ui_tab_id = (ViewContext.RouteData.Values["ui_tab_id"] ?? Request.QueryString["ui_tab_id"]) as string;
+    var ui_route_filter = (ViewContext.RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+
+    var ui_form_id = Guid.NewGuid().ToString();
+
+    var currentItem = Model;
+}
+
+<h1>@currentItem.Name</h1>
+<div class="card my-5">
+    <div class="card-body">
+        @Html.Action(actionName: "Details", controllerName: controller, routeValues: new { partial = true, id = currentItem.ID, ui_html_target, ui_modal_id, ui_list_view, ui_route_filter })
+    </div>
+</div>
+<div>
+    <script>
+        $(function () {
+            if ("@ui_tab_id" == "") {
+                $('#tabs-TIMS_Project a').first().tab('show');
+            }
+            else {
+                $('#tabs-TIMS_Project a[href="#@ui_tab_id"]').tab('show');
+            }
+
+        });
+    </script>
+    <ul class="nav nav-tabs" id="tabs-TIMS_Project">
+        <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectActionItem">Action Items</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectArea">Areas</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectContractor">Contractors</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectDiscipline">Disciplines</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectInterfacePoint">Interface Points</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectPackage">Packages</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_ProjectPhysicalArea">Physical Areas</a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#tab-TIMS_Project-TIMS_UserRole">User Roles</a>
+</li>
+    </ul>
+    <div class="tab-content" id="tabContent-TIMS_Project">
+        <div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_Project-TIMS_ProjectActionItem">
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectActionItem", routeValues: new { ui_modal_id, ui_route_filter = (new TIMS_ProjectActionItemViewModel { ProjectID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_Project-TIMS_ProjectActionItem", ui_list_view = "ListTable" })
+</div>
+<div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_Project-TIMS_ProjectArea">
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectArea", routeValues: new { ui_modal_id, ui_route_filter = (new TIMS_ProjectAreaViewModel { ProjectID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_Project-TIMS_ProjectArea", ui_list_view = "ListTable" })
+</div>
+<div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_Project-TIMS_ProjectContractor">
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectContractor", routeValues: new { ui_modal_id, ui_route_filter = (new TIMS_ProjectContractorViewModel { ProjectID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_Project-TIMS_ProjectContractor", ui_list_view = "ListTable" })
+</div>
+<div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_Project-TIMS_ProjectDiscipline">
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectDiscipline", routeValues: new { ui_modal_id, ui_route_filter = (new TIMS_ProjectDisciplineViewModel { ProjectID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_Project-TIMS_ProjectDiscipline", ui_list_view = "ListTable" })
+</div>
+<div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_Project-TIMS_ProjectInterfacePoint">
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectInterfacePoint", routeValues: new { ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfacePointViewModel { ProjectID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_Project-TIMS_ProjectInterfacePoint", ui_list_view = "ListTable" })
+</div>
+<div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_Project-TIMS_ProjectPackage">
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectPackage", routeValues: new { ui_modal_id, ui_route_filter = (new TIMS_ProjectPackageViewModel { ProjectID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_Project-TIMS_ProjectPackage", ui_list_view = "ListTable" })
+</div>
+<div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_Project-TIMS_ProjectPhysicalArea">
+    @Html.Action(actionName: "List", controllerName: "TIMS_ProjectPhysicalArea", routeValues: new { ui_modal_id, ui_route_filter = (new TIMS_ProjectPhysicalAreaViewModel { ProjectID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_Project-TIMS_ProjectPhysicalArea", ui_list_view = "ListTable" })
+</div>
+<div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_Project-TIMS_UserRole">
+    @Html.Action(actionName: "List", controllerName: "TIMS_UserRole", routeValues: new { ui_modal_id, ui_route_filter = (new TIMS_UserRoleViewModel { ProjectID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_Project-TIMS_UserRole", ui_list_view = "ListTable" })
+</div>
+    </div>
+</div>

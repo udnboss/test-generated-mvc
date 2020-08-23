@@ -30,7 +30,7 @@ namespace WorkflowWeb.Controllers
 
             return new Dictionary<string, object> {
                 {"ProjectID", db.TIMS_Project.Where(x => routeFilter.ProjectID == null || x.ID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"InterfaceAgreementID", db.TIMS_ProjectInterfaceAgreement.Where(x => routeFilter.InterfaceAgreementID == null || x.ID == routeFilter.InterfaceAgreementID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
+				{"InterfaceAgreementID", db.TIMS_ProjectInterfaceAgreement.Where(x => routeFilter.InterfaceAgreementID == null || x.ID == routeFilter.InterfaceAgreementID).Where(x => routeFilter.ProjectID == null ||  x.TIMS_ProjectInterfacePoint.ProjectID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
             };
         }
 
@@ -66,7 +66,17 @@ namespace WorkflowWeb.Controllers
             return Json(new string[] { message });
         }
 
-        public ActionResult Details(Guid id)
+        public ActionResult DetailsWithBar(Guid id, bool partial = true)
+        {
+            return Details(id, partial);
+        }
+
+        public ActionResult DetailsWithTabs(Guid id, bool partial = true)
+        {
+            return Details(id, partial);
+
+        }
+        public ActionResult Details(Guid id, bool partial = true)
         {
             string message;
 
@@ -87,7 +97,7 @@ namespace WorkflowWeb.Controllers
                 {
                     var m = r.Data;
                     var vm = new TIMS_ProjectActionItemViewModel(m, true);
-                    return PartialView(vm);
+                    return partial ? PartialView(vm) as ActionResult : View(vm);
                 }
             }
 

@@ -1,4 +1,5 @@
 @using WorkflowWeb.ViewModels
+@using WorkflowWeb.Models
 @model IEnumerable<TIMS_ProjectInterfacePointFieldEntryViewModel>
     @{
         var controller = ViewContext.RouteData.Values["controller"].ToString();
@@ -15,12 +16,14 @@
 
         var currentId = ViewBag.CurrentID as object;
         var currentItem = currentId == null ? Model.FirstOrDefault() : Model.FirstOrDefault(x => x.ID.ToString() == currentId.ToString());
+        var currentRouteFilter = ViewBag.RouteFilter as TIMS_ProjectInterfacePointFieldEntry;
     }
 
     <div>
-        <div class="text-right mb-5">
+        <h3>Project Interface Point Field Entrys</h3>
+        <div class="text-right mb-2">
             @Ajax.ActionLink(
-            linkText: "Add New TIMS_ProjectInterfacePointFieldEntry..",
+            linkText: "Add New Project Interface Point Field Entry..",
             actionName: "New",
             controllerName: controller,
             routeValues: new { ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter },
@@ -49,9 +52,9 @@
                         <th>
                             View
                         </th>
-                        <th>@Html.DisplayNameFor(m => m.InterfacePointWorkflowID)</th>
-					<th>@Html.DisplayNameFor(m => m.InterfaceTypeFieldID)</th>
-					<th>@Html.DisplayNameFor(m => m.Value)</th>
+                        @if (currentRouteFilter.InterfacePointWorkflowID == null) { <th>@Html.DisplayNameFor(m => m.InterfacePointWorkflowID)</th> }
+						@if (currentRouteFilter.InterfaceTypeFieldID == null) { <th>@Html.DisplayNameFor(m => m.InterfaceTypeFieldID)</th> }
+						@if (currentRouteFilter.Value == null) { <th>@Html.DisplayNameFor(m => m.Value)</th> }
                     </tr>
                 </thead>
                 <tbody>
@@ -81,9 +84,9 @@
                                         @class = "btn btn-outline-primary btn-sm"
                                     })
                             </td>
-                            <td>@Html.DisplayFor(modelItem => item.TIMS_ProjectInterfacePointWorkflow.WorkflowTypeID)</td>
-						<td>@Html.DisplayFor(modelItem => item.TIMS_ProjectDisciplineInterfaceTypeField.Name)</td>
-						<td>@Html.DisplayFor(modelItem => item.Value)</td>
+                            @if (currentRouteFilter.InterfacePointWorkflowID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_ProjectInterfacePointWorkflow.WorkflowTypeID)</td> }
+						@if (currentRouteFilter.InterfaceTypeFieldID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_ProjectDisciplineInterfaceTypeField.Name)</td> }
+						@if (currentRouteFilter.Value == null) { <td>@Html.DisplayFor(modelItem => item.Value)</td> }
                         </tr>
                     }
                 </tbody>

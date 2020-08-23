@@ -29,9 +29,9 @@ namespace WorkflowWeb.Controllers
             var routeFilter = GetRouteFilter();
 
             return new Dictionary<string, object> {
-                {"ProjectActionItemWorkflowID", db.TIMS_ProjectActionItemWorkflow.Where(x => routeFilter.ProjectActionItemWorkflowID == null || x.ID == routeFilter.ProjectActionItemWorkflowID).Where(x => routeFilter.UserID == null ||  x.TIMS_User.ID == routeFilter.UserID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
-				{"ProjectInterfaceAgreementWorkflowID", db.TIMS_ProjectInterfaceAgreementWorkflow.Where(x => routeFilter.ProjectInterfaceAgreementWorkflowID == null || x.ID == routeFilter.ProjectInterfaceAgreementWorkflowID).Where(x => routeFilter.UserID == null ||  x.TIMS_User.ID == routeFilter.UserID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
-				{"ProjectInterfacePointWorkflowID", db.TIMS_ProjectInterfacePointWorkflow.Where(x => routeFilter.ProjectInterfacePointWorkflowID == null || x.ID == routeFilter.ProjectInterfacePointWorkflowID).Where(x => routeFilter.UserID == null ||  x.TIMS_User.ID == routeFilter.UserID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
+                {"ProjectActionItemWorkflowID", db.TIMS_ProjectActionItemWorkflow.Where(x => routeFilter.ProjectActionItemWorkflowID == null || x.ID == routeFilter.ProjectActionItemWorkflowID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
+				{"ProjectInterfaceAgreementWorkflowID", db.TIMS_ProjectInterfaceAgreementWorkflow.Where(x => routeFilter.ProjectInterfaceAgreementWorkflowID == null || x.ID == routeFilter.ProjectInterfaceAgreementWorkflowID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
+				{"ProjectInterfacePointWorkflowID", db.TIMS_ProjectInterfacePointWorkflow.Where(x => routeFilter.ProjectInterfacePointWorkflowID == null || x.ID == routeFilter.ProjectInterfacePointWorkflowID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
 				{"UserID", db.TIMS_User.Where(x => routeFilter.UserID == null || x.ID == routeFilter.UserID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
             };
         }
@@ -68,7 +68,17 @@ namespace WorkflowWeb.Controllers
             return Json(new string[] { message });
         }
 
-        public ActionResult Details(Guid id)
+        public ActionResult DetailsWithBar(Guid id, bool partial = true)
+        {
+            return Details(id, partial);
+        }
+
+        public ActionResult DetailsWithTabs(Guid id, bool partial = true)
+        {
+            return Details(id, partial);
+
+        }
+        public ActionResult Details(Guid id, bool partial = true)
         {
             string message;
 
@@ -89,7 +99,7 @@ namespace WorkflowWeb.Controllers
                 {
                     var m = r.Data;
                     var vm = new TIMS_ProjectCommentViewModel(m, true);
-                    return PartialView(vm);
+                    return partial ? PartialView(vm) as ActionResult : View(vm);
                 }
             }
 
