@@ -38,7 +38,7 @@ namespace WorkflowWeb.Business
 
         public override IQueryable<TIMS_ProjectDisciplineInterfaceTypeField> GetIQueryable()
         {
-            return db.TIMS_ProjectDisciplineInterfaceTypeField.Include(x => x.TIMS_ProjectDisciplineInterfaceType).AsQueryable();
+            return ((IMSEntities)db).TIMS_ProjectDisciplineInterfaceTypeField.Include(x => x.TIMS_ProjectDisciplineInterfaceType).AsQueryable();
         }
 
         public IQueryable<TIMS_ProjectDisciplineInterfaceTypeField> GetIQueryable(TIMS_ProjectDisciplineInterfaceTypeField filter)
@@ -47,9 +47,9 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
-					if (filter.Name != null && filter.Name.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.Name == filter.Name);
-					if (filter.InterfaceTypeID != null && filter.InterfaceTypeID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.InterfaceTypeID == filter.InterfaceTypeID);
+                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
+					if (filter.Name != null && filter.Name.ToString() != default(Guid).ToString()) data = data.Where(x => x.Name == filter.Name);
+					if (filter.InterfaceTypeID != null && filter.InterfaceTypeID.ToString() != default(Guid).ToString()) data = data.Where(x => x.InterfaceTypeID == filter.InterfaceTypeID);
             }
 
             return data;

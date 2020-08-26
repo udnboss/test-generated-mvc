@@ -38,7 +38,7 @@ namespace WorkflowWeb.Business
 
         public override IQueryable<TIMS_UserWatchlistItem> GetIQueryable()
         {
-            return db.TIMS_UserWatchlistItem.Include(x => x.TIMS_User)
+            return ((IMSEntities)db).TIMS_UserWatchlistItem.Include(x => x.TIMS_User)
 				.Include(x => x.TIMS_ProjectInterfacePoint)
 				.Include(x => x.TIMS_ProjectInterfaceAgreement)
 				.Include(x => x.TIMS_ProjectActionItem).AsQueryable();
@@ -50,11 +50,11 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
-					if (filter.UserID != null && filter.UserID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.UserID == filter.UserID);
-					if (filter.ProjectInterfacePointID != null && filter.ProjectInterfacePointID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectInterfacePointID == filter.ProjectInterfacePointID);
-					if (filter.ProjectInterfaceAgreementID != null && filter.ProjectInterfaceAgreementID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectInterfaceAgreementID == filter.ProjectInterfaceAgreementID);
-					if (filter.ProjectActionItemID != null && filter.ProjectActionItemID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectActionItemID == filter.ProjectActionItemID);
+                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
+					if (filter.UserID != null && filter.UserID.ToString() != default(Guid).ToString()) data = data.Where(x => x.UserID == filter.UserID);
+					if (filter.ProjectInterfacePointID != null && filter.ProjectInterfacePointID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectInterfacePointID == filter.ProjectInterfacePointID);
+					if (filter.ProjectInterfaceAgreementID != null && filter.ProjectInterfaceAgreementID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectInterfaceAgreementID == filter.ProjectInterfaceAgreementID);
+					if (filter.ProjectActionItemID != null && filter.ProjectActionItemID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectActionItemID == filter.ProjectActionItemID);
             }
 
             return data;

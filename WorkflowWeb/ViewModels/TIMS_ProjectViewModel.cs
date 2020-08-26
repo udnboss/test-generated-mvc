@@ -44,6 +44,12 @@ namespace WorkflowWeb.ViewModels
 		[DisplayName("TIMS_User Role")]
 		public List<TIMS_UserRoleViewModel> TIMS_UserRole { get; set; }
 		
+		[DisplayName("TIMS_Project Comment")]
+		public List<TIMS_ProjectCommentViewModel> TIMS_ProjectComment { get; set; }
+		
+		[DisplayName("TIMS_Project Interface Agreement")]
+		public List<TIMS_ProjectInterfaceAgreementViewModel> TIMS_ProjectInterfaceAgreement { get; set; }
+		
 
         public TIMS_ProjectViewModel()
         {
@@ -64,6 +70,8 @@ namespace WorkflowWeb.ViewModels
 				this.TIMS_ProjectPackage = convertSubs && m.TIMS_ProjectPackage != null ? m.TIMS_ProjectPackage.Select(x => new TIMS_ProjectPackageViewModel(x)).ToList() : null;
 				this.TIMS_ProjectPhysicalArea = convertSubs && m.TIMS_ProjectPhysicalArea != null ? m.TIMS_ProjectPhysicalArea.Select(x => new TIMS_ProjectPhysicalAreaViewModel(x)).ToList() : null;
 				this.TIMS_UserRole = convertSubs && m.TIMS_UserRole != null ? m.TIMS_UserRole.Select(x => new TIMS_UserRoleViewModel(x)).ToList() : null;
+				this.TIMS_ProjectComment = convertSubs && m.TIMS_ProjectComment != null ? m.TIMS_ProjectComment.Select(x => new TIMS_ProjectCommentViewModel(x)).ToList() : null;
+				this.TIMS_ProjectInterfaceAgreement = convertSubs && m.TIMS_ProjectInterfaceAgreement != null ? m.TIMS_ProjectInterfaceAgreement.Select(x => new TIMS_ProjectInterfaceAgreementViewModel(x)).ToList() : null;
             }
         }
 
@@ -81,6 +89,8 @@ namespace WorkflowWeb.ViewModels
 			m.TIMS_ProjectPackage = convertSubs && this.TIMS_ProjectPackage != null  ? this.TIMS_ProjectPackage.Select(x => x.ToModel()).ToList() : null;
 			m.TIMS_ProjectPhysicalArea = convertSubs && this.TIMS_ProjectPhysicalArea != null  ? this.TIMS_ProjectPhysicalArea.Select(x => x.ToModel()).ToList() : null;
 			m.TIMS_UserRole = convertSubs && this.TIMS_UserRole != null  ? this.TIMS_UserRole.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectComment = convertSubs && this.TIMS_ProjectComment != null  ? this.TIMS_ProjectComment.Select(x => x.ToModel()).ToList() : null;
+			m.TIMS_ProjectInterfaceAgreement = convertSubs && this.TIMS_ProjectInterfaceAgreement != null  ? this.TIMS_ProjectInterfaceAgreement.Select(x => x.ToModel()).ToList() : null;
 
             return m;
         }
@@ -100,6 +110,8 @@ namespace WorkflowWeb.ViewModels
 				this.TIMS_ProjectPackage = convertSubs && m.TIMS_ProjectPackage != null ? m.TIMS_ProjectPackage.Select(x => new TIMS_ProjectPackageViewModel(x)).ToList() : null;
 				this.TIMS_ProjectPhysicalArea = convertSubs && m.TIMS_ProjectPhysicalArea != null ? m.TIMS_ProjectPhysicalArea.Select(x => new TIMS_ProjectPhysicalAreaViewModel(x)).ToList() : null;
 				this.TIMS_UserRole = convertSubs && m.TIMS_UserRole != null ? m.TIMS_UserRole.Select(x => new TIMS_UserRoleViewModel(x)).ToList() : null;
+				this.TIMS_ProjectComment = convertSubs && m.TIMS_ProjectComment != null ? m.TIMS_ProjectComment.Select(x => new TIMS_ProjectCommentViewModel(x)).ToList() : null;
+				this.TIMS_ProjectInterfaceAgreement = convertSubs && m.TIMS_ProjectInterfaceAgreement != null ? m.TIMS_ProjectInterfaceAgreement.Select(x => new TIMS_ProjectInterfaceAgreementViewModel(x)).ToList() : null;
             }
 
             return this;

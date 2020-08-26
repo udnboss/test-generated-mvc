@@ -16,11 +16,7 @@
 }
 
 <h1>@currentItem.Name</h1>
-<div class="card my-5">
-    <div class="card-body">
-        @Html.Action(actionName: "Details", controllerName: controller, routeValues: new { partial = true, id = currentItem.ID, ui_html_target, ui_modal_id, ui_list_view, ui_route_filter })
-    </div>
-</div>
+
 <div>
     <script>
         $(function () {
@@ -35,10 +31,16 @@
     </script>
     <ul class="nav nav-tabs" id="tabs-TIMS_ProjectPhysicalArea">
         <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#tab-TIMS_ProjectPhysicalArea-">Project Physical Area</a>
+        </li>
+        <li class="nav-item">
     <a class="nav-link" data-toggle="tab" href="#tab-TIMS_ProjectPhysicalArea-TIMS_ProjectInterfacePointWorkflow">Project Interface Point Workflows</a>
 </li>
     </ul>
     <div class="tab-content" id="tabContent-TIMS_ProjectPhysicalArea">
+        <div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_ProjectPhysicalArea-">
+            @Html.Action(actionName: "Details", controllerName: controller, routeValues: new { partial = true, id = currentItem.ID, ui_html_target, ui_modal_id, ui_list_view, ui_route_filter })
+        </div>
         <div class="tab-pane fade border border-top-0 p-2" id="tab-TIMS_ProjectPhysicalArea-TIMS_ProjectInterfacePointWorkflow">
     @Html.Action(actionName: "List", controllerName: "TIMS_ProjectInterfacePointWorkflow", routeValues: new { ui_modal_id, ui_route_filter = (new TIMS_ProjectInterfacePointWorkflowViewModel { ProjectPhysicalAreaID = currentItem.ID }).ToRouteFilter(), ui_html_target = "tab-TIMS_ProjectPhysicalArea-TIMS_ProjectInterfacePointWorkflow", ui_list_view = "ListTable" })
 </div>

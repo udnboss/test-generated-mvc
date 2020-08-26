@@ -38,7 +38,7 @@ namespace WorkflowWeb.Business
 
         public override IQueryable<TIMS_ProjectAttachment> GetIQueryable()
         {
-            return db.TIMS_ProjectAttachment.Include(x => x.TIMS_ProjectInterfacePointWorkflow)
+            return ((IMSEntities)db).TIMS_ProjectAttachment.Include(x => x.TIMS_ProjectInterfacePointWorkflow)
 				.Include(x => x.TIMS_ProjectInterfaceAgreementWorkflow)
 				.Include(x => x.TIMS_ProjectActionItemWorkflow)
 				.Include(x => x.TIMS_ProjectPackage)
@@ -51,15 +51,15 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
-					if (filter.Name != null && filter.Name.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.Name == filter.Name);
-					if (filter.ProjectInterfacePointWorkflowID != null && filter.ProjectInterfacePointWorkflowID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectInterfacePointWorkflowID == filter.ProjectInterfacePointWorkflowID);
-					if (filter.ProjectInterfaceAgreementWorkflowID != null && filter.ProjectInterfaceAgreementWorkflowID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectInterfaceAgreementWorkflowID == filter.ProjectInterfaceAgreementWorkflowID);
-					if (filter.ProjectActionItemWorkflowID != null && filter.ProjectActionItemWorkflowID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectActionItemWorkflowID == filter.ProjectActionItemWorkflowID);
-					if (filter.PackageID != null && filter.PackageID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.PackageID == filter.PackageID);
-					if (filter.Filename != null && filter.Filename.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.Filename == filter.Filename);
-					if (filter.DateUploaded != null && filter.DateUploaded.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.DateUploaded == filter.DateUploaded);
-					if (filter.UserID != null && filter.UserID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.UserID == filter.UserID);
+                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
+					if (filter.Name != null && filter.Name.ToString() != default(Guid).ToString()) data = data.Where(x => x.Name == filter.Name);
+					if (filter.ProjectInterfacePointWorkflowID != null && filter.ProjectInterfacePointWorkflowID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectInterfacePointWorkflowID == filter.ProjectInterfacePointWorkflowID);
+					if (filter.ProjectInterfaceAgreementWorkflowID != null && filter.ProjectInterfaceAgreementWorkflowID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectInterfaceAgreementWorkflowID == filter.ProjectInterfaceAgreementWorkflowID);
+					if (filter.ProjectActionItemWorkflowID != null && filter.ProjectActionItemWorkflowID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectActionItemWorkflowID == filter.ProjectActionItemWorkflowID);
+					if (filter.PackageID != null && filter.PackageID.ToString() != default(Guid).ToString()) data = data.Where(x => x.PackageID == filter.PackageID);
+					if (filter.Filename != null && filter.Filename.ToString() != default(Guid).ToString()) data = data.Where(x => x.Filename == filter.Filename);
+					if (filter.DateUploaded != null && filter.DateUploaded.ToString() != default(Guid).ToString()) data = data.Where(x => x.DateUploaded == filter.DateUploaded);
+					if (filter.UserID != null && filter.UserID.ToString() != default(Guid).ToString()) data = data.Where(x => x.UserID == filter.UserID);
             }
 
             return data;

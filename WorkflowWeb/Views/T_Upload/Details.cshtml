@@ -1,0 +1,91 @@
+@using WorkflowWeb.ViewModels
+@model T_UploadViewModel
+
+@{
+    var controller = ViewContext.RouteData.Values["controller"].ToString();
+
+    var ui_html_target = (ViewContext.RouteData.Values["ui_html_target"] ?? Request.QueryString["ui_html_target"]) as string;
+    var ui_list_view = (ViewContext.RouteData.Values["ui_list_view"] ?? Request.QueryString["ui_list_view"]) as string;
+    var ui_modal_id = (ViewContext.RouteData.Values["ui_modal_id"] ?? Request.QueryString["ui_modal_id"]) as string;
+    var ui_tab_id = (ViewContext.RouteData.Values["ui_tab_id"] ?? Request.QueryString["ui_tab_id"]) as string;
+    var ui_route_filter = (ViewContext.RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+
+    var ui_form_id = Guid.NewGuid().ToString();
+}
+
+<div>
+    <div class="row p-2">
+        <div class="col">
+            <h4>@Model.Name</h4>
+        </div>
+        <div class="ml-auto mr-2">
+            <a class="btn btn-primary btn-sm"
+               data-ajax="true"
+               data-ajax-begin="modal_loading(true);show_modal('@(ui_modal_id)', 'Edit @Model.Name');"
+               data-ajax-complete="modal_loading(false)"
+               data-ajax-failure="show_error"
+               data-ajax-method="GET"
+               data-ajax-mode="replace"
+               data-ajax-update="#@(ui_modal_id)_body"
+               href="@Url.Action("Edit", controller, new { id = Model.ID, ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter })"><i class="fas fa-edit"></i> Edit</a>
+
+            &nbsp;
+
+            <a class="btn btn-outline-danger btn-sm" 
+               data-ajax="true" 
+               data-ajax-begin="modal_loading(true);show_modal('@(ui_modal_id)', 'Delete Confirmation');"
+               data-ajax-complete="modal_loading(false)" 
+               data-ajax-failure="show_error" 
+               data-ajax-method="GET" 
+               data-ajax-mode="replace" 
+               data-ajax-update="#@(ui_modal_id)_body" 
+               href="@Url.Action("Delete", controller, new { id = Model.ID, ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter })"><i class="fas fa-trash-alt"></i> Delete</a>
+        </div>
+    </div>
+    
+    <hr />
+
+    <div>
+        <div class="form-group row">
+		    @Html.LabelFor(model => model.ID, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DisplayFor(model => model.ID)
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DisplayFor(model => model.Name)
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.Path, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DisplayFor(model => model.Path)
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.Size, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DisplayFor(model => model.Size)
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.UploadDate, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DisplayFor(model => model.UploadDate)
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.ParentID, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DisplayFor(model => model.ParentID)
+		    </div>
+		</div>
+    </div>
+</div>

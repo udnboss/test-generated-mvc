@@ -1,126 +1,112 @@
-﻿@model WorkflowWeb.Models.T_Comment
+@using WorkflowWeb.ViewModels
+@model T_CommentViewModel
 
 @{
-    var html_target = (ViewContext.RouteData.Values["html_target"] ?? Request.QueryString["html_target"]) as string;
     var controller = ViewContext.RouteData.Values["controller"].ToString();
-    var modalId = ViewContext.RouteData.Values["modal_id"] ?? Request.QueryString["modal_id"] as string;
-    var formId = Guid.NewGuid().ToString();
+
+    var ui_html_target = (ViewContext.RouteData.Values["ui_html_target"] ?? Request.QueryString["ui_html_target"]) as string;
+    var ui_list_view = (ViewContext.RouteData.Values["ui_list_view"] ?? Request.QueryString["ui_list_view"]) as string;
+    var ui_modal_id = (ViewContext.RouteData.Values["ui_modal_id"] ?? Request.QueryString["ui_modal_id"]) as string;
+    var ui_tab_id = (ViewContext.RouteData.Values["ui_tab_id"] ?? Request.QueryString["ui_tab_id"]) as string;
+    var ui_route_filter = (ViewContext.RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+
+    var ui_form_id = Guid.NewGuid().ToString();
 }
 
 <div>
-    <h4>T_Comment</h4>
-    <hr />
-    <div>
-        <div class="form-group row">
-            @Html.LabelFor(model => model.ID, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DisplayFor(model => model.ID)
-            </div>
+    <div class="row p-2">
+        <div class="col">
+            <h4>@Model.DomainID</h4>
         </div>
+        <div class="ml-auto mr-2">
+            <a class="btn btn-primary btn-sm"
+               data-ajax="true"
+               data-ajax-begin="modal_loading(true);show_modal('@(ui_modal_id)', 'Edit @Model.DomainID');"
+               data-ajax-complete="modal_loading(false)"
+               data-ajax-failure="show_error"
+               data-ajax-method="GET"
+               data-ajax-mode="replace"
+               data-ajax-update="#@(ui_modal_id)_body"
+               href="@Url.Action("Edit", controller, new { id = Model.ID, ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter })"><i class="fas fa-edit"></i> Edit</a>
 
-        <div class="form-group row">
-            @Html.LabelFor(model => model.DomainID, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DisplayFor(model => model.DomainID)
-            </div>
-        </div>
+            &nbsp;
 
-        <div class="form-group row">
-            @Html.LabelFor(model => model.Path, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DisplayFor(model => model.Path)
-            </div>
-        </div>
-
-        <div class="form-group row">
-            @Html.LabelFor(model => model.IP, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DisplayFor(model => model.IP)
-            </div>
-        </div>
-
-        <div class="form-group row">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DisplayFor(model => model.Name)
-            </div>
-        </div>
-
-        <div class="form-group row">
-            @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DisplayFor(model => model.Comment)
-            </div>
-        </div>
-
-        <div class="form-group row">
-            @Html.LabelFor(model => model.ParentID, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DisplayFor(model => model.ParentID)
-            </div>
-        </div>
-
-        <div class="form-group row">
-            @Html.LabelFor(model => model.DatePosted, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DisplayFor(model => model.DatePosted)
-            </div>
-        </div>
-
-        <div class="form-group row">
-            @Html.LabelFor(model => model.QueryString, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DisplayFor(model => model.QueryString)
-            </div>
+            <a class="btn btn-outline-danger btn-sm" 
+               data-ajax="true" 
+               data-ajax-begin="modal_loading(true);show_modal('@(ui_modal_id)', 'Delete Confirmation');"
+               data-ajax-complete="modal_loading(false)" 
+               data-ajax-failure="show_error" 
+               data-ajax-method="GET" 
+               data-ajax-mode="replace" 
+               data-ajax-update="#@(ui_modal_id)_body" 
+               href="@Url.Action("Delete", controller, new { id = Model.ID, ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter })"><i class="fas fa-trash-alt"></i> Delete</a>
         </div>
     </div>
+    
+    <hr />
+
+    <div>
+        <div class="form-group row">
+		    @Html.LabelFor(model => model.ID, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DisplayFor(model => model.ID)
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.DomainID, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DisplayFor(model => model.T_Domain.ID)
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.Path, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DisplayFor(model => model.Path)
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.IP, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DisplayFor(model => model.IP)
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DisplayFor(model => model.Name)
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DisplayFor(model => model.Comment)
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.ParentID, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DisplayFor(model => model.T_Comment1.DomainID)
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.DatePosted, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DisplayFor(model => model.DatePosted)
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.QueryString, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DisplayFor(model => model.QueryString)
+		    </div>
+		</div>
+    </div>
 </div>
-<p>
-    @Ajax.ActionLink(
-        linkText: "Edit",
-        actionName: "Edit",
-        controllerName: controller,
-        routeValues: new { id = Model.ID, modal_id = modalId, html_target = html_target },
-        ajaxOptions: new AjaxOptions
-        {
-            HttpMethod = "GET",
-            OnBegin = "modal_loading(true)",
-            OnSuccess = "",
-            Confirm = null,
-            AllowCache = false,
-            InsertionMode = InsertionMode.Replace,
-            OnFailure = "show_error",
-            OnComplete = "modal_loading(false)",
-            UpdateTargetId = modalId + "_body"
-        },
-        htmlAttributes: new
-        {
-            @class = "btn btn-primary"
-        })
-
-    @using (Ajax.BeginForm(
-        actionName: "Delete",
-        controllerName: controller,
-        routeValues: new { id = Model.ID, modal_id = modalId, html_target = html_target },
-        ajaxOptions: new AjaxOptions
-        {
-            HttpMethod = "POST",
-            OnBegin = "modal_loading(true)",
-            OnSuccess = "hide_modal(this)",
-            Confirm = null,
-            AllowCache = false,
-            InsertionMode = InsertionMode.Replace,
-            OnFailure = "show_error",
-            OnComplete = "modal_loading(false)",
-            UpdateTargetId = html_target
-        },
-        htmlAttributes: new
-        {
-            id = formId
-        }))
-    {
-        @Html.AntiForgeryToken()
-        <button type="submit" class="btn btn-danger" onclick="return confirm('Confirm delete?')">Delete</button>
-    }
-
-</p>

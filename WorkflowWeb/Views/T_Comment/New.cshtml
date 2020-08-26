@@ -1,10 +1,16 @@
-﻿@model WorkflowWeb.Models.T_Comment
+@using WorkflowWeb.ViewModels
+@model T_CommentViewModel
 
 @{
-    var html_target = (ViewContext.RouteData.Values["html_target"] ?? Request.QueryString["html_target"]) as string;
     var controller = ViewContext.RouteData.Values["controller"].ToString();
-    var modalId = ViewContext.RouteData.Values["modal_id"] ?? Request.QueryString["modal_id"];
-    var formId = Guid.NewGuid().ToString();
+
+    var ui_html_target = (ViewContext.RouteData.Values["ui_html_target"] ?? Request.QueryString["ui_html_target"]) as string;
+    var ui_list_view = (ViewContext.RouteData.Values["ui_list_view"] ?? Request.QueryString["ui_list_view"]) as string;
+    var ui_modal_id = (ViewContext.RouteData.Values["ui_modal_id"] ?? Request.QueryString["ui_modal_id"]) as string;
+    var ui_tab_id = (ViewContext.RouteData.Values["ui_tab_id"] ?? Request.QueryString["ui_tab_id"]) as string;
+    var ui_route_filter = (ViewContext.RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+
+    var ui_form_id = Guid.NewGuid().ToString();
     var lookups = ViewBag.Lookups as Dictionary<string, object>;
 }
 
@@ -12,7 +18,7 @@
 @using (Ajax.BeginForm(
     actionName: "Create",
     controllerName: controller,
-    routeValues: new { html_target = html_target },
+    routeValues: new { ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter },
     ajaxOptions: new AjaxOptions
     {
         HttpMethod = "POST",
@@ -23,89 +29,98 @@
         InsertionMode = InsertionMode.Replace,
         OnFailure = "show_error",
         OnComplete = "modal_loading(false)",
-        UpdateTargetId = html_target
+        UpdateTargetId = ui_html_target
     },
     htmlAttributes: new
     {
-        id = formId
+        id = ui_form_id
     }))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>T_Comment</h4>
+        <h4>Create New Comment</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         @Html.HiddenFor(m => m.ID)
 
-        <div class="form-group row">
-            @Html.LabelFor(model => model.DomainID, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("DomainID", lookups["DomainID"] as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.DomainID, "", new { @class = "text-danger" })
-            </div>
-        </div>
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.DomainID, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DropDownList("DomainID", (lookups["DomainID"] as IEnumerable<SelectListItem>).Prepend(new SelectListItem { Text = "-", Value = "" }), htmlAttributes: new { @class = "form-control" })
+		        @Html.ValidationMessageFor(model => model.DomainID, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.Path, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.EditorFor(model => model.Path, new { htmlAttributes = new { @class = "form-control" } })
+		        @Html.ValidationMessageFor(model => model.Path, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.IP, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.EditorFor(model => model.IP, new { htmlAttributes = new { @class = "form-control" } })
+		        @Html.ValidationMessageFor(model => model.IP, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+		        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
+		        @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.ParentID, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.DropDownList("ParentID", (lookups["ParentID"] as IEnumerable<SelectListItem>).Prepend(new SelectListItem { Text = "-", Value = "" }), htmlAttributes: new { @class = "form-control" })
+		        @Html.ValidationMessageFor(model => model.ParentID, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.DatePosted, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.EditorFor(model => model.DatePosted, new { htmlAttributes = new { @class = "form-control" } })
+		        @Html.ValidationMessageFor(model => model.DatePosted, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+		<div class="form-group row">
+		    @Html.LabelFor(model => model.QueryString, htmlAttributes: new { @class = "control-label col-md-2" })
+		    <div class="col-md-10">
+		        @Html.EditorFor(model => model.QueryString, new { htmlAttributes = new { @class = "form-control" } })
+		        @Html.ValidationMessageFor(model => model.QueryString, "", new { @class = "text-danger" })
+		    </div>
+		</div>
+
+        <script>
+            $(function () {
+                $.validator.unobtrusive.parse("form#@ui_form_id"); //enable validations
+            });
+        </script>
 
         <div class="form-group row">
-            @Html.LabelFor(model => model.Path, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Path, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Path, "", new { @class = "text-danger" })
-            </div>
-        </div>
+            <div class="col-md-2">
 
-        <div class="form-group row">
-            @Html.LabelFor(model => model.IP, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.IP, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.IP, "", new { @class = "text-danger" })
             </div>
-        </div>
-
-        <div class="form-group row">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group row">
-            @Html.LabelFor(model => model.Comment, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Comment, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Comment, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group row">
-            @Html.LabelFor(model => model.ParentID, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("ParentID", lookups["ParentID"] as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.ParentID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group row">
-            @Html.LabelFor(model => model.DatePosted, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.DatePosted, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.DatePosted, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group row">
-            @Html.LabelFor(model => model.QueryString, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.QueryString, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.QueryString, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Create</button>
             </div>
         </div>
     </div>

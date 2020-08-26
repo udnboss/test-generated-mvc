@@ -1,92 +1,11 @@
-﻿@model IEnumerable<WorkflowWeb.Models.T_Comment>
+@using WorkflowWeb.ViewModels
 @{
-    var html_target = ViewBag.HtmlTarget; ///automate this!
     var controller = ViewContext.RouteData.Values["controller"].ToString();
-    var modalId = Guid.NewGuid().ToString();
+    var ui_list_view = "ListDetail";
+    var ui_html_target = "T_Commentindex";
+    var ui_route_filter = (ViewContext.RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
 }
 
-<div>
-    <div class="text-right">
-        @Ajax.ActionLink(
-        linkText: "Add New T_Comment..",
-        actionName: "New",
-        controllerName: controller,
-        routeValues: new { html_target = html_target, modal_id = modalId },
-        ajaxOptions: new AjaxOptions
-        {
-            HttpMethod = "GET",
-            OnBegin = "show_modal('" + modalId + "')",
-            OnSuccess = "",
-            Confirm = null,
-            AllowCache = false,
-            InsertionMode = InsertionMode.Replace,
-            OnFailure = "show_error",
-            OnComplete = "modal_loading(false)",
-            UpdateTargetId = modalId + "_body"
-        },
-        htmlAttributes: new
-        {
-            @class = "btn btn-primary"
-        })
-    </div>
-
-    <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        View
-                    </th>
-                    <th>@Html.DisplayNameFor(m => m.ID)</th>
-                    <th>@Html.DisplayNameFor(m => m.DomainID)</th>
-                    <th>@Html.DisplayNameFor(m => m.Path)</th>
-                    <th>@Html.DisplayNameFor(m => m.IP)</th>
-                    <th>@Html.DisplayNameFor(m => m.Name)</th>
-                    <th>@Html.DisplayNameFor(m => m.Comment)</th>
-                    <th>@Html.DisplayNameFor(m => m.ParentID)</th>
-                    <th>@Html.DisplayNameFor(m => m.DatePosted)</th>
-                    <th>@Html.DisplayNameFor(m => m.QueryString)</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            @Ajax.ActionLink(
-                                linkText: "View",
-                                actionName: "Details",
-                                controllerName: controller,
-                                routeValues: new { html_target = html_target, modal_id = modalId, id = item.ID },
-                                ajaxOptions: new AjaxOptions
-                                {
-                                    HttpMethod = "GET",
-                                    OnBegin = "show_modal('" + modalId + "')",
-                                    OnSuccess = "",
-                                    Confirm = null,
-                                    AllowCache = false,
-                                    InsertionMode = InsertionMode.Replace,
-                                    OnFailure = "show_error",
-                                    OnComplete = "modal_loading(false)",
-                                    UpdateTargetId = modalId + "_body"
-                                },
-                                htmlAttributes: new
-                                {
-                                    @class = "btn btn-primary btn-sm"
-                                })
-                        </td>
-                        <td>@Html.DisplayFor(modelItem => item.ID)</td>
-                        <td>@Html.DisplayFor(modelItem => item.DomainID)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Path)</td>
-                        <td>@Html.DisplayFor(modelItem => item.IP)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Comment)</td>
-                        <td>@Html.DisplayFor(modelItem => item.ParentID)</td>
-                        <td>@Html.DisplayFor(modelItem => item.DatePosted)</td>
-                        <td>@Html.DisplayFor(modelItem => item.QueryString)</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+<div id="@ui_html_target">
+    @Html.Action(actionName: "List", controllerName: controller, routeValues: new { id = Model, ui_html_target, ui_list_view, ui_route_filter })
 </div>

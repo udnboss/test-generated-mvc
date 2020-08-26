@@ -38,9 +38,10 @@ namespace WorkflowWeb.Business
 
         public override IQueryable<TIMS_ProjectInterfaceAgreement> GetIQueryable()
         {
-            return db.TIMS_ProjectInterfaceAgreement.Include(x => x.TIMS_ProjectInterfacePoint)
+            return ((IMSEntities)db).TIMS_ProjectInterfaceAgreement.Include(x => x.TIMS_ProjectInterfacePoint)
 				.Include(x => x.TIMS_ProjectPackage)
-				.Include(x => x.TIMS_ProjectPackage1).AsQueryable();
+				.Include(x => x.TIMS_ProjectPackage1)
+				.Include(x => x.TIMS_Project).AsQueryable();
         }
 
         public IQueryable<TIMS_ProjectInterfaceAgreement> GetIQueryable(TIMS_ProjectInterfaceAgreement filter)
@@ -49,21 +50,22 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
-					if (filter.Name != null && filter.Name.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.Name == filter.Name);
-					if (filter.InterfacePointID != null && filter.InterfacePointID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.InterfacePointID == filter.InterfacePointID);
-					if (filter.RequestorPackageID != null && filter.RequestorPackageID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.RequestorPackageID == filter.RequestorPackageID);
-					if (filter.ResponderPackageID != null && filter.ResponderPackageID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ResponderPackageID == filter.ResponderPackageID);
-					if (filter.RequestorUserID != null && filter.RequestorUserID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.RequestorUserID == filter.RequestorUserID);
-					if (filter.RequestorTechnicalContactID != null && filter.RequestorTechnicalContactID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.RequestorTechnicalContactID == filter.RequestorTechnicalContactID);
-					if (filter.ResponderInterfaceManagerID != null && filter.ResponderInterfaceManagerID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ResponderInterfaceManagerID == filter.ResponderInterfaceManagerID);
-					if (filter.ResponderTechnicalContactID != null && filter.ResponderTechnicalContactID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ResponderTechnicalContactID == filter.ResponderTechnicalContactID);
-					if (filter.CreateDate != null && filter.CreateDate.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.CreateDate == filter.CreateDate);
-					if (filter.NeedDate != null && filter.NeedDate.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.NeedDate == filter.NeedDate);
-					if (filter.IssuedDate != null && filter.IssuedDate.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.IssuedDate == filter.IssuedDate);
-					if (filter.AcceptedDate != null && filter.AcceptedDate.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.AcceptedDate == filter.AcceptedDate);
-					if (filter.ResponseDate != null && filter.ResponseDate.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ResponseDate == filter.ResponseDate);
-					if (filter.CloseDate != null && filter.CloseDate.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.CloseDate == filter.CloseDate);
+                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
+					if (filter.Name != null && filter.Name.ToString() != default(Guid).ToString()) data = data.Where(x => x.Name == filter.Name);
+					if (filter.InterfacePointID != null && filter.InterfacePointID.ToString() != default(Guid).ToString()) data = data.Where(x => x.InterfacePointID == filter.InterfacePointID);
+					if (filter.RequestorPackageID != null && filter.RequestorPackageID.ToString() != default(Guid).ToString()) data = data.Where(x => x.RequestorPackageID == filter.RequestorPackageID);
+					if (filter.ResponderPackageID != null && filter.ResponderPackageID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ResponderPackageID == filter.ResponderPackageID);
+					if (filter.RequestorUserID != null && filter.RequestorUserID.ToString() != default(Guid).ToString()) data = data.Where(x => x.RequestorUserID == filter.RequestorUserID);
+					if (filter.RequestorTechnicalContactID != null && filter.RequestorTechnicalContactID.ToString() != default(Guid).ToString()) data = data.Where(x => x.RequestorTechnicalContactID == filter.RequestorTechnicalContactID);
+					if (filter.ResponderInterfaceManagerID != null && filter.ResponderInterfaceManagerID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ResponderInterfaceManagerID == filter.ResponderInterfaceManagerID);
+					if (filter.ResponderTechnicalContactID != null && filter.ResponderTechnicalContactID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ResponderTechnicalContactID == filter.ResponderTechnicalContactID);
+					if (filter.CreateDate != null && filter.CreateDate.ToString() != default(Guid).ToString()) data = data.Where(x => x.CreateDate == filter.CreateDate);
+					if (filter.NeedDate != null && filter.NeedDate.ToString() != default(Guid).ToString()) data = data.Where(x => x.NeedDate == filter.NeedDate);
+					if (filter.IssuedDate != null && filter.IssuedDate.ToString() != default(Guid).ToString()) data = data.Where(x => x.IssuedDate == filter.IssuedDate);
+					if (filter.AcceptedDate != null && filter.AcceptedDate.ToString() != default(Guid).ToString()) data = data.Where(x => x.AcceptedDate == filter.AcceptedDate);
+					if (filter.ResponseDate != null && filter.ResponseDate.ToString() != default(Guid).ToString()) data = data.Where(x => x.ResponseDate == filter.ResponseDate);
+					if (filter.CloseDate != null && filter.CloseDate.ToString() != default(Guid).ToString()) data = data.Where(x => x.CloseDate == filter.CloseDate);
+					if (filter.ProjectID != null && filter.ProjectID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectID == filter.ProjectID);
             }
 
             return data;

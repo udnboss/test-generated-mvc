@@ -1,0 +1,44 @@
+@using WorkflowWeb.ViewModels
+@model T_UploadViewModel
+
+@{
+    var controller = ViewContext.RouteData.Values["controller"].ToString();
+
+    var ui_html_target = (ViewContext.RouteData.Values["ui_html_target"] ?? Request.QueryString["ui_html_target"]) as string;
+    var ui_list_view = (ViewContext.RouteData.Values["ui_list_view"] ?? Request.QueryString["ui_list_view"]) as string;
+    var ui_modal_id = Guid.NewGuid().ToString();
+    var ui_tab_id = (ViewContext.RouteData.Values["ui_tab_id"] ?? Request.QueryString["ui_tab_id"]) as string;
+    var ui_route_filter = (ViewContext.RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+
+    var ui_form_id = Guid.NewGuid().ToString();
+
+    var currentItem = Model;
+}
+
+<h1>@currentItem.Name</h1>
+
+<div>
+    <script>
+        $(function () {
+            if ("@ui_tab_id" == "") {
+                $('#tabs-T_Upload a').first().tab('show');
+            }
+            else {
+                $('#tabs-T_Upload a[href="#@ui_tab_id"]').tab('show');
+            }
+
+        });
+    </script>
+    <ul class="nav nav-tabs" id="tabs-T_Upload">
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#tab-T_Upload-">Upload</a>
+        </li>
+        
+    </ul>
+    <div class="tab-content" id="tabContent-T_Upload">
+        <div class="tab-pane fade border border-top-0 p-2" id="tab-T_Upload-">
+            @Html.Action(actionName: "Details", controllerName: controller, routeValues: new { partial = true, id = currentItem.ID, ui_html_target, ui_modal_id, ui_list_view, ui_route_filter })
+        </div>
+        
+    </div>
+</div>

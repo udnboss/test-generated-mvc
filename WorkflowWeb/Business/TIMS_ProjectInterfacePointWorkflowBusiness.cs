@@ -38,7 +38,7 @@ namespace WorkflowWeb.Business
 
         public override IQueryable<TIMS_ProjectInterfacePointWorkflow> GetIQueryable()
         {
-            return db.TIMS_ProjectInterfacePointWorkflow.Include(x => x.TIMS_WorkflowType)
+            return ((IMSEntities)db).TIMS_ProjectInterfacePointWorkflow.Include(x => x.TIMS_WorkflowType)
 				.Include(x => x.TIMS_WorkflowState)
 				.Include(x => x.TIMS_WorkflowState1)
 				.Include(x => x.TIMS_WorkflowState2)
@@ -55,19 +55,19 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
-					if (filter.WorkflowTypeID != null && filter.WorkflowTypeID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.WorkflowTypeID == filter.WorkflowTypeID);
-					if (filter.InterfacePointID != null && filter.InterfacePointID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.InterfacePointID == filter.InterfacePointID);
-					if (filter.DateInitiated != null && filter.DateInitiated.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.DateInitiated == filter.DateInitiated);
-					if (filter.LeadStateID != null && filter.LeadStateID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.LeadStateID == filter.LeadStateID);
-					if (filter.InterfaceStateID != null && filter.InterfaceStateID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.InterfaceStateID == filter.InterfaceStateID);
-					if (filter.SupportStateID != null && filter.SupportStateID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.SupportStateID == filter.SupportStateID);
-					if (filter.ProjectAreaID != null && filter.ProjectAreaID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectAreaID == filter.ProjectAreaID);
-					if (filter.ProjectPhysicalAreaID != null && filter.ProjectPhysicalAreaID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectPhysicalAreaID == filter.ProjectPhysicalAreaID);
-					if (filter.PhaseID != null && filter.PhaseID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.PhaseID == filter.PhaseID);
-					if (filter.InterfaceTypeID != null && filter.InterfaceTypeID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.InterfaceTypeID == filter.InterfaceTypeID);
-					if (filter.UserID != null && filter.UserID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.UserID == filter.UserID);
-					if (filter.IsDraft != null && filter.IsDraft.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.IsDraft == filter.IsDraft);
+                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
+					if (filter.WorkflowTypeID != null && filter.WorkflowTypeID.ToString() != default(Guid).ToString()) data = data.Where(x => x.WorkflowTypeID == filter.WorkflowTypeID);
+					if (filter.InterfacePointID != null && filter.InterfacePointID.ToString() != default(Guid).ToString()) data = data.Where(x => x.InterfacePointID == filter.InterfacePointID);
+					if (filter.DateInitiated != null && filter.DateInitiated.ToString() != default(Guid).ToString()) data = data.Where(x => x.DateInitiated == filter.DateInitiated);
+					if (filter.LeadStateID != null && filter.LeadStateID.ToString() != default(Guid).ToString()) data = data.Where(x => x.LeadStateID == filter.LeadStateID);
+					if (filter.InterfaceStateID != null && filter.InterfaceStateID.ToString() != default(Guid).ToString()) data = data.Where(x => x.InterfaceStateID == filter.InterfaceStateID);
+					if (filter.SupportStateID != null && filter.SupportStateID.ToString() != default(Guid).ToString()) data = data.Where(x => x.SupportStateID == filter.SupportStateID);
+					if (filter.ProjectAreaID != null && filter.ProjectAreaID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectAreaID == filter.ProjectAreaID);
+					if (filter.ProjectPhysicalAreaID != null && filter.ProjectPhysicalAreaID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectPhysicalAreaID == filter.ProjectPhysicalAreaID);
+					if (filter.PhaseID != null && filter.PhaseID.ToString() != default(Guid).ToString()) data = data.Where(x => x.PhaseID == filter.PhaseID);
+					if (filter.InterfaceTypeID != null && filter.InterfaceTypeID.ToString() != default(Guid).ToString()) data = data.Where(x => x.InterfaceTypeID == filter.InterfaceTypeID);
+					if (filter.UserID != null && filter.UserID.ToString() != default(Guid).ToString()) data = data.Where(x => x.UserID == filter.UserID);
+					if (filter.IsDraft != null && filter.IsDraft.ToString() != default(Guid).ToString()) data = data.Where(x => x.IsDraft == filter.IsDraft);
             }
 
             return data;

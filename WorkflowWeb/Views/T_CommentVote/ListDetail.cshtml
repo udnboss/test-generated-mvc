@@ -1,0 +1,61 @@
+@using WorkflowWeb.ViewModels
+@model IEnumerable<T_CommentVoteViewModel>
+@{
+    var controller = ViewContext.RouteData.Values["controller"].ToString();
+
+    var ui_html_target = (ViewContext.RouteData.Values["ui_html_target"] ?? Request.QueryString["ui_html_target"]) as string;
+    var ui_list_view = System.IO.Path.GetFileNameWithoutExtension(((RazorView)ViewContext.View).ViewPath);
+    var ui_modal_id = Guid.NewGuid().ToString();
+    var ui_tab_id = (ViewContext.RouteData.Values["ui_tab_id"] ?? Request.QueryString["ui_tab_id"]) as string;
+    var ui_route_filter = (ViewContext.RouteData.Values["ui_route_filter"] ?? Request.QueryString["ui_route_filter"]) as string;
+
+    var currentId = ViewBag.CurrentID as object;
+    var currentItem = currentId == null ? Model.FirstOrDefault() : Model.FirstOrDefault(x => x.ID.ToString() == currentId.ToString());
+}
+
+<div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col">
+                    <h3>Comment Votes</h3>
+                </div>
+                <div class="ml-auto mr-2">
+                    <a class="btn btn-outline-success btn-sm"
+                       data-ajax="true"
+                       data-ajax-begin="show_modal('@(ui_modal_id)', 'Add New Comment Vote')"
+                       data-ajax-complete="modal_loading(false)"
+                       data-ajax-failure="show_error"
+                       data-ajax-method="GET"
+                       data-ajax-mode="replace"
+                       data-ajax-update="#@(ui_modal_id)_body"
+                       href="@Url.Action("New", controller, new { ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter })"><i class="fas fa-plus-circle"></i> Add New Comment Vote..</a>
+                </div>
+            </div>                       
+            <div class="list-group">
+                @foreach (var item in Model)
+                {
+                    @*<a href="@Url.Action(actionName: "Index", controllerName: controller, routeValues: new { id = item.ID, ui_route_filter })" class="list-group-item list-group-item-action @(currentItem != null && currentItem.ID == item.ID ? "list-group-item-primary" : "")">@item.IP</a>*@
+
+                    <a class="@("list-group-item list-group-item-action" + (currentItem != null && currentItem.ID == item.ID ? " list-group-item-primary" : ""))"
+                       data-ajax="true"
+                       data-ajax-begin=""
+                       data-ajax-complete=""
+                       data-ajax-failure="show_error"
+                       data-ajax-method="GET"
+                       data-ajax-mode="replace"
+                       data-ajax-update="#@(ui_html_target)"
+                       href="@Url.Action("List", controller, new { id = item.ID, ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter })">@item.IP</a>
+
+                }
+            </div>
+        </div>
+        <div class="col-md-9">
+
+            @if (currentItem != null)
+            {
+                @Html.Action(actionName: "DetailsWithTabs", controllerName: controller, routeValues: new { id = currentItem.ID, ui_html_target, ui_modal_id, ui_list_view, ui_route_filter })
+            }
+        </div>
+    </div>
+</div>

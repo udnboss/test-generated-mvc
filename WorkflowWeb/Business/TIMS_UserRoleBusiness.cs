@@ -38,7 +38,7 @@ namespace WorkflowWeb.Business
 
         public override IQueryable<TIMS_UserRole> GetIQueryable()
         {
-            return db.TIMS_UserRole.Include(x => x.TIMS_User)
+            return ((IMSEntities)db).TIMS_UserRole.Include(x => x.TIMS_User)
 				.Include(x => x.TIMS_Project)
 				.Include(x => x.TIMS_ProjectPackage)
 				.Include(x => x.TIMS_Role).AsQueryable();
@@ -50,11 +50,11 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
-					if (filter.UserID != null && filter.UserID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.UserID == filter.UserID);
-					if (filter.ProjectID != null && filter.ProjectID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectID == filter.ProjectID);
-					if (filter.ProjectPackageID != null && filter.ProjectPackageID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectPackageID == filter.ProjectPackageID);
-					if (filter.RoleID != null && filter.RoleID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.RoleID == filter.RoleID);
+                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
+					if (filter.UserID != null && filter.UserID.ToString() != default(Guid).ToString()) data = data.Where(x => x.UserID == filter.UserID);
+					if (filter.ProjectID != null && filter.ProjectID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectID == filter.ProjectID);
+					if (filter.ProjectPackageID != null && filter.ProjectPackageID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectPackageID == filter.ProjectPackageID);
+					if (filter.RoleID != null && filter.RoleID.ToString() != default(Guid).ToString()) data = data.Where(x => x.RoleID == filter.RoleID);
             }
 
             return data;

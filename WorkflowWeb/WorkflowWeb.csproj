@@ -159,6 +159,11 @@
     <Compile Include="Business\TIMS_WorkflowActionBusiness.cs" />
     <Compile Include="Business\TIMS_WorkflowStateBusiness.cs" />
     <Compile Include="Business\TIMS_WorkflowTypeBusiness.cs" />
+    <Compile Include="Business\T_CommentBusiness.cs" />
+    <Compile Include="Business\T_CommentVoteBusiness.cs" />
+    <Compile Include="Business\T_DomainBusiness.cs" />
+    <Compile Include="Business\T_UploadBusiness.cs" />
+    <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TIMS_ContractorController.cs" />
     <Compile Include="Controllers\TIMS_DisciplineController.cs" />
@@ -188,6 +193,9 @@
     <Compile Include="Controllers\TIMS_WorkflowActionController.cs" />
     <Compile Include="Controllers\TIMS_WorkflowStateController.cs" />
     <Compile Include="Controllers\TIMS_WorkflowTypeController.cs" />
+    <Compile Include="Controllers\T_CommentVoteController.cs" />
+    <Compile Include="Controllers\T_DomainController.cs" />
+    <Compile Include="Controllers\T_UploadController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -348,6 +356,10 @@
     <Compile Include="ViewModels\TIMS_WorkflowActionViewModel.cs" />
     <Compile Include="ViewModels\TIMS_WorkflowStateViewModel.cs" />
     <Compile Include="ViewModels\TIMS_WorkflowTypeViewModel.cs" />
+    <Compile Include="ViewModels\T_CommentViewModel.cs" />
+    <Compile Include="ViewModels\T_CommentVoteViewModel.cs" />
+    <Compile Include="ViewModels\T_DomainViewModel.cs" />
+    <Compile Include="ViewModels\T_UploadViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\sb-admin-2.css" />
@@ -2313,6 +2325,64 @@
     <Content Include="Views\TIMS_WorkflowState\DetailsWithTabs.cshtml" />
     <Content Include="Views\TIMS_WorkflowType\DetailsWithBar.cshtml" />
     <Content Include="Views\TIMS_WorkflowType\DetailsWithTabs.cshtml" />
+    <Content Include="Views\TIMS_Contractor\Delete.cshtml" />
+    <Content Include="Views\TIMS_Discipline\Delete.cshtml" />
+    <Content Include="Views\TIMS_Phase\Delete.cshtml" />
+    <Content Include="Views\TIMS_ProjectActionItemWorkflow\Delete.cshtml" />
+    <Content Include="Views\TIMS_ProjectActionItem\Delete.cshtml" />
+    <Content Include="Views\TIMS_ProjectArea\Delete.cshtml" />
+    <Content Include="Views\TIMS_ProjectAttachment\Delete.cshtml" />
+    <Content Include="Views\TIMS_ProjectComment\Delete.cshtml" />
+    <Content Include="Views\TIMS_ProjectContractor\Delete.cshtml" />
+    <Content Include="Views\TIMS_ProjectDisciplineInterfaceTypeField\Delete.cshtml" />
+    <Content Include="Views\TIMS_ProjectDisciplineInterfaceType\Delete.cshtml" />
+    <Content Include="Views\TIMS_ProjectDiscipline\Delete.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfaceAgreementWorkflow\Delete.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfaceAgreement\Delete.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePointFieldEntry\Delete.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePointWorkflow\Delete.cshtml" />
+    <Content Include="Views\TIMS_ProjectInterfacePoint\Delete.cshtml" />
+    <Content Include="Views\TIMS_ProjectPackage\Delete.cshtml" />
+    <Content Include="Views\TIMS_ProjectPhysicalArea\Delete.cshtml" />
+    <Content Include="Views\TIMS_Project\Delete.cshtml" />
+    <Content Include="Views\TIMS_Role\Delete.cshtml" />
+    <Content Include="Views\TIMS_UserRole\Delete.cshtml" />
+    <Content Include="Views\TIMS_UserWatchlistItem\Delete.cshtml" />
+    <Content Include="Views\TIMS_User\Delete.cshtml" />
+    <Content Include="Views\TIMS_WorkflowAction\Delete.cshtml" />
+    <Content Include="Views\TIMS_WorkflowState\Delete.cshtml" />
+    <Content Include="Views\TIMS_WorkflowType\Delete.cshtml" />
+    <Content Include="Views\T_CommentVote\Delete.cshtml" />
+    <Content Include="Views\T_CommentVote\Details.cshtml" />
+    <Content Include="Views\T_CommentVote\DetailsWithBar.cshtml" />
+    <Content Include="Views\T_CommentVote\DetailsWithTabs.cshtml" />
+    <Content Include="Views\T_CommentVote\Edit.cshtml" />
+    <Content Include="Views\T_CommentVote\Index.cshtml" />
+    <Content Include="Views\T_CommentVote\ListDetail.cshtml" />
+    <Content Include="Views\T_CommentVote\ListTable.cshtml" />
+    <Content Include="Views\T_CommentVote\New.cshtml" />
+    <Content Include="Views\T_Comment\DetailsWithBar.cshtml" />
+    <Content Include="Views\T_Comment\DetailsWithTabs.cshtml" />
+    <Content Include="Views\T_Comment\ListDetail.cshtml" />
+    <Content Include="Views\T_Comment\ListTable.cshtml" />
+    <Content Include="Views\T_Domain\Delete.cshtml" />
+    <Content Include="Views\T_Domain\Details.cshtml" />
+    <Content Include="Views\T_Domain\DetailsWithBar.cshtml" />
+    <Content Include="Views\T_Domain\DetailsWithTabs.cshtml" />
+    <Content Include="Views\T_Domain\Edit.cshtml" />
+    <Content Include="Views\T_Domain\Index.cshtml" />
+    <Content Include="Views\T_Domain\ListDetail.cshtml" />
+    <Content Include="Views\T_Domain\ListTable.cshtml" />
+    <Content Include="Views\T_Domain\New.cshtml" />
+    <Content Include="Views\T_Upload\Delete.cshtml" />
+    <Content Include="Views\T_Upload\Details.cshtml" />
+    <Content Include="Views\T_Upload\DetailsWithBar.cshtml" />
+    <Content Include="Views\T_Upload\DetailsWithTabs.cshtml" />
+    <Content Include="Views\T_Upload\Edit.cshtml" />
+    <Content Include="Views\T_Upload\Index.cshtml" />
+    <Content Include="Views\T_Upload\ListDetail.cshtml" />
+    <Content Include="Views\T_Upload\ListTable.cshtml" />
+    <Content Include="Views\T_Upload\New.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

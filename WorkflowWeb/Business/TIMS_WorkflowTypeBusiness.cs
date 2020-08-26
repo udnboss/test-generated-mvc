@@ -38,7 +38,7 @@ namespace WorkflowWeb.Business
 
         public override IQueryable<TIMS_WorkflowType> GetIQueryable()
         {
-            return db.TIMS_WorkflowType.AsQueryable();
+            return ((IMSEntities)db).TIMS_WorkflowType.AsQueryable();
         }
 
         public IQueryable<TIMS_WorkflowType> GetIQueryable(TIMS_WorkflowType filter)
@@ -47,8 +47,8 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
-					if (filter.Name != null && filter.Name.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.Name == filter.Name);
+                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
+					if (filter.Name != null && filter.Name.ToString() != default(Guid).ToString()) data = data.Where(x => x.Name == filter.Name);
             }
 
             return data;

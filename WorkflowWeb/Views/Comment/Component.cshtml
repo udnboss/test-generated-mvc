@@ -73,7 +73,7 @@
         },
        mounted: function () {
            var app = this;
-            $.get('@Url.Action("Index", "Comment")', function (response) {
+            $.get('@Url.Action("List", "Comment", new { json = true })', function (response) {
                 app.objects = response;
                 selectedObject = app.objects[0];
                 createObject = app.objects[0];
@@ -91,13 +91,13 @@
             },
             refresh: function () {
                 var app = this;
-                $.get('@Url.Action("Index", "Comment")', function (response) {
+                $.get('@Url.Action("List", "Comment", new { json = true })', function (response) {
                     app.objects = response;
                 });
             },
             details: function (o) {
                 var app = this;
-                $.get('@Url.Action("Details", "Comment")', { id: o.ID }, function (response) {
+                $.get('@Url.Action("Details", "Comment", new { json = true })', { id: o.ID }, function (response) {
                     var i = app.getIndex(o);
                     console.log(i);
                     app.objects[i] = response;
@@ -108,20 +108,27 @@
             },
             edit: function (o) {
                 var app = this;
-                $.get('@Url.Action("Edit", "Comment")', { id: o.ID }, function (response) {
+                $.get('@Url.Action("Edit", "Comment", new { json = true })', { id: o.ID }, function (response) {
                     var i = app.getIndex(o);
                     app.objects[i] = response.data;
                     app.lookups = response.lookups;
                     //console.log(app.lookups);
                     app.selectedObject = app.objects[i];
-                    app.editObject = JSON.parse(JSON.stringify(app.selectedObject));
+                    var editObj = JSON.parse(JSON.stringify(app.selectedObject));
+                    for (var i in editObj) {
+                        var x = editObj[i];
+                        if (Array.isArray(x) || (x instanceof Object && x.constructor === Object)) {
+                            delete editObj[i];
+                        }
+                    }
+                    app.editObject = editObj;
                     app.hideModals();
                     app.editModal = true;
                 });
             },
             createNew: function () {
                 var app = this;
-                $.get('@Url.Action("New", "Comment")', function (response) {
+                $.get('@Url.Action("New", "Comment", new { json = true })', function (response) {
                     app.createObject = response.data;
                     app.lookups = response.lookups;
                     app.hideModals();
@@ -137,7 +144,7 @@
             create: function (o) {
                 var app = this;
                 o["__RequestVerificationToken"] = app.token;
-                $.post('@Url.Action("Create", "Comment")', o, function (response) {
+                $.post('@Url.Action("Create", "Comment", new { json = true })', o, function (response) {
                     app.objects = response;
                     app.selectedObject = o;
                     app.hideModals();
@@ -148,7 +155,7 @@
                 o["__RequestVerificationToken"] = app.token;
                 delete o["T_Comment1"];
 
-                $.post('@Url.Action("Update", "Comment")', o, function (response) {
+                $.post('@Url.Action("Update", "Comment", new { json = true })', o, function (response) {
                     app.objects = response;
                     app.selectedObject = o;
                     app.hideModals();
@@ -157,7 +164,7 @@
             deleteConfirmed: function (o) {
                 var app = this;
                 o["__RequestVerificationToken"] = app.token;
-                $.post('@Url.Action("Delete", "Comment")', o, function (response) {
+                $.post('@Url.Action("Delete", "Comment", new { json = true })', o, function (response) {
                     app.objects = response;
                     app.selectedObject = o;
                     app.hideModals();

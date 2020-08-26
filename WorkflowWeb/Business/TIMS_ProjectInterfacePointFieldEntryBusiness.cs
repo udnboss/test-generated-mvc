@@ -38,7 +38,7 @@ namespace WorkflowWeb.Business
 
         public override IQueryable<TIMS_ProjectInterfacePointFieldEntry> GetIQueryable()
         {
-            return db.TIMS_ProjectInterfacePointFieldEntry.Include(x => x.TIMS_ProjectInterfacePointWorkflow)
+            return ((IMSEntities)db).TIMS_ProjectInterfacePointFieldEntry.Include(x => x.TIMS_ProjectInterfacePointWorkflow)
 				.Include(x => x.TIMS_ProjectDisciplineInterfaceTypeField).AsQueryable();
         }
 
@@ -48,10 +48,10 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
-					if (filter.InterfacePointWorkflowID != null && filter.InterfacePointWorkflowID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.InterfacePointWorkflowID == filter.InterfacePointWorkflowID);
-					if (filter.InterfaceTypeFieldID != null && filter.InterfaceTypeFieldID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.InterfaceTypeFieldID == filter.InterfaceTypeFieldID);
-					if (filter.Value != null && filter.Value.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.Value == filter.Value);
+                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
+					if (filter.InterfacePointWorkflowID != null && filter.InterfacePointWorkflowID.ToString() != default(Guid).ToString()) data = data.Where(x => x.InterfacePointWorkflowID == filter.InterfacePointWorkflowID);
+					if (filter.InterfaceTypeFieldID != null && filter.InterfaceTypeFieldID.ToString() != default(Guid).ToString()) data = data.Where(x => x.InterfaceTypeFieldID == filter.InterfaceTypeFieldID);
+					if (filter.Value != null && filter.Value.ToString() != default(Guid).ToString()) data = data.Where(x => x.Value == filter.Value);
             }
 
             return data;

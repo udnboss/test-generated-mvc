@@ -38,7 +38,7 @@ namespace WorkflowWeb.Business
 
         public override IQueryable<TIMS_ProjectContractor> GetIQueryable()
         {
-            return db.TIMS_ProjectContractor.Include(x => x.TIMS_Project)
+            return ((IMSEntities)db).TIMS_ProjectContractor.Include(x => x.TIMS_Project)
 				.Include(x => x.TIMS_Contractor).AsQueryable();
         }
 
@@ -48,10 +48,10 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ID == filter.ID);
-					if (filter.Name != null && filter.Name.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.Name == filter.Name);
-					if (filter.ProjectID != null && filter.ProjectID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ProjectID == filter.ProjectID);
-					if (filter.ContractorID != null && filter.ContractorID.ToString() != "00000000-0000-0000-0000-000000000000") data = data.Where(x => x.ContractorID == filter.ContractorID);
+                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
+					if (filter.Name != null && filter.Name.ToString() != default(Guid).ToString()) data = data.Where(x => x.Name == filter.Name);
+					if (filter.ProjectID != null && filter.ProjectID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectID == filter.ProjectID);
+					if (filter.ContractorID != null && filter.ContractorID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ContractorID == filter.ContractorID);
             }
 
             return data;

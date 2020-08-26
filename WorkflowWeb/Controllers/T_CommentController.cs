@@ -1,4 +1,4 @@
-﻿
+
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,128 +9,284 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using WorkflowWeb.Models;
+using WorkflowWeb.Business;
+using WorkflowWeb.ViewModels;
 
 namespace WorkflowWeb.Controllers
 {
-    public class T_CommentController : BaseController
+    public partial class T_CommentController : BaseController<T_Comment, T_CommentBusiness, T_CommentViewModel>
     {
-        new COMMENTSEntities db = new COMMENTSEntities();
-        public List<T_Comment> GetList()
+        public T_CommentController()
         {
-            db.Configuration.ProxyCreationEnabled = false;
-            var data = db.T_Comment.Include(x => x.T_Domain)
-                .Include(x => x.T_Comment1).ToList();
-            return data;
+            business = new T_CommentBusiness(db, user);
+            this.GetLookups = DefaultGetLookups;
         }
 
-        public T_Comment Get(Guid id)
-        {
-            db.Configuration.ProxyCreationEnabled = false;
-            return db.T_Comment.Include(x => x.T_Domain)
-                .Include(x => x.T_Comment1).FirstOrDefault(x => x.ID == id);
-        }
+        public Func<Dictionary<string, object>> GetLookups { get; set; }
 
-        public bool Del(Guid id)
+        public Dictionary<string, object> DefaultGetLookups()
         {
-            var m = Get(id);
-            if (m == null)
-            {
-                return false;
-            }
+            var db = (COMMENTSEntities)this.db;
+            var routeFilter = GetRouteFilter();
 
-            db.T_Comment.Remove(m);
-            db.SaveChanges();
-            return true;
-        }
-
-        public Dictionary<string, object> GetLookups()
-        {
             return new Dictionary<string, object> {
-                {"ParentID", db.T_Comment.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
-                {"DomainID", db.T_Domain.Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) }
+                {"ParentID", db.T_Comment.Where(x => routeFilter.ParentID == null || x.ID == routeFilter.ParentID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
+				{"DomainID", db.T_Domain.Where(x => routeFilter.DomainID == null || x.ID == routeFilter.DomainID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) }
             };
         }
 
-        public ActionResult Index()
+        public ActionResult Index(Guid? id = null)
         {
-            return PartialView(GetList());
+            return View((object)id);
         }
 
-        public ActionResult Details(Guid id)
+        public ActionResult List(Guid? id = null, string ui_list_view = null, bool json = false)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var m = Get(id);
-            if (m == null)
+            ViewBag.CurrentID = id;
+            var uiListView = ui_list_view ?? (RouteData.Values["ui_list_view"] ?? Request.QueryString["ui_list_view"]) as string;
+
+            if (uiListView != null && uiListView != "ListDetail" && uiListView != "ListTable") //invalid
             {
                 return HttpNotFound();
             }
 
-            return PartialView(m);
-        }
+            var routeFilter = GetRouteFilter();
+            var results = business.GetList(routeFilter);
 
-        public ActionResult New()
-        {
-            var m = new T_Comment() { DatePosted = DateTime.Now };
+            var message = results.Message;
 
-            ViewBag.Lookups = GetLookups();
-            return PartialView(m);
-        }
+            var responseCode = GetResponseCode(results);
+            Response.StatusCode = (int)responseCode;
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(T_Comment m)
-        {
-            if (ModelState.IsValid)
+            if (responseCode == HttpStatusCode.OK)
             {
-                m.ID = Guid.NewGuid();
-                db.T_Comment.Add(m);
-                db.SaveChanges();
-                return PartialView("Index", GetList());
+                var data = results.Data.Select(x => new T_CommentViewModel(x, true)).ToList();
+                if (json) { return JsonOut(data); }
+
+                ViewBag.CanEdit = business.CanNew(routeFilter).Status == State.Success;
+
+                return PartialView(uiListView ?? "ListTable", data);
             }
 
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            return Json(new string[] { message });
         }
 
-        public ActionResult Edit(Guid id)
+        public ActionResult DetailsWithBar(Guid id, bool partial = true)
         {
+            return Details(id, partial);
+        }
+
+        public ActionResult DetailsWithTabs(Guid id, bool partial = true)
+        {
+            return Details(id, partial);
+
+        }
+        
+        public ActionResult Details(Guid id, bool partial = true, bool json = false)
+        {
+            string message;
+
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                message = "Bad Request: missing identifier";
             }
-            var m = Get(id);
-            if (m == null)
+            else
             {
-                return HttpNotFound();
+                var r = business.Get(id);
+                message = r.Message;
+
+                var responseCode = GetResponseCode(r);
+                Response.StatusCode = (int)responseCode;
+
+                if (responseCode == HttpStatusCode.OK)
+                {
+                    var m = r.Data;
+                    var vm = new T_CommentViewModel(m, true);
+                    if (json) { return JsonOut(vm); }
+
+                    ViewBag.CanEdit = business.CanEdit(id).Status == State.Success;
+                    ViewBag.CanDelete = business.CanDelete(m).Status == State.Success;
+
+                    return partial ? PartialView(vm) as ActionResult : View(vm);
+                }
             }
 
-            ViewBag.Lookups = GetLookups();
-            return PartialView(m);
+            return Json(new string[] { message });
+        }
+
+        public ActionResult Delete(Guid id, bool json = false)
+        {
+            string message;
+
+            if (id == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                message = "Bad Request: missing identifier";
+            }
+            else
+            {
+                var r = business.Get(id);
+                message = r.Message;
+
+                var responseCode = GetResponseCode(r);
+                Response.StatusCode = (int)responseCode;
+
+                if (responseCode == HttpStatusCode.OK)
+                {
+                    var m = r.Data;
+
+                    var dr = business.CanDelete(m);
+                    message = dr.Message;
+
+                    responseCode = GetResponseCode(dr);
+                    Response.StatusCode = (int)responseCode;
+
+                    m = dr.Data;
+
+                    var vm = new T_CommentViewModel(m, true);
+                    if (json) { return JsonOut(vm); }
+
+                    return PartialView(vm);
+                }
+            }
+
+            return Json(new string[] { message });
+        }
+
+        public ActionResult New(bool json = false)
+        {
+            var routeFilter = GetRouteFilter();
+            var vm = routeFilter != null ? new T_CommentViewModel(routeFilter) : new T_CommentViewModel() { };
+            var r = business.CanNew(routeFilter);
+            var message = r.Message;
+
+            var responseCode = GetResponseCode(r);
+            Response.StatusCode = (int)responseCode;
+
+            if (responseCode == HttpStatusCode.OK)
+            {
+                if (json) { return JsonOut(new { data = vm, lookups = GetLookups() }); }
+
+                ViewBag.Lookups = GetLookups();                
+                return PartialView(vm);
+            }
+
+            return Json(new string[] { message });
+        }
+
+        public ActionResult Edit(Guid id, bool json = false)
+        {
+            string message;
+
+            if (id == null)
+            {
+                Response.StatusCode = HttpStatusCode.BadRequest.GetHashCode();
+                message = "Bad Request: missing identifier";
+            }
+            else
+            {
+                var r = business.CanEdit(id);
+                message = r.Message;
+
+                var responseCode = GetResponseCode(r);
+                Response.StatusCode = (int)responseCode;
+                if (responseCode == HttpStatusCode.OK)
+                {
+                    var m = r.Data;
+                    var vm = new T_CommentViewModel(m, true);
+                                        
+                    if (json) { return JsonOut(new { data = vm, lookups = GetLookups() }); }
+                    ViewBag.Lookups = GetLookups();
+                    return PartialView(vm);
+                }
+            }
+
+            return Json(new string[] { message });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Update(T_Comment m)
+        public ActionResult Create(T_CommentViewModel vm, bool json = false)
         {
+            string message;
+
             if (ModelState.IsValid)
             {
-                db.Entry(m).State = EntityState.Modified;
-                db.SaveChanges();
-                return PartialView("Index", GetList());
+                var m = vm.ToModel();
+                m.ID = Guid.NewGuid(); 
+                var r = business.Create(m);
+                message = r.Message;
+
+                var responseCode = GetResponseCode(r);
+                Response.StatusCode = (int)responseCode;
+
+                if (responseCode == HttpStatusCode.OK)
+                {
+                    return List(m.ID, null, json);
+                }
+
+                return Json(new string[] { message });
             }
 
-            return PartialView(ModelState);
+            var errors = ModelState.SelectMany(x => x.Value.Errors)
+                .Select(x => x.ErrorMessage)
+                .ToList();
+
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+
+            return Json(errors);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(T_Comment m)
+        public ActionResult Update(T_CommentViewModel vm, bool json = false)
         {
-            Del(m.ID);
-            return PartialView("Index", GetList());
+            string message;
+
+            if (ModelState.IsValid)
+            {
+                var m = vm.ToModel();
+                var r = business.Update(m);
+                message = r.Message;
+
+                var responseCode = GetResponseCode(r);
+                Response.StatusCode = (int)responseCode;
+                if (responseCode == HttpStatusCode.OK)
+                {
+                    return List(m.ID, null, json);
+                }
+
+                return Json(new string[] { message });
+            }
+
+            var errors = ModelState.SelectMany(x => x.Value.Errors)
+                .Select(x => x.ErrorMessage)
+                .ToList();
+
+            Response.StatusCode = (int)HttpStatusCode.BadRequest;
+
+            return Json(errors);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(T_CommentViewModel vm, bool json = false)
+        {
+            string message;
+
+            var m = vm.ToModel();
+            var r = business.Delete(m);
+
+            message = r.Message;
+            var responseCode = GetResponseCode(r);
+            Response.StatusCode = (int)responseCode;
+            if (responseCode == HttpStatusCode.OK)
+            {
+                return List(null, null, json);
+            }
+
+            return Json(new string[] { message });
+        }
     }
 }
