@@ -2383,6 +2383,7 @@
     <Content Include="Views\T_Upload\ListDetail.cshtml" />
     <Content Include="Views\T_Upload\ListTable.cshtml" />
     <Content Include="Views\T_Upload\New.cshtml" />
+    <Content Include="Views\Shared\Vue\CRUD.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

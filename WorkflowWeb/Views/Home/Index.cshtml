@@ -17,14 +17,16 @@
 
 
 
-@Html.Partial("~/Views/Comment/Component.cshtml")
-@Html.Partial("~/Views/Upload/Component.cshtml")
+@Html.Partial("~/Views/Shared/Vue/CRUD.cshtml")
+@*@Html.Partial("~/Views/Upload/Component.cshtml")*@
 
 <div id="app">
     @*<v-sidebar></v-sidebar>*@
     @*<v-uploads></v-uploads>
         <v-comments></v-comments>*@
-    <v-comments></v-comments>
+    <v-crud controller="T_Comment"></v-crud>
+    <v-crud controller="TIMS_Project"></v-crud>
+    <v-crud controller="TIMS_ProjectActionItem"></v-crud>
 </div>
 
 <script>

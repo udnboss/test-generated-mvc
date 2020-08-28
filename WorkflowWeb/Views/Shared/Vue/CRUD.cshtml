@@ -1,0 +1,192 @@
+﻿<script type="text/template" id="crud-component-template">
+    <div>
+        <div class="text-right">
+            <button v-on:click="refresh()" class="btn btn-primary">Refresh</button>
+            <button v-on:click="createNew()" class="btn btn-primary">New..</button>
+        </div>
+        <table class="table">
+            <tr v-for="c in objects">
+                <td v-for="(value, name, index) in c">{{ value }}</td>
+                <td><button v-on:click="details(c)" class="btn btn-primary">View</button></td>
+                <td><button v-on:click="edit(c)" class="btn btn-success">Edit</button></td>
+                <td><button v-on:click="del(c)" class="btn btn-danger">Delete</button></td>
+            </tr>
+        </table>
+
+        <v-modal v-if="detailsModal" v-on:close="detailsModal = false" v-bind:item="selectedObject">
+            <p>{{ selectedObject }}</p>
+        </v-modal>
+
+        <v-modal v-if="editModal" v-on:close="editModal = false" v-bind:item="editObject">
+            <form v-on:submit.prevent="update(editObject)">
+                <v-form-input v-for="(value, name, index) in editObject" v-bind:key="name" :label="name" v-model="editObject[name]"></v-form-input>
+                @*<v-form-input label="UserName" v-model="editObject.Name"></v-form-input>
+                    <v-form-input label="Comment" v-model="editObject.Comment"></v-form-input>*@
+                <v-select2 label="Domain" :options="lookups.domain_id" v-model="editObject.DomainID">
+                    <option disabled value="0">Select one</option>
+                </v-select2>
+                <button>Update</button>
+                <p>{{ editObject }}</p>
+            </form>
+        </v-modal>
+
+        <v-modal v-if="newModal" v-on:close="newModal = false" v-bind:item="createObject">
+            <form v-on:submit.prevent="create(createObject)">
+                <v-form-input v-for="(value, name, index) in createObject" v-bind:key="name" :label="name" v-model="createObject[name]"></v-form-input>
+                <button>Create</button>
+                <p>{{ createObject }}</p>
+            </form>
+        </v-modal>
+
+        <v-modal v-if="deleteModal" v-on:close="deleteModal = false" v-bind:item="selectedObject">
+            <p>{{ selectedObject }}</p>
+            <form v-on:submit.prevent="deleteConfirmed(selectedObject)">
+                <button>Delete</button>
+            </form>
+        </v-modal>
+    </div>
+</script>
+
+<script>
+    Vue.component("v-crud", {
+        template: "#crud-component-template",
+        props: ['controller'],
+        data: function () {
+            return {
+                lookups: {},
+                objects: [],
+                selectedObject: {},
+                editObject: {},
+                createObject: {},
+                detailsModal: false,
+                editModal: false,
+                newModal: false,
+                deleteModal: false,
+                listUrl: this.getUrl('List'),
+                detailsUrl: this.getUrl('Details'),
+                editUrl: this.getUrl('Edit'),
+                newUrl: this.getUrl('New'),
+                createUrl: this.getUrl('Create'),
+                updateUrl: this.getUrl('Update'),
+                deleteUrl: this.getUrl('Delete'),
+
+                token: $('@Html.AntiForgeryToken()').val()
+            }
+        },
+       mounted: function () {
+           var app = this;
+            $.get(app.listUrl, function (response) {
+                app.objects = response;
+                selectedObject = app.objects[0];
+                createObject = app.objects[0];
+                detailsModal = app.objects[0];
+                });
+        },
+       methods: {
+           getUrl: function (action) {
+               var template = '/_controller_/_action_?json=true';
+               return template.replace('_controller_', this.controller).replace('_action_', action);
+           },
+            getIndex: function (o) {
+               var app = this;
+                var i = app.objects.map(function (elem) {
+                    return elem.ID;
+                }).indexOf(o.ID);
+                return i;
+            },
+            refresh: function () {
+                var app = this;
+                $.get(app.listUrl, function (response) {
+                    app.objects = response;
+                });
+            },
+            details: function (o) {
+                var app = this;
+                $.get(app.detailsUrl, { id: o.ID }, function (response) {
+                    var i = app.getIndex(o);
+                    console.log(i);
+                    app.objects[i] = response;
+                    app.selectedObject = app.objects[i];
+                    app.hideModals();
+                    app.detailsModal = true;
+                });
+            },
+            edit: function (o) {
+                var app = this;
+                $.get(app.editUrl, { id: o.ID }, function (response) {
+                    var i = app.getIndex(o);
+                    app.objects[i] = response.data;
+                    app.lookups = response.lookups;
+                    //console.log(app.lookups);
+                    app.selectedObject = app.objects[i];
+                    var editObj = JSON.parse(JSON.stringify(app.selectedObject));
+                    for (var i in editObj) {
+                        var x = editObj[i];
+                        if (Array.isArray(x) || (x instanceof Object && x.constructor === Object)) {
+                            delete editObj[i];
+                        }
+                    }
+                    app.editObject = editObj;
+                    app.hideModals();
+                    app.editModal = true;
+                });
+            },
+            createNew: function () {
+                var app = this;
+                $.get(app.newUrl, function (response) {
+                    app.createObject = response.data;
+                    app.lookups = response.lookups;
+                    app.hideModals();
+                    app.newModal = true;
+                });
+            },
+            del: function (o) {
+                var app = this;
+                $.get(app.deleteUrl, { id: o.ID }, function (response) {
+                    var i = app.getIndex(o);
+                    console.log(i);
+                    app.objects[i] = response;
+                    app.selectedObject = app.objects[i];
+                    app.hideModals();
+                    app.deleteModal = true;
+                });
+            },
+            create: function (o) {
+                var app = this;
+                o["__RequestVerificationToken"] = app.token;
+                $.post(app.createUrl, o, function (response) {
+                    app.objects = response;
+                    app.selectedObject = o;
+                    app.hideModals();
+                })
+            },
+            update: function (o) {
+                var app = this;
+                o["__RequestVerificationToken"] = app.token;
+
+                $.post(app.updateUrl, o, function (response) {
+                    app.objects = response;
+                    app.selectedObject = o;
+                    app.hideModals();
+                })
+            },
+            deleteConfirmed: function (o) {
+                var app = this;
+                o["__RequestVerificationToken"] = app.token;
+                $.post(app.deleteUrl, o, function (response) {
+                    app.objects = response;
+                    app.selectedObject = o;
+                    app.hideModals();
+                })
+            },
+            hideModals: function () {
+                var app = this;
+                app.detailsModal = false;
+                app.editModal = false;
+                app.newModal = false;
+                app.deleteModal = false;
+            }
+        }
+    });
+
+</script>

@@ -21,33 +21,43 @@ namespace WorkflowWeb.ViewModels
 		public String Name { get; set; }
 		
 		[DisplayName("TIMS_Project Action Item")]
+		[JsonIgnore]
 		public List<TIMS_ProjectActionItemViewModel> TIMS_ProjectActionItem { get; set; }
 		
 		[DisplayName("TIMS_Project Area")]
+		[JsonIgnore]
 		public List<TIMS_ProjectAreaViewModel> TIMS_ProjectArea { get; set; }
 		
 		[DisplayName("TIMS_Project Contractor")]
+		[JsonIgnore]
 		public List<TIMS_ProjectContractorViewModel> TIMS_ProjectContractor { get; set; }
 		
 		[DisplayName("TIMS_Project Discipline")]
+		[JsonIgnore]
 		public List<TIMS_ProjectDisciplineViewModel> TIMS_ProjectDiscipline { get; set; }
 		
 		[DisplayName("TIMS_Project Interface Point")]
+		[JsonIgnore]
 		public List<TIMS_ProjectInterfacePointViewModel> TIMS_ProjectInterfacePoint { get; set; }
 		
 		[DisplayName("TIMS_Project Package")]
+		[JsonIgnore]
 		public List<TIMS_ProjectPackageViewModel> TIMS_ProjectPackage { get; set; }
 		
 		[DisplayName("TIMS_Project Physical Area")]
+		[JsonIgnore]
 		public List<TIMS_ProjectPhysicalAreaViewModel> TIMS_ProjectPhysicalArea { get; set; }
 		
 		[DisplayName("TIMS_User Role")]
+		[JsonIgnore]
 		public List<TIMS_UserRoleViewModel> TIMS_UserRole { get; set; }
 		
 		[DisplayName("TIMS_Project Comment")]
+		[JsonIgnore]
 		public List<TIMS_ProjectCommentViewModel> TIMS_ProjectComment { get; set; }
 		
 		[DisplayName("TIMS_Project Interface Agreement")]
+		[JsonIgnore]
 		public List<TIMS_ProjectInterfaceAgreementViewModel> TIMS_ProjectInterfaceAgreement { get; set; }
 		
 
