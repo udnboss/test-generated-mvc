@@ -44,14 +44,14 @@
                         <th>
                             
                         </th>
-                        @if (currentRouteFilter.Comment == null) { <th>@Html.DisplayNameFor(m => m.Comment)</th> }
+                        @if (currentRouteFilter.Name == null) { <th>@Html.DisplayNameFor(m => m.Name)</th> }
+						@if (currentRouteFilter.Comment == null) { <th>@Html.DisplayNameFor(m => m.Comment)</th> }
+						@if (currentRouteFilter.ProjectID == null) { <th>@Html.DisplayNameFor(m => m.ProjectID)</th> }
 						@if (currentRouteFilter.ProjectInterfacePointWorkflowID == null) { <th>@Html.DisplayNameFor(m => m.ProjectInterfacePointWorkflowID)</th> }
 						@if (currentRouteFilter.ProjectInterfaceAgreementWorkflowID == null) { <th>@Html.DisplayNameFor(m => m.ProjectInterfaceAgreementWorkflowID)</th> }
 						@if (currentRouteFilter.ProjectActionItemWorkflowID == null) { <th>@Html.DisplayNameFor(m => m.ProjectActionItemWorkflowID)</th> }
 						@if (currentRouteFilter.UserID == null) { <th>@Html.DisplayNameFor(m => m.UserID)</th> }
 						@if (currentRouteFilter.DateAdded == null) { <th>@Html.DisplayNameFor(m => m.DateAdded)</th> }
-						@if (currentRouteFilter.Name == null) { <th>@Html.DisplayNameFor(m => m.Name)</th> }
-						@if (currentRouteFilter.ProjectID == null) { <th>@Html.DisplayNameFor(m => m.ProjectID)</th> }
                     </tr>
                 </thead>
                 <tbody>
@@ -69,14 +69,14 @@
                                    data-ajax-update="#@(ui_modal_id)_body" 
                                    href="@Url.Action("Details", controller, new { id = item.ID, ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter })"><i class="fas fa-eye"></i> View</a>
                             </td>
-                            @if (currentRouteFilter.Comment == null) { <td>@Html.DisplayFor(modelItem => item.Comment)</td> }
+                            @if (currentRouteFilter.Name == null) { <td>@Html.DisplayFor(modelItem => item.Name)</td> }
+						@if (currentRouteFilter.Comment == null) { <td>@Html.DisplayFor(modelItem => item.Comment)</td> }
+						@if (currentRouteFilter.ProjectID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_Project.Name)</td> }
 						@if (currentRouteFilter.ProjectInterfacePointWorkflowID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_ProjectInterfacePointWorkflow.WorkflowTypeID)</td> }
 						@if (currentRouteFilter.ProjectInterfaceAgreementWorkflowID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_ProjectInterfaceAgreementWorkflow.WorkflowTypeID)</td> }
 						@if (currentRouteFilter.ProjectActionItemWorkflowID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_ProjectActionItemWorkflow.WorkflowTypeID)</td> }
 						@if (currentRouteFilter.UserID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_User.Name)</td> }
 						@if (currentRouteFilter.DateAdded == null) { <td>@Html.DisplayFor(modelItem => item.DateAdded)</td> }
-						@if (currentRouteFilter.Name == null) { <td>@Html.DisplayFor(modelItem => item.Name)</td> }
-						@if (currentRouteFilter.ProjectID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_Project.Name)</td> }
                         </tr>
                     }
                 </tbody>

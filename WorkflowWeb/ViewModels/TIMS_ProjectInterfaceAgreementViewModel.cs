@@ -20,6 +20,9 @@ namespace WorkflowWeb.ViewModels
 		[DisplayName("Name")]
 		public String Name { get; set; }
 		
+		[DisplayName("Project")]
+		public Guid? ProjectID { get; set; }
+		
 		[DisplayName("Interface Point")]
 		public Guid? InterfacePointID { get; set; }
 		
@@ -59,10 +62,11 @@ namespace WorkflowWeb.ViewModels
 		[DisplayName("Close Date")]
 		public DateTime? CloseDate { get; set; }
 		
-		[DisplayName("Project")]
-		public Guid? ProjectID { get; set; }
+		[DisplayName("TIMS_Project")]
+		public TIMS_ProjectViewModel TIMS_Project { get; set; }
 		
 		[DisplayName("TIMS_Project Action Item")]
+		[JsonIgnore]
 		public List<TIMS_ProjectActionItemViewModel> TIMS_ProjectActionItem { get; set; }
 		
 		[DisplayName("TIMS_Project Interface Point")]
@@ -75,13 +79,12 @@ namespace WorkflowWeb.ViewModels
 		public TIMS_ProjectPackageViewModel TIMS_ProjectPackage1 { get; set; }
 		
 		[DisplayName("TIMS_Project Interface Agreement Workflow")]
+		[JsonIgnore]
 		public List<TIMS_ProjectInterfaceAgreementWorkflowViewModel> TIMS_ProjectInterfaceAgreementWorkflow { get; set; }
 		
 		[DisplayName("TIMS_User Watchlist Item")]
+		[JsonIgnore]
 		public List<TIMS_UserWatchlistItemViewModel> TIMS_UserWatchlistItem { get; set; }
-		
-		[DisplayName("TIMS_Project")]
-		public TIMS_ProjectViewModel TIMS_Project { get; set; }
 		
 
         public TIMS_ProjectInterfaceAgreementViewModel()
@@ -95,6 +98,7 @@ namespace WorkflowWeb.ViewModels
             {
                 this.ID = m.ID;
 				this.Name = m.Name;
+				this.ProjectID = m.ProjectID;
 				this.InterfacePointID = m.InterfacePointID;
 				this.RequestorPackageID = m.RequestorPackageID;
 				this.ResponderPackageID = m.ResponderPackageID;
@@ -108,14 +112,13 @@ namespace WorkflowWeb.ViewModels
 				this.AcceptedDate = m.AcceptedDate;
 				this.ResponseDate = m.ResponseDate;
 				this.CloseDate = m.CloseDate;
-				this.ProjectID = m.ProjectID;
+				this.TIMS_Project = convertSubs ? new TIMS_ProjectViewModel(m.TIMS_Project) : null;
 				this.TIMS_ProjectActionItem = convertSubs && m.TIMS_ProjectActionItem != null ? m.TIMS_ProjectActionItem.Select(x => new TIMS_ProjectActionItemViewModel(x)).ToList() : null;
 				this.TIMS_ProjectInterfacePoint = convertSubs ? new TIMS_ProjectInterfacePointViewModel(m.TIMS_ProjectInterfacePoint) : null;
 				this.TIMS_ProjectPackage = convertSubs ? new TIMS_ProjectPackageViewModel(m.TIMS_ProjectPackage) : null;
 				this.TIMS_ProjectPackage1 = convertSubs ? new TIMS_ProjectPackageViewModel(m.TIMS_ProjectPackage1) : null;
 				this.TIMS_ProjectInterfaceAgreementWorkflow = convertSubs && m.TIMS_ProjectInterfaceAgreementWorkflow != null ? m.TIMS_ProjectInterfaceAgreementWorkflow.Select(x => new TIMS_ProjectInterfaceAgreementWorkflowViewModel(x)).ToList() : null;
 				this.TIMS_UserWatchlistItem = convertSubs && m.TIMS_UserWatchlistItem != null ? m.TIMS_UserWatchlistItem.Select(x => new TIMS_UserWatchlistItemViewModel(x)).ToList() : null;
-				this.TIMS_Project = convertSubs ? new TIMS_ProjectViewModel(m.TIMS_Project) : null;
             }
         }
 
@@ -125,6 +128,7 @@ namespace WorkflowWeb.ViewModels
 
             m.ID = this.ID;
 			m.Name = this.Name;
+			m.ProjectID = this.ProjectID;
 			m.InterfacePointID = this.InterfacePointID;
 			m.RequestorPackageID = this.RequestorPackageID;
 			m.ResponderPackageID = this.ResponderPackageID;
@@ -138,14 +142,13 @@ namespace WorkflowWeb.ViewModels
 			m.AcceptedDate = this.AcceptedDate;
 			m.ResponseDate = this.ResponseDate;
 			m.CloseDate = this.CloseDate;
-			m.ProjectID = this.ProjectID;
+			m.TIMS_Project = convertSubs && this.TIMS_Project != null ?  this.TIMS_Project.ToModel() : null;
 			m.TIMS_ProjectActionItem = convertSubs && this.TIMS_ProjectActionItem != null  ? this.TIMS_ProjectActionItem.Select(x => x.ToModel()).ToList() : null;
 			m.TIMS_ProjectInterfacePoint = convertSubs && this.TIMS_ProjectInterfacePoint != null ?  this.TIMS_ProjectInterfacePoint.ToModel() : null;
 			m.TIMS_ProjectPackage = convertSubs && this.TIMS_ProjectPackage != null ?  this.TIMS_ProjectPackage.ToModel() : null;
 			m.TIMS_ProjectPackage1 = convertSubs && this.TIMS_ProjectPackage1 != null ?  this.TIMS_ProjectPackage1.ToModel() : null;
 			m.TIMS_ProjectInterfaceAgreementWorkflow = convertSubs && this.TIMS_ProjectInterfaceAgreementWorkflow != null  ? this.TIMS_ProjectInterfaceAgreementWorkflow.Select(x => x.ToModel()).ToList() : null;
 			m.TIMS_UserWatchlistItem = convertSubs && this.TIMS_UserWatchlistItem != null  ? this.TIMS_UserWatchlistItem.Select(x => x.ToModel()).ToList() : null;
-			m.TIMS_Project = convertSubs && this.TIMS_Project != null ?  this.TIMS_Project.ToModel() : null;
 
             return m;
         }
@@ -157,6 +160,7 @@ namespace WorkflowWeb.ViewModels
             {
                 this.ID = m.ID;
 				this.Name = m.Name;
+				this.ProjectID = m.ProjectID;
 				this.InterfacePointID = m.InterfacePointID;
 				this.RequestorPackageID = m.RequestorPackageID;
 				this.ResponderPackageID = m.ResponderPackageID;
@@ -170,14 +174,13 @@ namespace WorkflowWeb.ViewModels
 				this.AcceptedDate = m.AcceptedDate;
 				this.ResponseDate = m.ResponseDate;
 				this.CloseDate = m.CloseDate;
-				this.ProjectID = m.ProjectID;
+				this.TIMS_Project = convertSubs ? new TIMS_ProjectViewModel(m.TIMS_Project) : null;
 				this.TIMS_ProjectActionItem = convertSubs && m.TIMS_ProjectActionItem != null ? m.TIMS_ProjectActionItem.Select(x => new TIMS_ProjectActionItemViewModel(x)).ToList() : null;
 				this.TIMS_ProjectInterfacePoint = convertSubs ? new TIMS_ProjectInterfacePointViewModel(m.TIMS_ProjectInterfacePoint) : null;
 				this.TIMS_ProjectPackage = convertSubs ? new TIMS_ProjectPackageViewModel(m.TIMS_ProjectPackage) : null;
 				this.TIMS_ProjectPackage1 = convertSubs ? new TIMS_ProjectPackageViewModel(m.TIMS_ProjectPackage1) : null;
 				this.TIMS_ProjectInterfaceAgreementWorkflow = convertSubs && m.TIMS_ProjectInterfaceAgreementWorkflow != null ? m.TIMS_ProjectInterfaceAgreementWorkflow.Select(x => new TIMS_ProjectInterfaceAgreementWorkflowViewModel(x)).ToList() : null;
 				this.TIMS_UserWatchlistItem = convertSubs && m.TIMS_UserWatchlistItem != null ? m.TIMS_UserWatchlistItem.Select(x => new TIMS_UserWatchlistItemViewModel(x)).ToList() : null;
-				this.TIMS_Project = convertSubs ? new TIMS_ProjectViewModel(m.TIMS_Project) : null;
             }
 
             return this;

@@ -1,0 +1,238 @@
+﻿<script type="text/template" id="T_Comment-Component-Template">
+    <div>
+        <div class="row p-2">
+            <div class="col"></div>
+            <div class="ml-auto mr-2">
+                <button v-on:click="refresh()" class="btn btn-outline-primary"><i class="fas fa-sync"></i> Refresh</button>
+                <button v-on:click="createNew()" class="btn btn-outline-success"><i class="fas fa-plus-circle"></i> New</button>
+            </div>
+        </div>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th v-if="c.Name != 'ID'" v-for="(c, n, i) in schema.Columns">{{ c.DisplayName }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="x in objects" v-on:click="details(x)" style="cursor:pointer">
+                    <td v-if="n != 'ID'" v-for="(c, n, i) in x.Cells">{{ c.DisplayValue }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <v-modal v-if="selectedObject != null" :show="detailsModal" v-on:close="detailsModal = false">
+            <div class="row p-2">
+                <div class="col"></div>
+                <div class="ml-auto mr-2">
+                    <button v-on:click="edit(selectedObject)" class="btn btn-outline-success"><i class="fas fa-edit"></i> Edit</button>
+                    <button v-on:click="del(selectedObject)" class="btn btn-outline-danger"><i class="fas fa-trash"></i> Delete</button>
+                </div>
+            </div>
+
+            <dl>
+                <template v-for="(value, name, index) in selectedObject.Cells">
+                    <dt>{{ name }}</dt>
+                    <dd>{{ value.DisplayValue }}</dd>
+                </template>
+            </dl>
+
+        </v-modal>
+
+        <v-modal v-if="editObject != null" :show="editModal" v-on:close="editModal = false">
+            <form v-on:submit.prevent v-on:submit.once="update(editObject)">
+                <component v-for="(value, name, index) in editObject.Cells"
+                           :is="schema.Columns[name].Component"
+                           :label="schema.Columns[name].DisplayName"
+                           v-model="value.Value"
+                           :options="lookups.DomainID"></component>
+                <button class="btn btn-success"><i class="fas fa-save"></i> Update</button>
+            </form>
+        </v-modal>
+
+        <v-modal v-if="createObject != null" :show="newModal" v-on:close="newModal = false">
+            <form v-on:submit.prevent v-on:submit="create(createObject)">
+                <component v-for="(value, name, index) in createObject.Cells" 
+                           :is="schema.Columns[name].Component" 
+                           :label="schema.Columns[name].DisplayName" 
+                           v-model="createObject.Cells[name].Value"
+                           :options="lookups.DomainID"></component>
+                @*<v-select2 label="Domain" :options="lookups.domain_id" v-model="createObject.Cells.DomainID.Value">
+                    <option disabled value="0">Select one</option>
+                </v-select2>*@
+                <button class="btn btn-success"><i class="fas fa-save"></i> Create</button>
+            </form>
+        </v-modal>
+
+        <v-modal v-if="selectedObject != null" :show="deleteModal" v-on:close="deleteModal = false">
+            <dl>
+                <template v-for="(value, name, index) in selectedObject.Cells">
+                    <dt>{{ name }}</dt>
+                    <dd>{{ value.DisplayValue }}</dd>
+                </template>
+            </dl>
+            <form v-on:submit.prevent v-on:submit.once="deleteConfirmed(selectedObject)">
+                <button class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+            </form>
+        </v-modal>
+
+        <v-modal v-if="errorObject != null" :show="errorModal" name="Errors Encountered" v-on:close="errorModal = false">
+            @*<p>{{ errorObject }}</p>*@
+            <ul>
+                <template v-for="error in errorObject">
+                    <li>{{ error }}</li>
+                </template>
+            </ul>
+        </v-modal>
+    </div>
+</script>
+
+<script>
+    //see this for a complete crud example...
+    //https://www.ma-no.org/en/programming/javascript/crud-operations-using-vue-js-a-basic-example
+
+
+    Vue.component("v-t_comment", {
+        template: "#T_Comment-Component-Template",
+        data: function () {
+            return {
+                lookups: {},
+                objects: [],
+                schema: {},
+                errorObject: null,
+                selectedObject: null,
+                editObject: null,
+                createObject: null,
+                detailsModal: false,
+                editModal: false,
+                newModal: false,
+                deleteModal: false,
+                errorModal: false,
+                token: $('@Html.AntiForgeryToken()').val()
+            }
+        },
+       mounted: function () {
+           var app = this;
+            $.get('@Url.Action("List", "T_Comment", new { json = true })', function (response) {
+                app.schema = response.schema;
+                app.objects = response.data;
+                app.selectedObject = app.objects[0];
+                app.createObject = app.objects[0];
+            }).fail(app.error);
+        },
+       methods: {
+            getIndex: function (o) {
+               var app = this;
+                var i = app.objects.map(function (elem) {
+                    return elem.Cells.ID.Value;
+                }).indexOf(o.Cells.ID.Value);
+                return i;
+            },
+            refresh: function () {
+                var app = this;
+                $.get('@Url.Action("List", "T_Comment", new { json = true })', function (response) {
+                    app.schema = response.schema;
+                    app.objects = response.data;
+                }).fail(app.error);
+            },
+            details: function (o) {
+                var app = this;
+                $.get('@Url.Action("Details", "T_Comment", new { json = true })', { id: o.PrimaryKey }, function (response) {
+                    var i = app.getIndex(o);
+                    console.log(i);
+                    app.objects[i] = response;
+                    app.selectedObject = app.objects[i];
+                    app.hideModals();
+                    app.detailsModal = true;
+                }).fail(app.error);
+            },
+            edit: function (o) {
+                var app = this;
+                $.get('@Url.Action("Edit", "T_Comment", new { json = true })', { id: o.PrimaryKey }, function (response) {
+                    var i = app.getIndex(o);
+                    app.objects[i] = response.data;
+                    app.lookups = response.lookups;
+                    app.selectedObject = app.objects[i];
+                    var editObj = JSON.parse(JSON.stringify(app.selectedObject));
+                    app.editObject = editObj;
+                    app.hideModals();
+                    app.editModal = true;
+                }).fail(app.error);
+            },
+            createNew: function () {
+                var app = this;
+                $.get('@Url.Action("New", "T_Comment", new { json = true })', function (response) {
+                    app.createObject = response.data;
+                    app.lookups = response.lookups;
+                    app.hideModals();
+                    app.newModal = true;
+                }).fail(app.error);
+            },
+            del: function (o) {
+                var app = this;
+                app.selectedObject = o;
+                app.hideModals();
+                app.deleteModal = true;
+            },
+            create: function (o) {
+                var app = this;
+
+                var data = {};
+                data["__RequestVerificationToken"] = app.token;
+                Object.keys(o.Cells).map(function (key, index) {
+                    data[key] = o.Cells[key].Value;
+                });
+
+                $.post('@Url.Action("Create", "T_Comment", new { json = true })', data, function (response) {
+                    app.objects = response.data;
+                    app.selectedObject = o;
+                    app.hideModals();
+                }).fail(app.error);
+            },
+            update: function (o) {
+                var app = this;
+
+                var data = {};
+                data["__RequestVerificationToken"] = app.token;
+                Object.keys(o.Cells).map(function (key, index) {
+                    data[key] = o.Cells[key].Value;
+                });
+
+                $.post('@Url.Action("Update", "T_Comment", new { json = true })', data, function (response) {
+                    app.objects = response.data;
+                    app.selectedObject = o;
+                    app.hideModals();
+                }).fail(app.error);
+            },
+            deleteConfirmed: function (o) {
+                var app = this;
+
+                var data = {};
+                data["__RequestVerificationToken"] = app.token;
+                Object.keys(o.Cells).map(function (key, index) {
+                    data[key] = o.Cells[key].Value;
+                });
+
+                $.post('@Url.Action("Delete", "T_Comment", new { json = true })', data, function (response) {
+                    app.objects = response.data;
+                    app.selectedObject = o;
+                    app.hideModals();
+                }).fail(app.error);
+            },
+            hideModals: function () {
+                var app = this;
+                app.detailsModal = false;
+                app.editModal = false;
+                app.newModal = false;
+                app.deleteModal = false;
+                app.errorModal = false;
+           },
+            error: function (xhr, status, error) {
+                var app = this;
+                app.errorObject = xhr.responseJSON[0].split('\n');
+                app.errorModal = true;
+            }
+        }
+    });
+
+</script>

@@ -30,10 +30,10 @@ namespace WorkflowWeb.Controllers
             var routeFilter = GetRouteFilter();
 
             return new Dictionary<string, object> {
-                {"InterfacePointID", db.TIMS_ProjectInterfacePoint.Where(x => routeFilter.InterfacePointID == null || x.ID == routeFilter.InterfacePointID).Where(x => routeFilter.ProjectID == null ||  x.TIMS_ProjectPackage.ProjectID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
+                {"ProjectID", db.TIMS_Project.Where(x => routeFilter.ProjectID == null || x.ID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"InterfacePointID", db.TIMS_ProjectInterfacePoint.Where(x => routeFilter.InterfacePointID == null || x.ID == routeFilter.InterfacePointID).Where(x => routeFilter.ProjectID == null ||  x.TIMS_ProjectPackage.ProjectID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
 				{"RequestorPackageID", db.TIMS_ProjectPackage.Where(x => routeFilter.RequestorPackageID == null || x.ID == routeFilter.RequestorPackageID).Where(x => routeFilter.ProjectID == null ||  x.TIMS_ProjectContractor.ProjectID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"ResponderPackageID", db.TIMS_ProjectPackage.Where(x => routeFilter.ResponderPackageID == null || x.ID == routeFilter.ResponderPackageID).Where(x => routeFilter.ProjectID == null ||  x.TIMS_ProjectContractor.ProjectID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"ProjectID", db.TIMS_Project.Where(x => routeFilter.ProjectID == null || x.ID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
+				{"ResponderPackageID", db.TIMS_ProjectPackage.Where(x => routeFilter.ResponderPackageID == null || x.ID == routeFilter.ResponderPackageID).Where(x => routeFilter.ProjectID == null ||  x.TIMS_ProjectContractor.ProjectID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
             };
         }
 

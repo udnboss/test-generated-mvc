@@ -18,6 +18,7 @@ namespace WorkflowWeb.Controllers
     {
         public T_CommentController()
         {
+            db = new COMMENTSEntities();
             business = new T_CommentBusiness(db, user);
             this.GetLookups = DefaultGetLookups;
         }
@@ -61,7 +62,7 @@ namespace WorkflowWeb.Controllers
             if (responseCode == HttpStatusCode.OK)
             {
                 var data = results.Data.Select(x => new T_CommentViewModel(x, true)).ToList();
-                if (json) { return JsonOut(data); }
+                if (json) { return JsonOut(new {schema = ((T_CommentBusiness)business).GetSchema(), data = data.Select(x => x.ToRow()) }); }
 
                 ViewBag.CanEdit = business.CanNew(routeFilter).Status == State.Success;
 
@@ -103,7 +104,7 @@ namespace WorkflowWeb.Controllers
                 {
                     var m = r.Data;
                     var vm = new T_CommentViewModel(m, true);
-                    if (json) { return JsonOut(vm); }
+                    if (json) { return JsonOut(vm.ToRow()); }
 
                     ViewBag.CanEdit = business.CanEdit(id).Status == State.Success;
                     ViewBag.CanDelete = business.CanDelete(m).Status == State.Success;
@@ -157,8 +158,9 @@ namespace WorkflowWeb.Controllers
         public ActionResult New(bool json = false)
         {
             var routeFilter = GetRouteFilter();
-            var vm = routeFilter != null ? new T_CommentViewModel(routeFilter) : new T_CommentViewModel() { };
+            //var vm = routeFilter != null ? new T_CommentViewModel(routeFilter) : new T_CommentViewModel() { };
             var r = business.CanNew(routeFilter);
+            var vm = new T_CommentViewModel(r.Data);
             var message = r.Message;
 
             var responseCode = GetResponseCode(r);
@@ -166,7 +168,7 @@ namespace WorkflowWeb.Controllers
 
             if (responseCode == HttpStatusCode.OK)
             {
-                if (json) { return JsonOut(new { data = vm, lookups = GetLookups() }); }
+                if (json) { return JsonOut(new { data = vm.ToRow(), lookups = GetLookups() }); }
 
                 ViewBag.Lookups = GetLookups();                
                 return PartialView(vm);
@@ -196,7 +198,7 @@ namespace WorkflowWeb.Controllers
                     var m = r.Data;
                     var vm = new T_CommentViewModel(m, true);
                                         
-                    if (json) { return JsonOut(new { data = vm, lookups = GetLookups() }); }
+                    if (json) { return JsonOut(new { data = vm.ToRow(), lookups = GetLookups() }); }
                     ViewBag.Lookups = GetLookups();
                     return PartialView(vm);
                 }

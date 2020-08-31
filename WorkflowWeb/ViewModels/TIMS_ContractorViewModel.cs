@@ -21,6 +21,7 @@ namespace WorkflowWeb.ViewModels
 		public String Name { get; set; }
 		
 		[DisplayName("TIMS_Project Contractor")]
+		[JsonIgnore]
 		public List<TIMS_ProjectContractorViewModel> TIMS_ProjectContractor { get; set; }
 		
 

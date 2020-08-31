@@ -27,9 +27,11 @@ namespace WorkflowWeb.ViewModels
 		public TIMS_ProjectDisciplineViewModel TIMS_ProjectDiscipline { get; set; }
 		
 		[DisplayName("TIMS_Project Discipline Interface Type Field")]
+		[JsonIgnore]
 		public List<TIMS_ProjectDisciplineInterfaceTypeFieldViewModel> TIMS_ProjectDisciplineInterfaceTypeField { get; set; }
 		
 		[DisplayName("TIMS_Project Interface Point Workflow")]
+		[JsonIgnore]
 		public List<TIMS_ProjectInterfacePointWorkflowViewModel> TIMS_ProjectInterfacePointWorkflow { get; set; }
 		
 

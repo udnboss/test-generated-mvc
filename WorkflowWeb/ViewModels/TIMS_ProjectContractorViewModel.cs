@@ -33,6 +33,7 @@ namespace WorkflowWeb.ViewModels
 		public TIMS_ProjectViewModel TIMS_Project { get; set; }
 		
 		[DisplayName("TIMS_Project Package")]
+		[JsonIgnore]
 		public List<TIMS_ProjectPackageViewModel> TIMS_ProjectPackage { get; set; }
 		
 

@@ -48,10 +48,10 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
-					if (filter.InterfacePointWorkflowID != null && filter.InterfacePointWorkflowID.ToString() != default(Guid).ToString()) data = data.Where(x => x.InterfacePointWorkflowID == filter.InterfacePointWorkflowID);
-					if (filter.InterfaceTypeFieldID != null && filter.InterfaceTypeFieldID.ToString() != default(Guid).ToString()) data = data.Where(x => x.InterfaceTypeFieldID == filter.InterfaceTypeFieldID);
-					if (filter.Value != null && filter.Value.ToString() != default(Guid).ToString()) data = data.Where(x => x.Value == filter.Value);
+                if (filter.ID != null && filter.ID != default(Guid)) data = data.Where(x => x.ID == filter.ID);
+					if (filter.InterfacePointWorkflowID != null && filter.InterfacePointWorkflowID != default(Guid)) data = data.Where(x => x.InterfacePointWorkflowID == filter.InterfacePointWorkflowID);
+					if (filter.InterfaceTypeFieldID != null && filter.InterfaceTypeFieldID != default(Guid)) data = data.Where(x => x.InterfaceTypeFieldID == filter.InterfaceTypeFieldID);
+					if (filter.Value != null) data = data.Where(x => x.Value == filter.Value);
             }
 
             return data;

@@ -21,6 +21,7 @@ namespace WorkflowWeb.ViewModels
 		public String Name { get; set; }
 		
 		[DisplayName("TIMS_User Role")]
+		[JsonIgnore]
 		public List<TIMS_UserRoleViewModel> TIMS_UserRole { get; set; }
 		
 

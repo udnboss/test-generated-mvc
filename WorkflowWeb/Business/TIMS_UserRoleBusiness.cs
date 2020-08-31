@@ -50,11 +50,11 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
-					if (filter.UserID != null && filter.UserID.ToString() != default(Guid).ToString()) data = data.Where(x => x.UserID == filter.UserID);
-					if (filter.ProjectID != null && filter.ProjectID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectID == filter.ProjectID);
-					if (filter.ProjectPackageID != null && filter.ProjectPackageID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectPackageID == filter.ProjectPackageID);
-					if (filter.RoleID != null && filter.RoleID.ToString() != default(Guid).ToString()) data = data.Where(x => x.RoleID == filter.RoleID);
+                if (filter.ID != null && filter.ID != default(Guid)) data = data.Where(x => x.ID == filter.ID);
+					if (filter.UserID != null && filter.UserID != default(Guid)) data = data.Where(x => x.UserID == filter.UserID);
+					if (filter.ProjectID != null && filter.ProjectID != default(Guid)) data = data.Where(x => x.ProjectID == filter.ProjectID);
+					if (filter.ProjectPackageID != null && filter.ProjectPackageID != default(Guid)) data = data.Where(x => x.ProjectPackageID == filter.ProjectPackageID);
+					if (filter.RoleID != null && filter.RoleID != default(Guid)) data = data.Where(x => x.RoleID == filter.RoleID);
             }
 
             return data;

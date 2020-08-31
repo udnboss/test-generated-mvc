@@ -47,9 +47,9 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
-					if (filter.Name != null && filter.Name.ToString() != default(Guid).ToString()) data = data.Where(x => x.Name == filter.Name);
-					if (filter.InterfaceTypeID != null && filter.InterfaceTypeID.ToString() != default(Guid).ToString()) data = data.Where(x => x.InterfaceTypeID == filter.InterfaceTypeID);
+                if (filter.ID != null && filter.ID != default(Guid)) data = data.Where(x => x.ID == filter.ID);
+					if (filter.Name != null) data = data.Where(x => x.Name == filter.Name);
+					if (filter.InterfaceTypeID != null && filter.InterfaceTypeID != default(Guid)) data = data.Where(x => x.InterfaceTypeID == filter.InterfaceTypeID);
             }
 
             return data;

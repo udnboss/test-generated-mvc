@@ -42,6 +42,7 @@ namespace WorkflowWeb.ViewModels
 		public String QueryString { get; set; }
 		
 		[DisplayName("T_Comment1")]
+		[JsonIgnore]
 		public List<T_CommentViewModel> T_Comment1 { get; set; }
 		
 		[DisplayName("T_Comment2")]
@@ -51,13 +52,15 @@ namespace WorkflowWeb.ViewModels
 		public T_DomainViewModel T_Domain { get; set; }
 		
 		[DisplayName("T_Comment Vote")]
+		[JsonIgnore]
 		public List<T_CommentVoteViewModel> T_CommentVote { get; set; }
 		
 
         public T_CommentViewModel()
         {
+			DatePosted = DateTime.Now;
 
-        }
+		}
 
         public T_CommentViewModel(T_Comment m, bool convertSubs = false)
         {
@@ -100,6 +103,28 @@ namespace WorkflowWeb.ViewModels
             return m;
         }
 
+
+
+		public Row ToRow()
+		{
+
+			var row = new Row { 
+				PrimaryKey = ID.ToString(), 
+				Cells = new Dictionary<string, Cell> {
+					{"ID", new Cell { Value = ID, DisplayValue = ID.ToString(), Color = null } },
+					{"DomainID", new Cell { Value = DomainID, DisplayValue = DomainID != null ? Str(T_Domain.Host) : null, Color = null } },
+					{"Path", new Cell { Value = Path, DisplayValue = Str(Path), Color = null } },
+					{"IP", new Cell { Value = IP, DisplayValue = Str(IP), Color = null } },
+					{"Name", new Cell { Value = Name, DisplayValue = Str(Name), Color = null } },
+					{"Comment", new Cell { Value = Comment, DisplayValue = Str(Comment), Color = null } },
+					{"DatePosted", new Cell { Value = DatePosted, DisplayValue = Str(DatePosted), Color = null } },
+					{"QueryString", new Cell { Value = QueryString, DisplayValue = Str(QueryString), Color = null } }
+				}
+			};
+
+			return row;
+        }
+
         public override BaseViewModel<T_Comment> FromModel<M>(M mo, bool convertSubs)
         {
             var m = mo as T_Comment;
@@ -131,6 +156,36 @@ namespace WorkflowWeb.ViewModels
 
             return errors.AsEnumerable();
         }
+    		
+	}
+
+	public class Table
+    {
+		public Dictionary<string, Column> Columns { get; set; }
+		public List<Row> Rows { get; set; }
+    }
+	public class Column
+    {
+		public string Name { get; set; }
+		public string DisplayName { get; set; }
+		public string Type { get; set; }
+		public string Component { get; set; }
+    }
+	public class Row
+    {
+		public string PrimaryKey { get; set; }
+		public Dictionary<string, Cell> Cells { get; set; }
+
+		public Row()
+        {
+			Cells = new Dictionary<string, Cell>();
+        }
     }
 
+	public class Cell
+    {
+		public string Color { get; set; }
+		public object Value { get; set; }
+		public string DisplayValue { get; set; }
+    }
 }

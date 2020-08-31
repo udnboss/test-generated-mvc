@@ -1,50 +1,81 @@
 ﻿<script type="text/template" id="commentsComponent">
     <div>
         <div class="text-right">
-            <button v-on:click="refresh()" class="btn btn-primary">Refresh</button>
-            <button v-on:click="createNew()" class="btn btn-primary">New..</button>
+            <button v-on:click="refresh()" class="btn btn-outline-primary"><i class="fas fa-refresh"></i> Refresh</button>
+            <button v-on:click="createNew()" class="btn btn-outline-success"><i class="fas fa-plus-circle"></i> New</button>
         </div>
+
         <table class="table">
-            <tr v-for="c in objects">
-                <td>{{ c.Name }}</td>
-                <td>{{ c.Comment }}</td>
-                <td>{{ c.DatePosted }}</td>
-                <td><button v-on:click="details(c)" class="btn btn-primary">View</button></td>
-                <td><button v-on:click="edit(c)" class="btn btn-success">Edit</button></td>
-                <td><button v-on:click="del(c)" class="btn btn-danger">Delete</button></td>
-            </tr>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Domain</th>
+                    <th>Comment</th>
+                    <th>Date Posted</th>                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="x in objects">
+                    <td><button v-on:click="details(x)" class="btn btn-primary">View</button></td>
+                    <td>{{ x.Name }}</td>
+                    <td>{{ x.T_Domain.Name }}</td>
+                    <td>{{ x.Comment }}</td>
+                    <td>{{ x.DatePosted }}</td>                    
+                </tr>
+            </tbody>            
         </table>
 
-        <v-modal v-if="detailsModal" v-on:close="detailsModal = false" name="Umesh" v-bind:comment="selectedObject">
-            <p>{{ selectedObject.Comment }}</p>
+        <v-modal v-if="detailsModal" v-on:close="detailsModal = false" v-bind:comment="selectedObject">
+            <dl>
+                <dt>Name</dt>
+                <dd>{{ selectedObject.Name }}</dd>
+                <dt>Domain</dt>
+                <dd>{{ selectedObject.DomainID }}</dd>
+                <dt>Comment</dt>
+                <dd>{{ selectedObject.Comment }}</dd>
+                <dt>Date Posted</dt>
+                <dd>{{ selectedObject.DatePosted }}</dd>
+            </dl>
+            <button v-on:click="edit(selectedObject)" class="btn btn-outline-success"><i class="fas fa-pencil"></i> Edit</button>
+            <button v-on:click="del(selectedObject)" class="btn btn-outline-danger"><i class="fas fa-trash"></i> Delete</button>
         </v-modal>
 
-        <v-modal v-if="editModal" v-on:close="editModal = false" name="Umesh" v-bind:comment="editObject">
+        <v-modal v-if="editModal" v-on:close="editModal = false" v-bind:comment="editObject">
             <form v-on:submit.prevent="update(editObject)">
-                <v-form-input v-for="(value, name, index) in editObject" v-bind:key="name" :label="name" v-model="editObject[name]"></v-form-input>
-                @*<v-form-input label="UserName" v-model="editObject.Name"></v-form-input>
-        <v-form-input label="Comment" v-model="editObject.Comment"></v-form-input>*@
+                <v-form-input label="UserName" v-model="editObject.Name"></v-form-input>
+                <v-form-input label="Comment" v-model="editObject.Comment"></v-form-input>
                 <v-select2 label="Domain" :options="lookups.domain_id" v-model="editObject.DomainID">
                     <option disabled value="0">Select one</option>
                 </v-select2>
-                <button>Update</button>
-                <p>{{ editObject }}</p>
+                <button class="btn btn-success"><i class="fas fa-save"></i> Update</button>                
             </form>
         </v-modal>
 
-        <v-modal v-if="newModal" v-on:close="newModal = false" name="Umesh" v-bind:comment="createObject">
+        <v-modal v-if="newModal" v-on:close="newModal = false" v-bind:comment="createObject">
             <form v-on:submit.prevent="create(createObject)">
                 <v-form-input label="UserName" v-model="createObject.Name"></v-form-input>
                 <v-form-input label="Comment" v-model="createObject.Comment"></v-form-input>
-                <button>Create</button>
-                <p>{{ createObject }}</p>
+                <v-select2 label="Domain" :options="lookups.domain_id" v-model="createObject.DomainID">
+                    <option disabled value="0">Select one</option>
+                </v-select2>
+                <button class="btn btn-success"><i class="fas fa-save"></i> Create</button>
             </form>
         </v-modal>
 
-        <v-modal v-if="deleteModal" v-on:close="deleteModal = false" name="Umesh" v-bind:comment="selectedObject">
-            <p>{{ selectedObject.Comment }}</p>
+        <v-modal v-if="deleteModal" v-on:close="deleteModal = false" v-bind:comment="selectedObject">
+            <dl>
+                <dt>Name</dt>
+                <dd>{{ selectedObject.Name }}</dd>
+                <dt>Domain</dt>
+                <dd>{{ selectedObject.DomainID }}</dd>
+                <dt>Comment</dt>
+                <dd>{{ selectedObject.Comment }}</dd>
+                <dt>Date Posted</dt>
+                <dd>{{ selectedObject.DatePosted }}</dd>
+            </dl>
             <form v-on:submit.prevent="deleteConfirmed(selectedObject)">
-                <button>Delete</button>
+                <button class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
             </form>
         </v-modal>
     </div>
@@ -81,7 +112,6 @@
                 });
         },
        methods: {
-
            getIndex: function (o) {
                var app = this;
                 var i = app.objects.map(function (elem) {
@@ -93,7 +123,7 @@
                 var app = this;
                 $.get('@Url.Action("List", "Comment", new { json = true })', function (response) {
                     app.objects = response;
-                });
+                }).fail(function (xhr, status, error) { console.Log(status); });
             },
             details: function (o) {
                 var app = this;
@@ -104,7 +134,7 @@
                     app.selectedObject = app.objects[i];
                     app.hideModals();
                     app.detailsModal = true;
-                });
+                }).fail(function (xhr, status, error) { console.Log(status); });
             },
             edit: function (o) {
                 var app = this;
@@ -112,19 +142,12 @@
                     var i = app.getIndex(o);
                     app.objects[i] = response.data;
                     app.lookups = response.lookups;
-                    //console.log(app.lookups);
                     app.selectedObject = app.objects[i];
                     var editObj = JSON.parse(JSON.stringify(app.selectedObject));
-                    for (var i in editObj) {
-                        var x = editObj[i];
-                        if (Array.isArray(x) || (x instanceof Object && x.constructor === Object)) {
-                            delete editObj[i];
-                        }
-                    }
                     app.editObject = editObj;
                     app.hideModals();
                     app.editModal = true;
-                });
+                }).fail(function (xhr, status, error) { console.Log(status); });
             },
             createNew: function () {
                 var app = this;
@@ -133,7 +156,7 @@
                     app.lookups = response.lookups;
                     app.hideModals();
                     app.newModal = true;
-                });
+                }).fail(function (xhr, status, error) { console.Log(status); });
             },
             del: function (o) {
                 var app = this;
@@ -148,7 +171,7 @@
                     app.objects = response;
                     app.selectedObject = o;
                     app.hideModals();
-                })
+                }).fail(function (xhr, status, error) { console.Log(status); });
             },
             update: function (o) {
                 var app = this;
@@ -159,7 +182,7 @@
                     app.objects = response;
                     app.selectedObject = o;
                     app.hideModals();
-                })
+                }).fail(function (xhr, status, error) { console.Log(status); });
             },
             deleteConfirmed: function (o) {
                 var app = this;
@@ -168,7 +191,7 @@
                     app.objects = response;
                     app.selectedObject = o;
                     app.hideModals();
-                })
+                }).fail(function (xhr, status, error) { console.Log(status); });
             },
             hideModals: function () {
                 var app = this;

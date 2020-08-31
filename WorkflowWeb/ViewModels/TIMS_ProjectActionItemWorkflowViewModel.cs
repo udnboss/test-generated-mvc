@@ -47,9 +47,11 @@ namespace WorkflowWeb.ViewModels
 		public TIMS_WorkflowTypeViewModel TIMS_WorkflowType { get; set; }
 		
 		[DisplayName("TIMS_Project Attachment")]
+		[JsonIgnore]
 		public List<TIMS_ProjectAttachmentViewModel> TIMS_ProjectAttachment { get; set; }
 		
 		[DisplayName("TIMS_Project Comment")]
+		[JsonIgnore]
 		public List<TIMS_ProjectCommentViewModel> TIMS_ProjectComment { get; set; }
 		
 

@@ -8,6 +8,7 @@ using System.Configuration;
 using System.Linq;
 using System.Web;
 using WorkflowWeb.Models;
+using WorkflowWeb.ViewModels;
 
 namespace WorkflowWeb.Business
 {
@@ -60,6 +61,26 @@ namespace WorkflowWeb.Business
             }
 
             return data;
+        }
+
+        public Table GetSchema()
+        {
+            var t = new Table
+            {
+                Columns = new Dictionary<string, Column>
+                {
+                    {"ID", new Column { Name = "ID", DisplayName = "ID", Type = "Guid", Component = "v-form-input-hidden" } },
+                    {"DomainID", new Column { Name = "DomainID", DisplayName = "Domain", Type = "String", Component = "v-form-select" } },
+                    {"Path", new Column { Name = "Path", DisplayName = "Path", Type = "String", Component = "v-form-input" } },
+                    {"IP", new Column { Name = "IP", DisplayName = "IP", Type = "String", Component = "v-form-input" } },
+                    {"Name", new Column { Name = "Name", DisplayName = "Name", Type = "String", Component = "v-form-input" } },
+                    {"Comment", new Column { Name = "Comment", DisplayName = "Comment", Type = "String", Component = "v-form-textarea" } },
+                    {"DatePosted", new Column { Name = "DatePosted", DisplayName = "Date Posted", Type = "Date", Component = "v-form-input-date" } },
+                    {"QueryString", new Column { Name = "QueryString", DisplayName = "Query String", Type = "String", Component = "v-form-input" } }
+                }
+            };
+
+            return t;
         }
     }
 

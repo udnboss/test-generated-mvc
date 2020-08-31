@@ -21,24 +21,31 @@ namespace WorkflowWeb.ViewModels
 		public String Name { get; set; }
 		
 		[DisplayName("TIMS_Project Action Item Workflow")]
+		[JsonIgnore]
 		public List<TIMS_ProjectActionItemWorkflowViewModel> TIMS_ProjectActionItemWorkflow { get; set; }
 		
 		[DisplayName("TIMS_Project Attachment")]
+		[JsonIgnore]
 		public List<TIMS_ProjectAttachmentViewModel> TIMS_ProjectAttachment { get; set; }
 		
 		[DisplayName("TIMS_Project Comment")]
+		[JsonIgnore]
 		public List<TIMS_ProjectCommentViewModel> TIMS_ProjectComment { get; set; }
 		
 		[DisplayName("TIMS_Project Interface Agreement Workflow")]
+		[JsonIgnore]
 		public List<TIMS_ProjectInterfaceAgreementWorkflowViewModel> TIMS_ProjectInterfaceAgreementWorkflow { get; set; }
 		
 		[DisplayName("TIMS_Project Interface Point Workflow")]
+		[JsonIgnore]
 		public List<TIMS_ProjectInterfacePointWorkflowViewModel> TIMS_ProjectInterfacePointWorkflow { get; set; }
 		
 		[DisplayName("TIMS_User Role")]
+		[JsonIgnore]
 		public List<TIMS_UserRoleViewModel> TIMS_UserRole { get; set; }
 		
 		[DisplayName("TIMS_User Watchlist Item")]
+		[JsonIgnore]
 		public List<TIMS_UserWatchlistItemViewModel> TIMS_UserWatchlistItem { get; set; }
 		
 

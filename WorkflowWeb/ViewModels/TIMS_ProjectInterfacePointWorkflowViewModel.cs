@@ -59,15 +59,18 @@ namespace WorkflowWeb.ViewModels
 		public TIMS_ProjectAreaViewModel TIMS_ProjectArea { get; set; }
 		
 		[DisplayName("TIMS_Project Attachment")]
+		[JsonIgnore]
 		public List<TIMS_ProjectAttachmentViewModel> TIMS_ProjectAttachment { get; set; }
 		
 		[DisplayName("TIMS_Project Comment")]
+		[JsonIgnore]
 		public List<TIMS_ProjectCommentViewModel> TIMS_ProjectComment { get; set; }
 		
 		[DisplayName("TIMS_Project Discipline Interface Type")]
 		public TIMS_ProjectDisciplineInterfaceTypeViewModel TIMS_ProjectDisciplineInterfaceType { get; set; }
 		
 		[DisplayName("TIMS_Project Interface Point Field Entry")]
+		[JsonIgnore]
 		public List<TIMS_ProjectInterfacePointFieldEntryViewModel> TIMS_ProjectInterfacePointFieldEntry { get; set; }
 		
 		[DisplayName("TIMS_Project Physical Area")]

@@ -30,11 +30,11 @@ namespace WorkflowWeb.Controllers
             var routeFilter = GetRouteFilter();
 
             return new Dictionary<string, object> {
-                {"ProjectActionItemWorkflowID", db.TIMS_ProjectActionItemWorkflow.Where(x => routeFilter.ProjectActionItemWorkflowID == null || x.ID == routeFilter.ProjectActionItemWorkflowID).Where(x => routeFilter.ProjectID == null ||  x.TIMS_ProjectActionItem.ProjectID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
+                {"ProjectID", db.TIMS_Project.Where(x => routeFilter.ProjectID == null || x.ID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
+				{"ProjectActionItemWorkflowID", db.TIMS_ProjectActionItemWorkflow.Where(x => routeFilter.ProjectActionItemWorkflowID == null || x.ID == routeFilter.ProjectActionItemWorkflowID).Where(x => routeFilter.ProjectID == null ||  x.TIMS_ProjectActionItem.ProjectID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
 				{"ProjectInterfaceAgreementWorkflowID", db.TIMS_ProjectInterfaceAgreementWorkflow.Where(x => routeFilter.ProjectInterfaceAgreementWorkflowID == null || x.ID == routeFilter.ProjectInterfaceAgreementWorkflowID).Where(x => routeFilter.ProjectID == null ||  x.TIMS_ProjectArea.ProjectID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
 				{"ProjectInterfacePointWorkflowID", db.TIMS_ProjectInterfacePointWorkflow.Where(x => routeFilter.ProjectInterfacePointWorkflowID == null || x.ID == routeFilter.ProjectInterfacePointWorkflowID).Where(x => routeFilter.ProjectID == null ||  x.TIMS_ProjectArea.ProjectID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.ID.ToString() }) },
-				{"UserID", db.TIMS_User.Where(x => routeFilter.UserID == null || x.ID == routeFilter.UserID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) },
-				{"ProjectID", db.TIMS_Project.Where(x => routeFilter.ProjectID == null || x.ID == routeFilter.ProjectID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
+				{"UserID", db.TIMS_User.Where(x => routeFilter.UserID == null || x.ID == routeFilter.UserID).Select(x => new  SelectListItem { Value = x.ID.ToString(), Text = x.Name.ToString() }) }
             };
         }
 

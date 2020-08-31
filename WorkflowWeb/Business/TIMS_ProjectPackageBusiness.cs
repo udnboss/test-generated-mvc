@@ -48,10 +48,10 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
-					if (filter.Name != null && filter.Name.ToString() != default(Guid).ToString()) data = data.Where(x => x.Name == filter.Name);
-					if (filter.ProjectID != null && filter.ProjectID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectID == filter.ProjectID);
-					if (filter.ProjectContractorID != null && filter.ProjectContractorID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectContractorID == filter.ProjectContractorID);
+                if (filter.ID != null && filter.ID != default(Guid)) data = data.Where(x => x.ID == filter.ID);
+					if (filter.Name != null) data = data.Where(x => x.Name == filter.Name);
+					if (filter.ProjectID != null && filter.ProjectID != default(Guid)) data = data.Where(x => x.ProjectID == filter.ProjectID);
+					if (filter.ProjectContractorID != null && filter.ProjectContractorID != default(Guid)) data = data.Where(x => x.ProjectContractorID == filter.ProjectContractorID);
             }
 
             return data;

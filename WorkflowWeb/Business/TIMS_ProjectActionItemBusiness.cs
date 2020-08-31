@@ -39,8 +39,8 @@ namespace WorkflowWeb.Business
         public override IQueryable<TIMS_ProjectActionItem> GetIQueryable()
         {
             return ((IMSEntities)db).TIMS_ProjectActionItem.Include(x => x.TIMS_Project)
-				.Include(x => x.TIMS_ProjectInterfaceAgreement)
-				.Include(x => x.TIMS_ProjectInterfacePoint).AsQueryable();
+				.Include(x => x.TIMS_ProjectInterfacePoint)
+				.Include(x => x.TIMS_ProjectInterfaceAgreement).AsQueryable();
         }
 
         public IQueryable<TIMS_ProjectActionItem> GetIQueryable(TIMS_ProjectActionItem filter)
@@ -49,11 +49,11 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
-					if (filter.Name != null && filter.Name.ToString() != default(Guid).ToString()) data = data.Where(x => x.Name == filter.Name);
-					if (filter.ProjectID != null && filter.ProjectID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectID == filter.ProjectID);
-					if (filter.InterfaceAgreementID != null && filter.InterfaceAgreementID.ToString() != default(Guid).ToString()) data = data.Where(x => x.InterfaceAgreementID == filter.InterfaceAgreementID);
-					if (filter.InterfacePointID != null && filter.InterfacePointID.ToString() != default(Guid).ToString()) data = data.Where(x => x.InterfacePointID == filter.InterfacePointID);
+                if (filter.ID != null && filter.ID != default(Guid)) data = data.Where(x => x.ID == filter.ID);
+					if (filter.Name != null) data = data.Where(x => x.Name == filter.Name);
+					if (filter.ProjectID != null && filter.ProjectID != default(Guid)) data = data.Where(x => x.ProjectID == filter.ProjectID);
+					if (filter.InterfacePointID != null && filter.InterfacePointID != default(Guid)) data = data.Where(x => x.InterfacePointID == filter.InterfacePointID);
+					if (filter.InterfaceAgreementID != null && filter.InterfaceAgreementID != default(Guid)) data = data.Where(x => x.InterfaceAgreementID == filter.InterfaceAgreementID);
             }
 
             return data;

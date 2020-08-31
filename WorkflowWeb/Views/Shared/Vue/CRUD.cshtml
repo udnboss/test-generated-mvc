@@ -5,12 +5,23 @@
             <button v-on:click="createNew()" class="btn btn-primary">New..</button>
         </div>
         <table class="table">
-            <tr v-for="c in objects">
-                <td v-for="(value, name, index) in c">{{ value }}</td>
-                <td><button v-on:click="details(c)" class="btn btn-primary">View</button></td>
-                <td><button v-on:click="edit(c)" class="btn btn-success">Edit</button></td>
-                <td><button v-on:click="del(c)" class="btn btn-danger">Delete</button></td>
-            </tr>
+            <thead>
+                <tr>
+                    <th v-for="(value, name, index) in schema"
+                        v-if="isVisible(schema[name])">{{ value.Name }}</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="r in objects">
+                    <td v-for="(value, name, index) in r" v-if="isVisible(schema[name])">{{ displayValue(value) }}</td>
+                    <td><button v-on:click="details(r)" class="btn btn-primary">View</button></td>
+                    <td><button v-on:click="edit(r)" class="btn btn-success">Edit</button></td>
+                    <td><button v-on:click="del(r)" class="btn btn-danger">Delete</button></td>
+                </tr>
+            </tbody>            
         </table>
 
         <v-modal v-if="detailsModal" v-on:close="detailsModal = false" v-bind:item="selectedObject">
@@ -58,10 +69,12 @@
                 selectedObject: {},
                 editObject: {},
                 createObject: {},
+                schema: {},
                 detailsModal: false,
                 editModal: false,
                 newModal: false,
                 deleteModal: false,
+                schemaUrl: this.getUrl('Schema'),
                 listUrl: this.getUrl('List'),
                 detailsUrl: this.getUrl('Details'),
                 editUrl: this.getUrl('Edit'),
@@ -75,15 +88,31 @@
         },
        mounted: function () {
            var app = this;
-            $.get(app.listUrl, function (response) {
-                app.objects = response;
-                selectedObject = app.objects[0];
-                createObject = app.objects[0];
-                detailsModal = app.objects[0];
-                });
+           $.get(app.schemaUrl, function (response) {
+               app.schema = response;
+               for (var i in app.schema) {
+                   if (app.schema[i].Name == null)
+                       app.schema[i].Name = i;
+               }
+               app.refresh();
+           });
+           
         },
-       methods: {
-           getUrl: function (action) {
+        methods: {
+            isVisible: function (col) {
+                var app = this;
+                if (col.Name == 'ID') return false;
+                if (app.schema[col.Name].Type == 'Guid') return false;
+                return true;
+            },
+            displayValue: function (v) {
+                var app = this;
+                if (v instanceof Object && v.constructor === Object) {
+                    return v.hasOwnProperty('Name') ? v['Name'] : v['ID'];
+                }
+                return v;
+            },
+            getUrl: function (action) {
                var template = '/_controller_/_action_?json=true';
                return template.replace('_controller_', this.controller).replace('_action_', action);
            },
@@ -98,6 +127,9 @@
                 var app = this;
                 $.get(app.listUrl, function (response) {
                     app.objects = response;
+                    selectedObject = app.objects[0];
+                    createObject = app.objects[0];
+                    detailsModal = app.objects[0];
                 });
             },
             details: function (o) {

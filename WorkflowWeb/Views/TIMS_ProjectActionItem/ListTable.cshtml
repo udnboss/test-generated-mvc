@@ -46,8 +46,8 @@
                         </th>
                         @if (currentRouteFilter.Name == null) { <th>@Html.DisplayNameFor(m => m.Name)</th> }
 						@if (currentRouteFilter.ProjectID == null) { <th>@Html.DisplayNameFor(m => m.ProjectID)</th> }
-						@if (currentRouteFilter.InterfaceAgreementID == null) { <th>@Html.DisplayNameFor(m => m.InterfaceAgreementID)</th> }
 						@if (currentRouteFilter.InterfacePointID == null) { <th>@Html.DisplayNameFor(m => m.InterfacePointID)</th> }
+						@if (currentRouteFilter.InterfaceAgreementID == null) { <th>@Html.DisplayNameFor(m => m.InterfaceAgreementID)</th> }
                     </tr>
                 </thead>
                 <tbody>
@@ -67,8 +67,8 @@
                             </td>
                             @if (currentRouteFilter.Name == null) { <td>@Html.DisplayFor(modelItem => item.Name)</td> }
 						@if (currentRouteFilter.ProjectID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_Project.Name)</td> }
-						@if (currentRouteFilter.InterfaceAgreementID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_ProjectInterfaceAgreement.Name)</td> }
 						@if (currentRouteFilter.InterfacePointID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_ProjectInterfacePoint.ID)</td> }
+						@if (currentRouteFilter.InterfaceAgreementID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_ProjectInterfaceAgreement.Name)</td> }
                         </tr>
                     }
                 </tbody>

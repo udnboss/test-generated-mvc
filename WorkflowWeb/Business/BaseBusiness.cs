@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Metadata.Edm;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
@@ -35,7 +37,7 @@ namespace WorkflowWeb.Business
         public Func<T, BusinessResult<T>> Function { get; set; }
     }
 
-    public class BaseBusiness<T> : IBusiness<T>
+    public class BaseBusiness<T> : IBusiness<T> where T: new()
     {
         protected string user;
         protected DbContext db;
@@ -113,10 +115,25 @@ namespace WorkflowWeb.Business
             var o = Operation.Insert;
             if (CheckAuthorization(f, o, user))
             {
-                return new BusinessResult<T> { Status = State.Success, Data = f, RecordsAffected = 0 };
+                var m = New(f);
+                return new BusinessResult<T> { Status = State.Success, Data = m, RecordsAffected = 0 };
             }
 
             return AccessDenied<T>(o);
+        }
+
+        public virtual T New(T f)
+        {
+            if (f == null)
+                f = new T();
+
+            var newObject = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(f));
+            foreach(var prop in typeof(T).GetProperties().Where(p => p.PropertyType == typeof(DateTime)))
+            {
+                prop.SetValue(newObject, DateTime.Now);
+            }
+
+            return newObject;
         }
 
         public virtual BusinessResult<T> Create(T m)
@@ -203,7 +220,7 @@ namespace WorkflowWeb.Business
                 }
                 catch (Exception ex)
                 {
-                    results.Add(new BusinessResult<T> { Status = State.Error, Data = m, Message = ex.Message });
+                    results.Add(HandleException(m, ex));
                 }
 
                 //after operations
@@ -225,9 +242,10 @@ namespace WorkflowWeb.Business
                         var status = affected > 0 ? State.Success : State.NoRecordsAffected;
                         result = new BusinessResult<T> { Status = status, RecordsAffected = affected, Message = "" };
                     }
-                    catch (Exception e)
+                    catch (Exception ex)
                     {
-                        result = new BusinessResult<T> { Status = State.Error, RecordsAffected = 0, Message = e.Message + (e.InnerException != null ? "; " + e.InnerException.Message : "") };
+                        result = HandleException(m, ex);
+                        failedResults.Add(result);
                     }
 
                     if (failedResults.Count == 0)
@@ -252,17 +270,44 @@ namespace WorkflowWeb.Business
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    result = new BusinessResult<T>
-                    {
-                        Status = State.Error,
-                        Data = m,
-                        Message = ex.Message
-                    };
+                    result = HandleException(m, ex);
                 }
 
 
                 return result;
             }
+
+        }
+
+        private BusinessResult<T> HandleException(T m, Exception ex)
+        {
+            var lines = new List<string>() { ex.Message };
+            while (ex.InnerException != null)
+            {
+                lines.Add(ex.InnerException.Message);
+                ex = ex.InnerException;
+            }
+
+            if (ex is DbEntityValidationException)
+            {
+                foreach (var eve in ((DbEntityValidationException)ex).EntityValidationErrors)
+                {
+                    lines.Add(string.Format("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State));
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        lines.Add(string.Format("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage));
+                    }
+                }
+            }
+
+            return new BusinessResult<T>
+            {
+                Status = State.Error,
+                Data = m,
+                Message = string.Join("\r\n", lines)
+            };
         }
 
         public virtual BusinessResult<T> AccessDenied<T>(Operation o)

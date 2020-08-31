@@ -51,15 +51,15 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
-					if (filter.Name != null && filter.Name.ToString() != default(Guid).ToString()) data = data.Where(x => x.Name == filter.Name);
-					if (filter.ProjectInterfacePointWorkflowID != null && filter.ProjectInterfacePointWorkflowID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectInterfacePointWorkflowID == filter.ProjectInterfacePointWorkflowID);
-					if (filter.ProjectInterfaceAgreementWorkflowID != null && filter.ProjectInterfaceAgreementWorkflowID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectInterfaceAgreementWorkflowID == filter.ProjectInterfaceAgreementWorkflowID);
-					if (filter.ProjectActionItemWorkflowID != null && filter.ProjectActionItemWorkflowID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectActionItemWorkflowID == filter.ProjectActionItemWorkflowID);
-					if (filter.PackageID != null && filter.PackageID.ToString() != default(Guid).ToString()) data = data.Where(x => x.PackageID == filter.PackageID);
-					if (filter.Filename != null && filter.Filename.ToString() != default(Guid).ToString()) data = data.Where(x => x.Filename == filter.Filename);
-					if (filter.DateUploaded != null && filter.DateUploaded.ToString() != default(Guid).ToString()) data = data.Where(x => x.DateUploaded == filter.DateUploaded);
-					if (filter.UserID != null && filter.UserID.ToString() != default(Guid).ToString()) data = data.Where(x => x.UserID == filter.UserID);
+                if (filter.ID != null && filter.ID != default(Guid)) data = data.Where(x => x.ID == filter.ID);
+					if (filter.Name != null) data = data.Where(x => x.Name == filter.Name);
+					if (filter.ProjectInterfacePointWorkflowID != null && filter.ProjectInterfacePointWorkflowID != default(Guid)) data = data.Where(x => x.ProjectInterfacePointWorkflowID == filter.ProjectInterfacePointWorkflowID);
+					if (filter.ProjectInterfaceAgreementWorkflowID != null && filter.ProjectInterfaceAgreementWorkflowID != default(Guid)) data = data.Where(x => x.ProjectInterfaceAgreementWorkflowID == filter.ProjectInterfaceAgreementWorkflowID);
+					if (filter.ProjectActionItemWorkflowID != null && filter.ProjectActionItemWorkflowID != default(Guid)) data = data.Where(x => x.ProjectActionItemWorkflowID == filter.ProjectActionItemWorkflowID);
+					if (filter.PackageID != null && filter.PackageID != default(Guid)) data = data.Where(x => x.PackageID == filter.PackageID);
+					if (filter.Filename != null) data = data.Where(x => x.Filename == filter.Filename);
+					if (filter.DateUploaded != null && filter.DateUploaded != default(DateTime)) data = data.Where(x => x.DateUploaded == filter.DateUploaded);
+					if (filter.UserID != null && filter.UserID != default(Guid)) data = data.Where(x => x.UserID == filter.UserID);
             }
 
             return data;

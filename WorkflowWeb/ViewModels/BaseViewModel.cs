@@ -57,5 +57,16 @@ namespace WorkflowWeb.ViewModels
 
             return true;
         }
+
+
+
+        protected virtual string Str(object o)
+        {
+			if (o == null)
+				return null;
+			if (o is DateTime || o is DateTime?)
+				return ((DateTime)o).ToShortDateString();
+			return o.ToString();
+        }
     }
 }

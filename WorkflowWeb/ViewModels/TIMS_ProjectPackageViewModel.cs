@@ -30,27 +30,34 @@ namespace WorkflowWeb.ViewModels
 		public TIMS_ProjectViewModel TIMS_Project { get; set; }
 		
 		[DisplayName("TIMS_Project Attachment")]
+		[JsonIgnore]
 		public List<TIMS_ProjectAttachmentViewModel> TIMS_ProjectAttachment { get; set; }
 		
 		[DisplayName("TIMS_Project Contractor")]
 		public TIMS_ProjectContractorViewModel TIMS_ProjectContractor { get; set; }
 		
 		[DisplayName("TIMS_Project Interface Agreement")]
+		[JsonIgnore]
 		public List<TIMS_ProjectInterfaceAgreementViewModel> TIMS_ProjectInterfaceAgreement { get; set; }
 		
 		[DisplayName("TIMS_Project Interface Agreement1")]
+		[JsonIgnore]
 		public List<TIMS_ProjectInterfaceAgreementViewModel> TIMS_ProjectInterfaceAgreement1 { get; set; }
 		
 		[DisplayName("TIMS_Project Interface Point")]
+		[JsonIgnore]
 		public List<TIMS_ProjectInterfacePointViewModel> TIMS_ProjectInterfacePoint { get; set; }
 		
 		[DisplayName("TIMS_Project Interface Point1")]
+		[JsonIgnore]
 		public List<TIMS_ProjectInterfacePointViewModel> TIMS_ProjectInterfacePoint1 { get; set; }
 		
 		[DisplayName("TIMS_Project Interface Point2")]
+		[JsonIgnore]
 		public List<TIMS_ProjectInterfacePointViewModel> TIMS_ProjectInterfacePoint2 { get; set; }
 		
 		[DisplayName("TIMS_User Role")]
+		[JsonIgnore]
 		public List<TIMS_UserRoleViewModel> TIMS_UserRole { get; set; }
 		
 

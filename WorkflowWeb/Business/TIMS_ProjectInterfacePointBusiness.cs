@@ -50,15 +50,15 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
-					if (filter.ProjectID != null && filter.ProjectID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectID == filter.ProjectID);
-					if (filter.LeadPackageID != null && filter.LeadPackageID.ToString() != default(Guid).ToString()) data = data.Where(x => x.LeadPackageID == filter.LeadPackageID);
-					if (filter.InterfacePackageID != null && filter.InterfacePackageID.ToString() != default(Guid).ToString()) data = data.Where(x => x.InterfacePackageID == filter.InterfacePackageID);
-					if (filter.SupportPackageID != null && filter.SupportPackageID.ToString() != default(Guid).ToString()) data = data.Where(x => x.SupportPackageID == filter.SupportPackageID);
-					if (filter.CreateDate != null && filter.CreateDate.ToString() != default(Guid).ToString()) data = data.Where(x => x.CreateDate == filter.CreateDate);
-					if (filter.IssueDate != null && filter.IssueDate.ToString() != default(Guid).ToString()) data = data.Where(x => x.IssueDate == filter.IssueDate);
-					if (filter.FinalizeDate != null && filter.FinalizeDate.ToString() != default(Guid).ToString()) data = data.Where(x => x.FinalizeDate == filter.FinalizeDate);
-					if (filter.CloseDate != null && filter.CloseDate.ToString() != default(Guid).ToString()) data = data.Where(x => x.CloseDate == filter.CloseDate);
+                if (filter.ID != null && filter.ID != default(Guid)) data = data.Where(x => x.ID == filter.ID);
+					if (filter.ProjectID != null && filter.ProjectID != default(Guid)) data = data.Where(x => x.ProjectID == filter.ProjectID);
+					if (filter.LeadPackageID != null && filter.LeadPackageID != default(Guid)) data = data.Where(x => x.LeadPackageID == filter.LeadPackageID);
+					if (filter.InterfacePackageID != null && filter.InterfacePackageID != default(Guid)) data = data.Where(x => x.InterfacePackageID == filter.InterfacePackageID);
+					if (filter.SupportPackageID != null && filter.SupportPackageID != default(Guid)) data = data.Where(x => x.SupportPackageID == filter.SupportPackageID);
+					if (filter.CreateDate != null && filter.CreateDate != default(DateTime)) data = data.Where(x => x.CreateDate == filter.CreateDate);
+					if (filter.IssueDate != null && filter.IssueDate != default(DateTime)) data = data.Where(x => x.IssueDate == filter.IssueDate);
+					if (filter.FinalizeDate != null && filter.FinalizeDate != default(DateTime)) data = data.Where(x => x.FinalizeDate == filter.FinalizeDate);
+					if (filter.CloseDate != null && filter.CloseDate != default(DateTime)) data = data.Where(x => x.CloseDate == filter.CloseDate);
             }
 
             return data;

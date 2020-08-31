@@ -163,7 +163,6 @@
     <Compile Include="Business\T_CommentVoteBusiness.cs" />
     <Compile Include="Business\T_DomainBusiness.cs" />
     <Compile Include="Business\T_UploadBusiness.cs" />
-    <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TIMS_ContractorController.cs" />
     <Compile Include="Controllers\TIMS_DisciplineController.cs" />
@@ -193,6 +192,7 @@
     <Compile Include="Controllers\TIMS_WorkflowActionController.cs" />
     <Compile Include="Controllers\TIMS_WorkflowStateController.cs" />
     <Compile Include="Controllers\TIMS_WorkflowTypeController.cs" />
+    <Compile Include="Controllers\T_CommentController.cs" />
     <Compile Include="Controllers\T_CommentVoteController.cs" />
     <Compile Include="Controllers\T_DomainController.cs" />
     <Compile Include="Controllers\T_UploadController.cs" />
@@ -2384,6 +2384,11 @@
     <Content Include="Views\T_Upload\ListTable.cshtml" />
     <Content Include="Views\T_Upload\New.cshtml" />
     <Content Include="Views\Shared\Vue\CRUD.cshtml" />
+    <Content Include="Views\T_Comment\Component.cshtml" />
+    <Content Include="Views\Shared\Vue\FormInputDate.cshtml" />
+    <Content Include="Views\Shared\Vue\FormInputHidden.cshtml" />
+    <Content Include="Views\Shared\Vue\FormTextArea.cshtml" />
+    <Content Include="Views\Shared\Vue\FormInputCheckbox.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

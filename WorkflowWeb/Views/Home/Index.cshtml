@@ -10,6 +10,11 @@
 
 @*Common components*@
 @Html.Partial("~/Views/Shared/Vue/FormInput.cshtml")
+@Html.Partial("~/Views/Shared/Vue/FormInputCheckBox.cshtml")
+@Html.Partial("~/Views/Shared/Vue/FormInputDate.cshtml")
+@Html.Partial("~/Views/Shared/Vue/FormInputHidden.cshtml")
+@Html.Partial("~/Views/Shared/Vue/FormTextArea.cshtml")
+@Html.Partial("~/Views/Shared/Vue/FormSelect.cshtml")
 @Html.Partial("~/Views/Shared/Vue/FormUpload.cshtml")
 @Html.Partial("~/Views/Shared/Vue/Select2.cshtml")
 @Html.Partial("~/Views/Shared/Vue/Modal.cshtml")
@@ -17,16 +22,18 @@
 
 
 
-@Html.Partial("~/Views/Shared/Vue/CRUD.cshtml")
+@*@Html.Partial("~/Views/Shared/Vue/CRUD.cshtml")*@
 @*@Html.Partial("~/Views/Upload/Component.cshtml")*@
+
+@Html.Partial("~/Views/T_Comment/Component.cshtml")
 
 <div id="app">
     @*<v-sidebar></v-sidebar>*@
-    @*<v-uploads></v-uploads>
-        <v-comments></v-comments>*@
-    <v-crud controller="T_Comment"></v-crud>
-    <v-crud controller="TIMS_Project"></v-crud>
-    <v-crud controller="TIMS_ProjectActionItem"></v-crud>
+    @*<v-uploads></v-uploads>*@
+    <v-t_comment></v-t_comment>
+    @*<v-crud controller="T_Comment"></v-crud>
+        <v-crud controller="TIMS_Project"></v-crud>
+        <v-crud controller="TIMS_ProjectActionItem"></v-crud>*@
 </div>
 
 <script>

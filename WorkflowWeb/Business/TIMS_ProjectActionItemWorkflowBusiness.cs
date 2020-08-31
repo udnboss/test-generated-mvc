@@ -49,14 +49,14 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
-					if (filter.WorkflowTypeID != null && filter.WorkflowTypeID.ToString() != default(Guid).ToString()) data = data.Where(x => x.WorkflowTypeID == filter.WorkflowTypeID);
-					if (filter.ActionItemID != null && filter.ActionItemID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ActionItemID == filter.ActionItemID);
-					if (filter.DateInitiated != null && filter.DateInitiated.ToString() != default(Guid).ToString()) data = data.Where(x => x.DateInitiated == filter.DateInitiated);
-					if (filter.LeadStateID != null && filter.LeadStateID.ToString() != default(Guid).ToString()) data = data.Where(x => x.LeadStateID == filter.LeadStateID);
-					if (filter.InterfaceStateID != null && filter.InterfaceStateID.ToString() != default(Guid).ToString()) data = data.Where(x => x.InterfaceStateID == filter.InterfaceStateID);
-					if (filter.UserID != null && filter.UserID.ToString() != default(Guid).ToString()) data = data.Where(x => x.UserID == filter.UserID);
-					if (filter.IsDraft != null && filter.IsDraft.ToString() != default(Guid).ToString()) data = data.Where(x => x.IsDraft == filter.IsDraft);
+                if (filter.ID != null && filter.ID != default(Guid)) data = data.Where(x => x.ID == filter.ID);
+					if (filter.WorkflowTypeID != null) data = data.Where(x => x.WorkflowTypeID == filter.WorkflowTypeID);
+					if (filter.ActionItemID != null && filter.ActionItemID != default(Guid)) data = data.Where(x => x.ActionItemID == filter.ActionItemID);
+					if (filter.DateInitiated != null && filter.DateInitiated != default(DateTime)) data = data.Where(x => x.DateInitiated == filter.DateInitiated);
+					if (filter.LeadStateID != null) data = data.Where(x => x.LeadStateID == filter.LeadStateID);
+					if (filter.InterfaceStateID != null) data = data.Where(x => x.InterfaceStateID == filter.InterfaceStateID);
+					if (filter.UserID != null && filter.UserID != default(Guid)) data = data.Where(x => x.UserID == filter.UserID);
+					if (filter.IsDraft != null) data = data.Where(x => x.IsDraft == filter.IsDraft);
             }
 
             return data;

@@ -35,7 +35,7 @@
             <div class="list-group">
                 @foreach (var item in Model)
                 {
-                    @*<a href="@Url.Action(actionName: "Index", controllerName: controller, routeValues: new { id = item.ID, ui_route_filter })" class="list-group-item list-group-item-action @(currentItem != null && currentItem.ID == item.ID ? "list-group-item-primary" : "")">@item.Comment</a>*@
+                    @*<a href="@Url.Action(actionName: "Index", controllerName: controller, routeValues: new { id = item.ID, ui_route_filter })" class="list-group-item list-group-item-action @(currentItem != null && currentItem.ID == item.ID ? "list-group-item-primary" : "")">@item.Name</a>*@
 
                     <a class="@("list-group-item list-group-item-action" + (currentItem != null && currentItem.ID == item.ID ? " list-group-item-primary" : ""))"
                        data-ajax="true"
@@ -45,7 +45,7 @@
                        data-ajax-method="GET"
                        data-ajax-mode="replace"
                        data-ajax-update="#@(ui_html_target)"
-                       href="@Url.Action("List", controller, new { id = item.ID, ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter })">@item.Comment</a>
+                       href="@Url.Action("List", controller, new { id = item.ID, ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter })">@item.Name</a>
 
                 }
             </div>

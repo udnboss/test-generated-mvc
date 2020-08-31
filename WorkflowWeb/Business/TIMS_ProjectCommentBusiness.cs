@@ -38,11 +38,11 @@ namespace WorkflowWeb.Business
 
         public override IQueryable<TIMS_ProjectComment> GetIQueryable()
         {
-            return ((IMSEntities)db).TIMS_ProjectComment.Include(x => x.TIMS_ProjectInterfacePointWorkflow)
+            return ((IMSEntities)db).TIMS_ProjectComment.Include(x => x.TIMS_Project)
+				.Include(x => x.TIMS_ProjectInterfacePointWorkflow)
 				.Include(x => x.TIMS_ProjectInterfaceAgreementWorkflow)
 				.Include(x => x.TIMS_ProjectActionItemWorkflow)
-				.Include(x => x.TIMS_User)
-				.Include(x => x.TIMS_Project).AsQueryable();
+				.Include(x => x.TIMS_User).AsQueryable();
         }
 
         public IQueryable<TIMS_ProjectComment> GetIQueryable(TIMS_ProjectComment filter)
@@ -51,15 +51,15 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
-					if (filter.Comment != null && filter.Comment.ToString() != default(Guid).ToString()) data = data.Where(x => x.Comment == filter.Comment);
-					if (filter.ProjectInterfacePointWorkflowID != null && filter.ProjectInterfacePointWorkflowID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectInterfacePointWorkflowID == filter.ProjectInterfacePointWorkflowID);
-					if (filter.ProjectInterfaceAgreementWorkflowID != null && filter.ProjectInterfaceAgreementWorkflowID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectInterfaceAgreementWorkflowID == filter.ProjectInterfaceAgreementWorkflowID);
-					if (filter.ProjectActionItemWorkflowID != null && filter.ProjectActionItemWorkflowID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectActionItemWorkflowID == filter.ProjectActionItemWorkflowID);
-					if (filter.UserID != null && filter.UserID.ToString() != default(Guid).ToString()) data = data.Where(x => x.UserID == filter.UserID);
-					if (filter.DateAdded != null && filter.DateAdded.ToString() != default(Guid).ToString()) data = data.Where(x => x.DateAdded == filter.DateAdded);
-					if (filter.Name != null && filter.Name.ToString() != default(Guid).ToString()) data = data.Where(x => x.Name == filter.Name);
-					if (filter.ProjectID != null && filter.ProjectID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectID == filter.ProjectID);
+                if (filter.ID != null && filter.ID != default(Guid)) data = data.Where(x => x.ID == filter.ID);
+					if (filter.Name != null) data = data.Where(x => x.Name == filter.Name);
+					if (filter.Comment != null) data = data.Where(x => x.Comment == filter.Comment);
+					if (filter.ProjectID != null && filter.ProjectID != default(Guid)) data = data.Where(x => x.ProjectID == filter.ProjectID);
+					if (filter.ProjectInterfacePointWorkflowID != null && filter.ProjectInterfacePointWorkflowID != default(Guid)) data = data.Where(x => x.ProjectInterfacePointWorkflowID == filter.ProjectInterfacePointWorkflowID);
+					if (filter.ProjectInterfaceAgreementWorkflowID != null && filter.ProjectInterfaceAgreementWorkflowID != default(Guid)) data = data.Where(x => x.ProjectInterfaceAgreementWorkflowID == filter.ProjectInterfaceAgreementWorkflowID);
+					if (filter.ProjectActionItemWorkflowID != null && filter.ProjectActionItemWorkflowID != default(Guid)) data = data.Where(x => x.ProjectActionItemWorkflowID == filter.ProjectActionItemWorkflowID);
+					if (filter.UserID != null && filter.UserID != default(Guid)) data = data.Where(x => x.UserID == filter.UserID);
+					if (filter.DateAdded != null && filter.DateAdded != default(DateTime)) data = data.Where(x => x.DateAdded == filter.DateAdded);
             }
 
             return data;

@@ -16,8 +16,15 @@ namespace WorkflowWeb.ViewModels
 		[DisplayName("ID")]
 		public Guid ID { get; set; }
 		
+		[Required(AllowEmptyStrings = false, ErrorMessage = "Name is required.")]
+		[DisplayName("Name")]
+		public String Name { get; set; }
+		
 		[DisplayName("Comment")]
 		public String Comment { get; set; }
+		
+		[DisplayName("Project")]
+		public Guid? ProjectID { get; set; }
 		
 		[DisplayName("Project Interface Point Workflow")]
 		public Guid? ProjectInterfacePointWorkflowID { get; set; }
@@ -34,12 +41,8 @@ namespace WorkflowWeb.ViewModels
 		[DisplayName("Date Added")]
 		public DateTime? DateAdded { get; set; }
 		
-		[Required(AllowEmptyStrings = false, ErrorMessage = "Name is required.")]
-		[DisplayName("Name")]
-		public String Name { get; set; }
-		
-		[DisplayName("Project")]
-		public Guid? ProjectID { get; set; }
+		[DisplayName("TIMS_Project")]
+		public TIMS_ProjectViewModel TIMS_Project { get; set; }
 		
 		[DisplayName("TIMS_Project Action Item Workflow")]
 		public TIMS_ProjectActionItemWorkflowViewModel TIMS_ProjectActionItemWorkflow { get; set; }
@@ -53,9 +56,6 @@ namespace WorkflowWeb.ViewModels
 		[DisplayName("TIMS_User")]
 		public TIMS_UserViewModel TIMS_User { get; set; }
 		
-		[DisplayName("TIMS_Project")]
-		public TIMS_ProjectViewModel TIMS_Project { get; set; }
-		
 
         public TIMS_ProjectCommentViewModel()
         {
@@ -67,19 +67,19 @@ namespace WorkflowWeb.ViewModels
             if (m != null)
             {
                 this.ID = m.ID;
+				this.Name = m.Name;
 				this.Comment = m.Comment;
+				this.ProjectID = m.ProjectID;
 				this.ProjectInterfacePointWorkflowID = m.ProjectInterfacePointWorkflowID;
 				this.ProjectInterfaceAgreementWorkflowID = m.ProjectInterfaceAgreementWorkflowID;
 				this.ProjectActionItemWorkflowID = m.ProjectActionItemWorkflowID;
 				this.UserID = m.UserID;
 				this.DateAdded = m.DateAdded;
-				this.Name = m.Name;
-				this.ProjectID = m.ProjectID;
+				this.TIMS_Project = convertSubs ? new TIMS_ProjectViewModel(m.TIMS_Project) : null;
 				this.TIMS_ProjectActionItemWorkflow = convertSubs ? new TIMS_ProjectActionItemWorkflowViewModel(m.TIMS_ProjectActionItemWorkflow) : null;
 				this.TIMS_ProjectInterfaceAgreementWorkflow = convertSubs ? new TIMS_ProjectInterfaceAgreementWorkflowViewModel(m.TIMS_ProjectInterfaceAgreementWorkflow) : null;
 				this.TIMS_ProjectInterfacePointWorkflow = convertSubs ? new TIMS_ProjectInterfacePointWorkflowViewModel(m.TIMS_ProjectInterfacePointWorkflow) : null;
 				this.TIMS_User = convertSubs ? new TIMS_UserViewModel(m.TIMS_User) : null;
-				this.TIMS_Project = convertSubs ? new TIMS_ProjectViewModel(m.TIMS_Project) : null;
             }
         }
 
@@ -88,19 +88,19 @@ namespace WorkflowWeb.ViewModels
             var m = new TIMS_ProjectComment();
 
             m.ID = this.ID;
+			m.Name = this.Name;
 			m.Comment = this.Comment;
+			m.ProjectID = this.ProjectID;
 			m.ProjectInterfacePointWorkflowID = this.ProjectInterfacePointWorkflowID;
 			m.ProjectInterfaceAgreementWorkflowID = this.ProjectInterfaceAgreementWorkflowID;
 			m.ProjectActionItemWorkflowID = this.ProjectActionItemWorkflowID;
 			m.UserID = this.UserID;
 			m.DateAdded = this.DateAdded;
-			m.Name = this.Name;
-			m.ProjectID = this.ProjectID;
+			m.TIMS_Project = convertSubs && this.TIMS_Project != null ?  this.TIMS_Project.ToModel() : null;
 			m.TIMS_ProjectActionItemWorkflow = convertSubs && this.TIMS_ProjectActionItemWorkflow != null ?  this.TIMS_ProjectActionItemWorkflow.ToModel() : null;
 			m.TIMS_ProjectInterfaceAgreementWorkflow = convertSubs && this.TIMS_ProjectInterfaceAgreementWorkflow != null ?  this.TIMS_ProjectInterfaceAgreementWorkflow.ToModel() : null;
 			m.TIMS_ProjectInterfacePointWorkflow = convertSubs && this.TIMS_ProjectInterfacePointWorkflow != null ?  this.TIMS_ProjectInterfacePointWorkflow.ToModel() : null;
 			m.TIMS_User = convertSubs && this.TIMS_User != null ?  this.TIMS_User.ToModel() : null;
-			m.TIMS_Project = convertSubs && this.TIMS_Project != null ?  this.TIMS_Project.ToModel() : null;
 
             return m;
         }
@@ -111,19 +111,19 @@ namespace WorkflowWeb.ViewModels
             if (m != null)
             {
                 this.ID = m.ID;
+				this.Name = m.Name;
 				this.Comment = m.Comment;
+				this.ProjectID = m.ProjectID;
 				this.ProjectInterfacePointWorkflowID = m.ProjectInterfacePointWorkflowID;
 				this.ProjectInterfaceAgreementWorkflowID = m.ProjectInterfaceAgreementWorkflowID;
 				this.ProjectActionItemWorkflowID = m.ProjectActionItemWorkflowID;
 				this.UserID = m.UserID;
 				this.DateAdded = m.DateAdded;
-				this.Name = m.Name;
-				this.ProjectID = m.ProjectID;
+				this.TIMS_Project = convertSubs ? new TIMS_ProjectViewModel(m.TIMS_Project) : null;
 				this.TIMS_ProjectActionItemWorkflow = convertSubs ? new TIMS_ProjectActionItemWorkflowViewModel(m.TIMS_ProjectActionItemWorkflow) : null;
 				this.TIMS_ProjectInterfaceAgreementWorkflow = convertSubs ? new TIMS_ProjectInterfaceAgreementWorkflowViewModel(m.TIMS_ProjectInterfaceAgreementWorkflow) : null;
 				this.TIMS_ProjectInterfacePointWorkflow = convertSubs ? new TIMS_ProjectInterfacePointWorkflowViewModel(m.TIMS_ProjectInterfacePointWorkflow) : null;
 				this.TIMS_User = convertSubs ? new TIMS_UserViewModel(m.TIMS_User) : null;
-				this.TIMS_Project = convertSubs ? new TIMS_ProjectViewModel(m.TIMS_Project) : null;
             }
 
             return this;

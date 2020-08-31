@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -23,6 +24,24 @@ namespace WorkflowWeb.Controllers
         {
             user = "Ali";
             db = new IMSEntities();
+        }
+
+        public ActionResult Schema()
+        {
+            var schema = typeof(T)
+                .GetProperties()
+                .Where(sp => !sp.PropertyType.Name.StartsWith("System.Collections.Generic.ICollection"))
+                .Select(sp => new { 
+                    Name = sp.Name,
+                    DisplayName = (sp.GetCustomAttributes(typeof(DisplayNameAttribute), false).FirstOrDefault() as DisplayNameAttribute)?.DisplayName,
+                    Type = sp.PropertyType.IsGenericType ? sp.PropertyType.GenericTypeArguments[0] : sp.PropertyType 
+                })
+                .ToDictionary(x => x.Name, x=> new Dictionary<string, string> {
+                    { "Name", x.DisplayName},
+                    { "Type", x.Type.Name }
+                })
+                ;
+            return JsonOut(schema);
         }
 
         protected ContentResult JsonOut(object data)

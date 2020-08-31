@@ -50,11 +50,11 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
-					if (filter.UserID != null && filter.UserID.ToString() != default(Guid).ToString()) data = data.Where(x => x.UserID == filter.UserID);
-					if (filter.ProjectInterfacePointID != null && filter.ProjectInterfacePointID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectInterfacePointID == filter.ProjectInterfacePointID);
-					if (filter.ProjectInterfaceAgreementID != null && filter.ProjectInterfaceAgreementID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectInterfaceAgreementID == filter.ProjectInterfaceAgreementID);
-					if (filter.ProjectActionItemID != null && filter.ProjectActionItemID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ProjectActionItemID == filter.ProjectActionItemID);
+                if (filter.ID != null && filter.ID != default(Guid)) data = data.Where(x => x.ID == filter.ID);
+					if (filter.UserID != null && filter.UserID != default(Guid)) data = data.Where(x => x.UserID == filter.UserID);
+					if (filter.ProjectInterfacePointID != null && filter.ProjectInterfacePointID != default(Guid)) data = data.Where(x => x.ProjectInterfacePointID == filter.ProjectInterfacePointID);
+					if (filter.ProjectInterfaceAgreementID != null && filter.ProjectInterfaceAgreementID != default(Guid)) data = data.Where(x => x.ProjectInterfaceAgreementID == filter.ProjectInterfaceAgreementID);
+					if (filter.ProjectActionItemID != null && filter.ProjectActionItemID != default(Guid)) data = data.Where(x => x.ProjectActionItemID == filter.ProjectActionItemID);
             }
 
             return data;

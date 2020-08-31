@@ -45,6 +45,7 @@
                             
                         </th>
                         @if (currentRouteFilter.Name == null) { <th>@Html.DisplayNameFor(m => m.Name)</th> }
+						@if (currentRouteFilter.ProjectID == null) { <th>@Html.DisplayNameFor(m => m.ProjectID)</th> }
 						@if (currentRouteFilter.InterfacePointID == null) { <th>@Html.DisplayNameFor(m => m.InterfacePointID)</th> }
 						@if (currentRouteFilter.RequestorPackageID == null) { <th>@Html.DisplayNameFor(m => m.RequestorPackageID)</th> }
 						@if (currentRouteFilter.ResponderPackageID == null) { <th>@Html.DisplayNameFor(m => m.ResponderPackageID)</th> }
@@ -58,7 +59,6 @@
 						@if (currentRouteFilter.AcceptedDate == null) { <th>@Html.DisplayNameFor(m => m.AcceptedDate)</th> }
 						@if (currentRouteFilter.ResponseDate == null) { <th>@Html.DisplayNameFor(m => m.ResponseDate)</th> }
 						@if (currentRouteFilter.CloseDate == null) { <th>@Html.DisplayNameFor(m => m.CloseDate)</th> }
-						@if (currentRouteFilter.ProjectID == null) { <th>@Html.DisplayNameFor(m => m.ProjectID)</th> }
                     </tr>
                 </thead>
                 <tbody>
@@ -77,6 +77,7 @@
                                    href="@Url.Action("Details", controller, new { id = item.ID, ui_html_target, ui_list_view, ui_modal_id, ui_tab_id, ui_route_filter })"><i class="fas fa-eye"></i> View</a>
                             </td>
                             @if (currentRouteFilter.Name == null) { <td>@Html.DisplayFor(modelItem => item.Name)</td> }
+						@if (currentRouteFilter.ProjectID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_Project.Name)</td> }
 						@if (currentRouteFilter.InterfacePointID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_ProjectInterfacePoint.ID)</td> }
 						@if (currentRouteFilter.RequestorPackageID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_ProjectPackage.Name)</td> }
 						@if (currentRouteFilter.ResponderPackageID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_ProjectPackage1.Name)</td> }
@@ -90,7 +91,6 @@
 						@if (currentRouteFilter.AcceptedDate == null) { <td>@Html.DisplayFor(modelItem => item.AcceptedDate)</td> }
 						@if (currentRouteFilter.ResponseDate == null) { <td>@Html.DisplayFor(modelItem => item.ResponseDate)</td> }
 						@if (currentRouteFilter.CloseDate == null) { <td>@Html.DisplayFor(modelItem => item.CloseDate)</td> }
-						@if (currentRouteFilter.ProjectID == null) { <td>@Html.DisplayFor(modelItem => item.TIMS_Project.Name)</td> }
                         </tr>
                     }
                 </tbody>

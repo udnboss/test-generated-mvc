@@ -51,19 +51,19 @@ namespace WorkflowWeb.Business
 
             if (filter != null)
             {
-                if (filter.ID != null && filter.ID.ToString() != default(Guid).ToString()) data = data.Where(x => x.ID == filter.ID);
-					if (filter.WorkflowTypeID != null && filter.WorkflowTypeID.ToString() != default(Guid).ToString()) data = data.Where(x => x.WorkflowTypeID == filter.WorkflowTypeID);
-					if (filter.InterfaceAgreementID != null && filter.InterfaceAgreementID.ToString() != default(Guid).ToString()) data = data.Where(x => x.InterfaceAgreementID == filter.InterfaceAgreementID);
-					if (filter.DateInitiated != null && filter.DateInitiated.ToString() != default(Guid).ToString()) data = data.Where(x => x.DateInitiated == filter.DateInitiated);
-					if (filter.LeadStateID != null && filter.LeadStateID.ToString() != default(Guid).ToString()) data = data.Where(x => x.LeadStateID == filter.LeadStateID);
-					if (filter.InterfaceStateID != null && filter.InterfaceStateID.ToString() != default(Guid).ToString()) data = data.Where(x => x.InterfaceStateID == filter.InterfaceStateID);
-					if (filter.UserID != null && filter.UserID.ToString() != default(Guid).ToString()) data = data.Where(x => x.UserID == filter.UserID);
-					if (filter.IsDraft != null && filter.IsDraft.ToString() != default(Guid).ToString()) data = data.Where(x => x.IsDraft == filter.IsDraft);
-					if (filter.DisciplineID != null && filter.DisciplineID.ToString() != default(Guid).ToString()) data = data.Where(x => x.DisciplineID == filter.DisciplineID);
-					if (filter.SystemID != null && filter.SystemID.ToString() != default(Guid).ToString()) data = data.Where(x => x.SystemID == filter.SystemID);
-					if (filter.AreaID != null && filter.AreaID.ToString() != default(Guid).ToString()) data = data.Where(x => x.AreaID == filter.AreaID);
-					if (filter.ShortDescription != null && filter.ShortDescription.ToString() != default(Guid).ToString()) data = data.Where(x => x.ShortDescription == filter.ShortDescription);
-					if (filter.DetailedDescription != null && filter.DetailedDescription.ToString() != default(Guid).ToString()) data = data.Where(x => x.DetailedDescription == filter.DetailedDescription);
+                if (filter.ID != null && filter.ID != default(Guid)) data = data.Where(x => x.ID == filter.ID);
+					if (filter.WorkflowTypeID != null) data = data.Where(x => x.WorkflowTypeID == filter.WorkflowTypeID);
+					if (filter.InterfaceAgreementID != null && filter.InterfaceAgreementID != default(Guid)) data = data.Where(x => x.InterfaceAgreementID == filter.InterfaceAgreementID);
+					if (filter.DateInitiated != null && filter.DateInitiated != default(DateTime)) data = data.Where(x => x.DateInitiated == filter.DateInitiated);
+					if (filter.LeadStateID != null) data = data.Where(x => x.LeadStateID == filter.LeadStateID);
+					if (filter.InterfaceStateID != null) data = data.Where(x => x.InterfaceStateID == filter.InterfaceStateID);
+					if (filter.UserID != null && filter.UserID != default(Guid)) data = data.Where(x => x.UserID == filter.UserID);
+					if (filter.IsDraft != null) data = data.Where(x => x.IsDraft == filter.IsDraft);
+					if (filter.DisciplineID != null && filter.DisciplineID != default(Guid)) data = data.Where(x => x.DisciplineID == filter.DisciplineID);
+					if (filter.SystemID != null && filter.SystemID != default(Guid)) data = data.Where(x => x.SystemID == filter.SystemID);
+					if (filter.AreaID != null && filter.AreaID != default(Guid)) data = data.Where(x => x.AreaID == filter.AreaID);
+					if (filter.ShortDescription != null) data = data.Where(x => x.ShortDescription == filter.ShortDescription);
+					if (filter.DetailedDescription != null) data = data.Where(x => x.DetailedDescription == filter.DetailedDescription);
             }
 
             return data;

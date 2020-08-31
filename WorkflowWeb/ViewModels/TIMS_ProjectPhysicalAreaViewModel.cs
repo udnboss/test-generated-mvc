@@ -27,6 +27,7 @@ namespace WorkflowWeb.ViewModels
 		public TIMS_ProjectViewModel TIMS_Project { get; set; }
 		
 		[DisplayName("TIMS_Project Interface Point Workflow")]
+		[JsonIgnore]
 		public List<TIMS_ProjectInterfacePointWorkflowViewModel> TIMS_ProjectInterfacePointWorkflow { get; set; }
 		
 
