@@ -7,7 +7,12 @@
     <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
     <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
 </div>
-
+<script>
+    var antiForgeryToken = '';
+    $(function () {
+        antiForgeryToken = $('@Html.AntiForgeryToken()').val();
+    });
+</script>
 @*Common components*@
 @Html.Partial("~/Views/Shared/Vue/FormInput.cshtml")
 @Html.Partial("~/Views/Shared/Vue/FormInputCheckBox.cshtml")
@@ -30,7 +35,7 @@
 <div id="app">
     @*<v-sidebar></v-sidebar>*@
     @*<v-uploads></v-uploads>*@
-    <v-t_comment></v-t_comment>
+    <v-t_comment controller="T_Comment"></v-t_comment>
     @*<v-crud controller="T_Comment"></v-crud>
         <v-crud controller="TIMS_Project"></v-crud>
         <v-crud controller="TIMS_ProjectActionItem"></v-crud>*@

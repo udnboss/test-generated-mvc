@@ -40,12 +40,12 @@
         </v-modal>
 
         <v-modal v-if="editObject != null" :show="editModal" v-on:close="editModal = false">
-            <form v-on:submit.prevent v-on:submit.once="update(editObject)">
+            <form v-on:submit.prevent v-on:submit="update(editObject)">
                 <component v-for="(value, name, index) in editObject.Cells"
                            :is="schema.Columns[name].Component"
                            :label="schema.Columns[name].DisplayName"
                            v-model="value.Value"
-                           :options="lookups.DomainID"></component>
+                           :options="lookups[name]"></component>
                 <button class="btn btn-success"><i class="fas fa-save"></i> Update</button>
             </form>
         </v-modal>
@@ -56,10 +56,7 @@
                            :is="schema.Columns[name].Component" 
                            :label="schema.Columns[name].DisplayName" 
                            v-model="createObject.Cells[name].Value"
-                           :options="lookups.DomainID"></component>
-                @*<v-select2 label="Domain" :options="lookups.domain_id" v-model="createObject.Cells.DomainID.Value">
-                    <option disabled value="0">Select one</option>
-                </v-select2>*@
+                           :options="lookups[name]"></component>
                 <button class="btn btn-success"><i class="fas fa-save"></i> Create</button>
             </form>
         </v-modal>
@@ -90,10 +87,11 @@
 <script>
     //see this for a complete crud example...
     //https://www.ma-no.org/en/programming/javascript/crud-operations-using-vue-js-a-basic-example
-
+    var appRoot = '@Url.Action("", null, null, Request.Url.Scheme)';
 
     Vue.component("v-t_comment", {
         template: "#T_Comment-Component-Template",
+        props:['controller'],
         data: function () {
             return {
                 lookups: {},
@@ -108,12 +106,18 @@
                 newModal: false,
                 deleteModal: false,
                 errorModal: false,
-                token: $('@Html.AntiForgeryToken()').val()
+                listUrl: appRoot + this.controller + '/List?json=true',
+                detailsUrl: appRoot + this.controller + '/Details?json=true',
+                editUrl: appRoot + this.controller + '/Edit?json=true',
+                newUrl: appRoot + this.controller + '/New?json=true',
+                createUrl: appRoot + this.controller + '/Create?json=true',
+                updateUrl: appRoot + this.controller + '/Update?json=true',
+                deleteUrl: appRoot + this.controller + '/Delete?json=true'
             }
         },
        mounted: function () {
            var app = this;
-            $.get('@Url.Action("List", "T_Comment", new { json = true })', function (response) {
+            $.get(app.listUrl, function (response) {
                 app.schema = response.schema;
                 app.objects = response.data;
                 app.selectedObject = app.objects[0];
@@ -130,14 +134,14 @@
             },
             refresh: function () {
                 var app = this;
-                $.get('@Url.Action("List", "T_Comment", new { json = true })', function (response) {
+                $.get(app.listUrl, function (response) {
                     app.schema = response.schema;
                     app.objects = response.data;
                 }).fail(app.error);
             },
             details: function (o) {
                 var app = this;
-                $.get('@Url.Action("Details", "T_Comment", new { json = true })', { id: o.PrimaryKey }, function (response) {
+                $.get(app.detailsUrl, { id: o.PrimaryKey }, function (response) {
                     var i = app.getIndex(o);
                     console.log(i);
                     app.objects[i] = response;
@@ -148,7 +152,7 @@
             },
             edit: function (o) {
                 var app = this;
-                $.get('@Url.Action("Edit", "T_Comment", new { json = true })', { id: o.PrimaryKey }, function (response) {
+                $.get(editUrl, { id: o.PrimaryKey }, function (response) {
                     var i = app.getIndex(o);
                     app.objects[i] = response.data;
                     app.lookups = response.lookups;
@@ -161,7 +165,7 @@
             },
             createNew: function () {
                 var app = this;
-                $.get('@Url.Action("New", "T_Comment", new { json = true })', function (response) {
+                $.get(newUrl, function (response) {
                     app.createObject = response.data;
                     app.lookups = response.lookups;
                     app.hideModals();
@@ -170,20 +174,25 @@
             },
             del: function (o) {
                 var app = this;
-                app.selectedObject = o;
-                app.hideModals();
-                app.deleteModal = true;
+                $.get(app.deleteUrl, { id: o.PrimaryKey }, function (response) {
+                    var i = app.getIndex(o);
+                    console.log(i);
+                    app.objects[i] = response;
+                    app.selectedObject = app.objects[i];
+                    app.hideModals();
+                    app.deleteModal = true;
+                }).fail(app.error);
             },
             create: function (o) {
                 var app = this;
 
                 var data = {};
-                data["__RequestVerificationToken"] = app.token;
+                data["__RequestVerificationToken"] = antiForgeryToken;
                 Object.keys(o.Cells).map(function (key, index) {
                     data[key] = o.Cells[key].Value;
                 });
 
-                $.post('@Url.Action("Create", "T_Comment", new { json = true })', data, function (response) {
+                $.post(createUrl, data, function (response) {
                     app.objects = response.data;
                     app.selectedObject = o;
                     app.hideModals();
@@ -193,12 +202,12 @@
                 var app = this;
 
                 var data = {};
-                data["__RequestVerificationToken"] = app.token;
+                data["__RequestVerificationToken"] = antiForgeryToken;
                 Object.keys(o.Cells).map(function (key, index) {
                     data[key] = o.Cells[key].Value;
                 });
 
-                $.post('@Url.Action("Update", "T_Comment", new { json = true })', data, function (response) {
+                $.post(updateUrl, data, function (response) {
                     app.objects = response.data;
                     app.selectedObject = o;
                     app.hideModals();
@@ -208,12 +217,12 @@
                 var app = this;
 
                 var data = {};
-                data["__RequestVerificationToken"] = app.token;
+                data["__RequestVerificationToken"] = antiForgeryToken;
                 Object.keys(o.Cells).map(function (key, index) {
                     data[key] = o.Cells[key].Value;
                 });
 
-                $.post('@Url.Action("Delete", "T_Comment", new { json = true })', data, function (response) {
+                $.post(deleteUrl, data, function (response) {
                     app.objects = response.data;
                     app.selectedObject = o;
                     app.hideModals();
