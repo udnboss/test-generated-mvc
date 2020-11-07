@@ -197,7 +197,7 @@ namespace WorkflowWeb.Business
             if (db.Database.CurrentTransaction != null)
             {
                 db.Database.CurrentTransaction.Dispose();
-            }
+            } 
 
             using (var transaction = db.Database.BeginTransaction())
             {
